@@ -1,0 +1,37 @@
+name: Build Gerfex APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: GerfexReactUI/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Install and build web
+        run: |
+          cd GerfexReactUI
+          npm ci
+          npm run build
+          npx cap sync android
+      - name: Build APK
+        run: |
+          cd GerfexReactUI/android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gerfex-debug-apk
+          path: GerfexReactUI/android/app/build/outputs/apk/debug/app-debug.apk
