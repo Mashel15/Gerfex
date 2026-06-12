@@ -2,6 +2,7 @@ import json
 import sys
 import time
 from pathlib import Path
+from gerfex_android_paths import app_path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -11,7 +12,7 @@ from research.open_best_news_result import open_best
 from research.article_reader import read_article
 from research.article_summarizer import summarize
 
-LOG = ROOT / "learning" / "autonomous_loop_log.json"
+LOG = app_path("learning", "autonomous_loop_log.json")
 
 
 def save_event(event):

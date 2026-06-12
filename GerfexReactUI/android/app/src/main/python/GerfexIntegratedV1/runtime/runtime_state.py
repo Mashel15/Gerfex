@@ -1,5 +1,6 @@
 import json, time
 from pathlib import Path
+from gerfex_android_paths import app_path
 
 STATE_FILE = Path(__file__).resolve().parent / "runtime_state.json"
 

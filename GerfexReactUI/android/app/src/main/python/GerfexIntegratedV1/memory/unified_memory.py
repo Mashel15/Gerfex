@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
+from gerfex_android_paths import app_path
 from datetime import datetime
 
-MEM = Path("memory/gerfex_unified_memory.json")
+MEM = app_path("memory", "gerfex_unified_memory.json")
 
 def _load():
     if MEM.exists():

@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
+from gerfex_android_paths import app_path
 
-MEMORY = Path("memory/brain_memory.json")
+MEMORY = app_path("memory", "brain_memory.json")
 
 def remember(event):
     MEMORY.parent.mkdir(parents=True, exist_ok=True)

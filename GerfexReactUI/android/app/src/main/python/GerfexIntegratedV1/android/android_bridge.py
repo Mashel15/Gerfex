@@ -1,9 +1,10 @@
 import json
 import time
 from pathlib import Path
+from gerfex_android_paths import app_path
 
 ROOT = Path(__file__).resolve().parents[1]
-QUEUE_FILE = ROOT / "runtime" / "android_queue.txt"
+QUEUE_FILE = app_path("runtime", "android_queue.txt")
 
 def queue_action(action):
     if not action:

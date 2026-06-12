@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from gerfex_android_paths import app_path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -19,7 +20,7 @@ from learning.learning_manager import learn
 
 
 def clear_queue():
-    q = ROOT / "runtime" / "android_queue.txt"
+    q = app_path("runtime", "android_queue.txt")
     q.parent.mkdir(parents=True, exist_ok=True)
     q.write_text("", encoding="utf-8")
 

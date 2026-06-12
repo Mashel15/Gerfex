@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
+from gerfex_android_paths import app_path
 from datetime import datetime
 
-QUEUE = Path("runtime/goal_queue.json")
+QUEUE = app_path("runtime", "goal_queue.json")
 
 def _now():
     return datetime.utcnow().isoformat() + "Z"

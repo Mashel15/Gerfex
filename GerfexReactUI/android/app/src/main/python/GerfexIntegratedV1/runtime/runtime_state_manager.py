@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
+from gerfex_android_paths import app_path
 from datetime import datetime
 
-STATE = Path("runtime/runtime_state.json")
+STATE = app_path("runtime", "runtime_state.json")
 
 def _now():
     return datetime.utcnow().isoformat() + "Z"

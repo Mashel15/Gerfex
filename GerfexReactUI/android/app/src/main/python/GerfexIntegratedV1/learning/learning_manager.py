@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
+from gerfex_android_paths import app_path
 from datetime import datetime
 
-LOG = Path("learning/executive_learning_log.json")
+LOG = app_path("learning", "executive_learning_log.json")
 
 def learn(goal, decision, execution):
     LOG.parent.mkdir(parents=True, exist_ok=True)
