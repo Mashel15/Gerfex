@@ -5,12 +5,22 @@ const GerfexNative = registerPlugin("Gerfex");
 
 async function askGerfexNative(prompt, modelState = {}) {
   const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
+
+  if (!nativeRes || nativeRes.ok === false) {
+    return {
+      ok: false,
+      reply: "خطأ Gerfex Native: " + (nativeRes?.error || "لا يوجد تفاصيل"),
+      speaker: "Gerfex",
+      raw: nativeRes
+    };
+  }
+
   const parsed = JSON.parse(nativeRes.result || "{}");
   return {
     ok: parsed.ok,
-    reply: parsed.reply || "لا يوجد رد.",
+    reply: parsed.reply || parsed.error || "لا يوجد رد.",
     speaker: "Gerfex",
-    raw: parsed.raw
+    raw: parsed.raw || parsed
   };
 }
 
