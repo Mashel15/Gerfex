@@ -1,0 +1,1125 @@
+{
+  "version": "GERFEX_INTEGRATED_RUNTIME_V1",
+  "history": [
+    {
+      "time": "2026-06-11T11:26:23.425816Z",
+      "goal": "افتح كروم",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "intent": "open_app",
+      "target": "chrome",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781177183.6344023,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177183.4161267,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T11:26:54.540797Z",
+      "goal": "افتح كروم",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "intent": "open_app",
+      "target": "chrome",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781177216.1069913,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177216.0762255,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177218.112048,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177216.0768888,
+          "action": "open_url",
+          "args": {
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177221.6281118,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177216.077381,
+          "action": "wait",
+          "args": {
+            "seconds": 5
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177227.637002,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177216.0778177,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T11:27:24.240413Z",
+      "goal": "أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781177453.1997335,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177453.1610324,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177455.2066586,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177453.1616952,
+          "action": "open_url",
+          "args": {
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177458.9038384,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177453.1621351,
+          "action": "wait",
+          "args": {
+            "seconds": 5
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177464.913257,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177453.1626062,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T11:31:23.069691Z",
+      "goal": "أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781177606.6044257,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177606.5664487,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177608.610841,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177606.5671535,
+          "action": "open_url",
+          "args": {
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177612.3187444,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177606.5675876,
+          "action": "wait",
+          "args": {
+            "seconds": 5
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781177618.3343785,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781177606.567935,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T11:33:55.066260Z",
+      "goal": "أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": "2026-06-11T11:37:30.100614Z",
+      "goal": "أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781178149.8518085,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178149.8146884,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781178151.8581352,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178149.8153403,
+          "action": "open_url",
+          "args": {
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781178155.8055136,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178149.8157458,
+          "action": "wait",
+          "args": {
+            "seconds": 5
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781178161.8288198,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178149.8160825,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T11:42:59.455788Z",
+      "goal": "أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781178192.4965131,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178192.4562376,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781178194.5024061,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178192.4569395,
+          "action": "open_url",
+          "args": {
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781178198.0988863,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178192.4574018,
+          "action": "wait",
+          "args": {
+            "seconds": 5
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781178204.1111133,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781178192.4578419,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T11:43:40.886420Z",
+      "goal": "أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": "2026-06-11T11:48:37.149009Z",
+      "goal": "حلل الشاشة الحالية",
+      "route": {
+        "ok": true,
+        "route": "cognitive",
+        "reason": "thinking/planning goal"
+      },
+      "intent": "cognitive",
+      "target": "cognitive",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": "2026-06-11T15:17:37.725914Z",
+      "goal": "حلل الشاشة الحالية",
+      "route": {
+        "ok": true,
+        "route": "cognitive",
+        "reason": "thinking/planning goal"
+      },
+      "intent": "cognitive",
+      "target": "cognitive",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": "2026-06-11T15:31:06.929291Z",
+      "goal": "حلل الشاشة الحالية",
+      "route": {
+        "ok": true,
+        "route": "cognitive",
+        "reason": "thinking/planning goal"
+      },
+      "intent": "cognitive",
+      "target": "cognitive",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": "2026-06-11T15:37:33.194573Z",
+      "goal": "افتح كروم",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "intent": "open_app",
+      "target": "chrome",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781192253.260101,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781192253.1870844,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T15:41:08.133792Z",
+      "goal": "حلل الشاشة الحالية",
+      "route": {
+        "ok": true,
+        "route": "cognitive",
+        "reason": "thinking/planning goal"
+      },
+      "intent": "cognitive",
+      "target": "cognitive",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781192560.057521,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781192559.768391,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781193423.0669734,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781193422.5160627,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781193774.927724,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781193774.2871897,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194011.5657156,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781193960.9289625,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194071.5713022,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194070.7158475,
+          "action": "open_app",
+          "args": {
+            "package": "youtube"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194202.2620354,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194201.498283,
+          "action": "open_app",
+          "args": {
+            "package": "settings"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194487.4779282,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194486.596031,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194491.0923424,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194486.6054754,
+          "action": "wait",
+          "args": {
+            "seconds": 2
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194494.1006622,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194486.606521,
+          "action": "open_url",
+          "args": {
+            "url": "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194498.0714042,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194486.6073656,
+          "action": "wait",
+          "args": {
+            "seconds": 3
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781194502.083206,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781194486.6081543,
+          "action": "dump_ui",
+          "args": {},
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": "2026-06-11T16:29:13.479448Z",
+      "goal": "افتح كروم وابحث عن أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "intent": "news_research_pipeline",
+      "target": "research",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": "2026-06-11T16:35:15.349782Z",
+      "goal": "افتح كروم وابحث عن أخبار الذكاء الاصطناعي",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "multi_step_priority_to_queen"
+      },
+      "intent": "web_search",
+      "target": "chrome",
+      "ok": true,
+      "error": null
+    },
+    {
+      "time": 1781195716.0618725,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781195715.3383281,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781195719.8679578,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781195715.3399708,
+          "action": "wait",
+          "args": {
+            "seconds": 2
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781195722.87121,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781195715.3402941,
+          "action": "open_url",
+          "args": {
+            "url": "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781195726.5945816,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781195715.3405128,
+          "action": "wait",
+          "args": {
+            "seconds": 3
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781195730.605364,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781195715.3406916,
+          "action": "dump_ui",
+          "args": {},
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781196050.9179745,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781196049.9852116,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781196054.7758482,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781196049.988855,
+          "action": "wait",
+          "args": {
+            "seconds": 2
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781196057.7989073,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781196049.9892154,
+          "action": "open_url",
+          "args": {
+            "url": "https://www.google.com/search?q=%D8%A2%D8%AE%D8%B1+%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781196061.3606205,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781196049.9895318,
+          "action": "wait",
+          "args": {
+            "seconds": 3
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781196065.3694553,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781196049.9898329,
+          "action": "dump_ui",
+          "args": {},
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781197527.3445876,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781197526.4184165,
+          "action": "open_app",
+          "args": {
+            "package": "settings"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781197644.9429607,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781197644.6920648,
+          "action": "press_back",
+          "args": {},
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781197998.050233,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781197997.263526,
+          "action": "press_home",
+          "args": {},
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781201282.8931994,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781201282.4728963,
+          "action": "open_app",
+          "args": {
+            "package": "settings"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781201612.2876859,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781201611.7228205,
+          "action": "open_app",
+          "args": {
+            "package": "settings"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781203974.1209867,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781203973.903345,
+          "action": "open_app",
+          "args": {
+            "package": "settings"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781204274.3044782,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781204273.9495125,
+          "action": "open_app",
+          "args": {
+            "package": "settings"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781204814.29021,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781204813.9930897,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781204818.164645,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781204813.9977016,
+          "action": "wait",
+          "args": {
+            "seconds": 2
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781204821.1725059,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781204813.9981303,
+          "action": "open_url",
+          "args": {
+            "url": "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781204825.038213,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781204813.9984128,
+          "action": "wait",
+          "args": {
+            "seconds": 3
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781204829.0454676,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781204813.998641,
+          "action": "dump_ui",
+          "args": {},
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205345.2920046,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205344.646406,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205349.6911542,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205344.6494615,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205351.6996443,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205344.6498616,
+          "action": "tap",
+          "args": {
+            "x": 702,
+            "y": 2206
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205355.089442,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205344.6500835,
+          "action": "wait",
+          "args": {
+            "seconds": 4
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205360.1073956,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205344.6502311,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205465.4655166,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205464.4534664,
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205468.4666085,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205464.4543571,
+          "action": "wait",
+          "args": {
+            "seconds": 1
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205470.4802303,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205464.4546473,
+          "action": "tap",
+          "args": {
+            "x": 540,
+            "y": 1797
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205472.9894714,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205464.454801,
+          "action": "wait",
+          "args": {
+            "seconds": 5
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    },
+    {
+      "time": 1781205479.006925,
+      "event": "runner_action",
+      "data": {
+        "last_runner_action": {
+          "time": 1781205464.4549227,
+          "action": "dump_ui",
+          "args": {
+            "focus": "chrome"
+          },
+          "source": "GerfexIntegratedV1"
+        }
+      }
+    }
+  ],
+  "counters": {
+    "think": 14,
+    "runner_actions": 313
+  },
+  "last_event": "think",
+  "last_data": {
+    "prompt": "افتح كروم",
+    "intent": "android_action_request",
+    "mode": "execution_review",
+    "selected_provider": "queen",
+    "reply": "Queen Intent: فهمت الطلب كـ android_action_request. الثقة: 0.82"
+  },
+  "updated_at": 1781205479.0069509,
+  "status": "running",
+  "ok": true,
+  "current_goal": "افتح كروم وابحث عن أخبار الذكاء الاصطناعي",
+  "current_route": {
+    "ok": true,
+    "route": "android",
+    "reason": "multi_step_priority_to_queen"
+  },
+  "current_intent": "web_search",
+  "current_target": "chrome",
+  "last_ok": true,
+  "last_error": null
+}

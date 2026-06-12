@@ -1,0 +1,43 @@
+{
+  "version": "GERFEX_BRAIN_CONTRACT_V1",
+  "principle": "Gerfex is the system. The brain is replaceable.",
+  "current_brain_provider": "queen",
+  "brain_role": {
+    "understand": true,
+    "suggest": true,
+    "reason": true,
+    "direct_execution": false,
+    "final_authority": false,
+    "permanent_memory_write": false
+  },
+  "system_role": {
+    "identity_owner": "Gerfex",
+    "decision_owner": "Gerfex Core",
+    "execution_owner": "Gerfex Runtime",
+    "safety_owner": "Gerfex Safety",
+    "final_human_authority": "Mashel"
+  },
+  "provider_rules": [
+    "A brain provider may be stopped without stopping Gerfex.",
+    "A brain provider may be replaced without changing Gerfex identity.",
+    "A brain provider may suggest actions but may not execute actions directly.",
+    "A brain provider may discuss learning only through the learning system.",
+    "Permanent learning approval requires explicit Mashel approval.",
+    "If the active brain fails, Gerfex must fall back to a safe dummy provider."
+  ],
+  "provider_interface": {
+    "input": {
+      "prompt": "string",
+      "context": "dict",
+      "mode": "general | learning | planning | execution_review"
+    },
+    "output": {
+      "reply": "string",
+      "intent": "string",
+      "suggested_action": "dict | null",
+      "confidence": "float",
+      "provider": "string",
+      "status": "ok | fallback | error"
+    }
+  }
+}

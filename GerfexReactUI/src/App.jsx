@@ -1,3 +1,4 @@
+import { registerPlugin } from "@capacitor/core";
 const API_BASE = "http://192.168.1.4:8000";
 
 import { useEffect, useRef, useState } from "react";
@@ -23,7 +24,19 @@ function load(key, fallback) {
   }
 }
 
-export default function App() {
+export default 
+async function askGerfexNative(prompt, modelState = {}) {
+  const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
+  const parsed = JSON.parse(nativeRes.result || "{}");
+  return {
+    ok: parsed.ok,
+    reply: parsed.reply || "لا يوجد رد.",
+    speaker: "Gerfex",
+    raw: parsed.raw
+  };
+}
+
+function App() {
   const [menu, setMenu] = useState(false);
   const [quick, setQuick] = useState(false);
   const [section, setSection] = useState("sessions");
@@ -201,16 +214,7 @@ export default function App() {
         const learnText = mashelMessages[mashelMessages.length - 1] || "";
 
         try {
-          const res = await fetch(`${API_BASE}/think`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              prompt: `[LEARNING_SESSION]\n${learnText}\nاعتمد الجلسة`,
-              model: "Gerfex",
-              model_state: { ...modelState, learning_session: true }
-            })
-          });
-          const data = await res.json();
+          const data = await askGerfexNative(`[LEARNING_SESSION]\n${learnText}\nاعتمد الجلسة`, { ...modelState, learning_session: true });
           setInput("");
           setVoiceInput(false);
           const approvalMsg = { speaker: data.speaker || "Queen", content: data.reply || "تم اعتماد جلسة التعلم." };
@@ -241,12 +245,7 @@ export default function App() {
       setVoiceInput(false);
 
       try {
-        const res = await fetch(`${API_BASE}/think`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: text, model: "Gerfex", model_state: { ...modelState, learning_session: true } })
-        });
-        const data = await res.json();
+        const data = await askGerfexNative(text, { ...modelState, learning_session: true });
 
         if (!modelState.mute) {
           const withReply = [...nextMessages, { speaker: data.speaker || "Queen", content: data.reply || "لا يوجد رد." }];
@@ -254,7 +253,7 @@ export default function App() {
           persistLearningSessionMessages(learningSession, withReply);
         }
       } catch {
-        setLearningSession((x) => ({ ...x, messages: [...nextMessages, { speaker: "Gerfex", content: "فشل الاتصال بـ Gerfex API" }] }));
+        setLearningSession((x) => ({ ...x, messages: [...nextMessages, { speaker: "Gerfex", content: "خطأ في Gerfex الداخلي" }] }));
       }
       return;
     }
@@ -264,18 +263,13 @@ export default function App() {
     setVoiceInput(false);
 
     try {
-      const res = await fetch(`${API_BASE}/think`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: text, model: "Gerfex", model_state: modelState })
-      });
-      const data = await res.json();
+      const data = await askGerfexNative(text, modelState);
 
       if (!modelState.mute) {
         addReply(data.reply || "لا يوجد رد.", data.speaker || "Gerfex", shouldSpeak);
       }
     } catch (err) {
-      addReply(`فشل الاتصال بـ Gerfex API: ${API_BASE} / ${err?.message || err}`);
+      addReply(`خطأ في Gerfex الداخلي: ${err?.message || err}`);
     }
   }
 

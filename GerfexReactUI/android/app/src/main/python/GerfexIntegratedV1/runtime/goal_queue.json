@@ -1,0 +1,2273 @@
+[
+  {
+    "id": "goal_1_1781166111",
+    "goal": "افتح كروم",
+    "source": "test",
+    "status": "completed",
+    "created_at": "2026-06-11T11:21:51.828097Z",
+    "started_at": "2026-06-11T11:21:51.829019Z",
+    "finished_at": "2026-06-11T11:21:51.829508Z",
+    "result": {
+      "ok": true
+    }
+  },
+  {
+    "id": "goal_2_1781166383",
+    "goal": "افتح كروم",
+    "source": "worker_test",
+    "status": "completed",
+    "created_at": "2026-06-11T11:26:23.397312Z",
+    "started_at": "2026-06-11T11:26:23.397912Z",
+    "finished_at": "2026-06-11T11:26:23.428853Z",
+    "result": {
+      "ok": true,
+      "goal": "افتح كروم",
+      "memory_recall": {
+        "ok": true,
+        "goal": "افتح كروم",
+        "count": 5,
+        "matches": [
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T11:17:45.158989Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T11:14:12.557828Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T10:57:37.916454Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T10:51:52.463870Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T10:47:22.947070Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "افتح كروم",
+        "success_count": 5,
+        "failure_count": 0,
+        "recommended_route": "android",
+        "recommended_target": "chrome",
+        "confidence": 1.0,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "Queen",
+        "intent": "open_app",
+        "target": "chrome",
+        "action": {
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          }
+        },
+        "actions": null,
+        "reason": "Queen قررت فتح chrome",
+        "route": {
+          "ok": true,
+          "route": "android",
+          "reason": "android control goal"
+        },
+        "experience_advice": {
+          "route": "android",
+          "target": "chrome",
+          "confidence": 1.0,
+          "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+        },
+        "experience_used": true,
+        "experience_route": "android"
+      },
+      "execution": {
+        "ok": true,
+        "queued": {
+          "ok": true,
+          "queued": {
+            "time": 1781177183.4161267,
+            "action": "open_app",
+            "args": {
+              "package": "chrome"
+            },
+            "source": "GerfexIntegratedV1"
+          },
+          "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt",
+          "safety": {
+            "allowed": true,
+            "reason": "safe_action"
+          }
+        },
+        "decision": {
+          "ok": true,
+          "brain": "Queen",
+          "intent": "open_app",
+          "target": "chrome",
+          "action": {
+            "action": "open_app",
+            "args": {
+              "package": "chrome"
+            }
+          },
+          "actions": null,
+          "reason": "Queen قررت فتح chrome",
+          "route": {
+            "ok": true,
+            "route": "android",
+            "reason": "android control goal"
+          },
+          "experience_advice": {
+            "route": "android",
+            "target": "chrome",
+            "confidence": 1.0,
+            "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+          },
+          "experience_used": true,
+          "experience_route": "android"
+        }
+      },
+      "learning": {
+        "time": "2026-06-11T11:26:23.418649Z",
+        "goal": "افتح كروم",
+        "decision_ok": true,
+        "intent": "open_app",
+        "target": "chrome",
+        "execution_ok": true,
+        "reason": "Queen قررت فتح chrome"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 10
+      }
+    }
+  },
+  {
+    "id": "goal_3_1781166414",
+    "goal": "افتح كروم",
+    "source": "manual",
+    "status": "completed",
+    "created_at": "2026-06-11T11:26:54.370579Z",
+    "started_at": "2026-06-11T11:26:54.515717Z",
+    "finished_at": "2026-06-11T11:26:54.543471Z",
+    "result": {
+      "ok": true,
+      "goal": "افتح كروم",
+      "memory_recall": {
+        "ok": true,
+        "goal": "افتح كروم",
+        "count": 5,
+        "matches": [
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T11:26:23.428256Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T11:17:45.158989Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T11:14:12.557828Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T10:57:37.916454Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "افتح كروم",
+            "route": {
+              "ok": true,
+              "route": "android",
+              "reason": "android control goal"
+            },
+            "intent": "open_app",
+            "target": "chrome",
+            "ok": true,
+            "summary": null,
+            "time": "2026-06-11T10:51:52.463870Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "افتح كروم",
+        "success_count": 5,
+        "failure_count": 0,
+        "recommended_route": "android",
+        "recommended_target": "chrome",
+        "confidence": 1.0,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "Queen",
+        "intent": "open_app",
+        "target": "chrome",
+        "action": {
+          "action": "open_app",
+          "args": {
+            "package": "chrome"
+          }
+        },
+        "actions": null,
+        "reason": "Queen قررت فتح chrome",
+        "route": {
+          "ok": true,
+          "route": "android",
+          "reason": "android control goal"
+        },
+        "experience_advice": {
+          "route": "android",
+          "target": "chrome",
+          "confidence": 1.0,
+          "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+        },
+        "experience_used": true,
+        "experience_route": "android"
+      },
+      "execution": {
+        "ok": true,
+        "queued": {
+          "ok": true,
+          "queued": {
+            "time": 1781177214.5317624,
+            "action": "open_app",
+            "args": {
+              "package": "chrome"
+            },
+            "source": "GerfexIntegratedV1"
+          },
+          "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt",
+          "safety": {
+            "allowed": true,
+            "reason": "safe_action"
+          }
+        },
+        "decision": {
+          "ok": true,
+          "brain": "Queen",
+          "intent": "open_app",
+          "target": "chrome",
+          "action": {
+            "action": "open_app",
+            "args": {
+              "package": "chrome"
+            }
+          },
+          "actions": null,
+          "reason": "Queen قررت فتح chrome",
+          "route": {
+            "ok": true,
+            "route": "android",
+            "reason": "android control goal"
+          },
+          "experience_advice": {
+            "route": "android",
+            "target": "chrome",
+            "confidence": 1.0,
+            "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+          },
+          "experience_used": true,
+          "experience_route": "android"
+        }
+      },
+      "learning": {
+        "time": "2026-06-11T11:26:54.534076Z",
+        "goal": "افتح كروم",
+        "decision_ok": true,
+        "intent": "open_app",
+        "target": "chrome",
+        "execution_ok": true,
+        "reason": "Queen قررت فتح chrome"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 11
+      }
+    }
+  },
+  {
+    "id": "goal_4_1781166414",
+    "goal": "أخبار الذكاء الاصطناعي",
+    "source": "manual",
+    "status": "completed",
+    "created_at": "2026-06-11T11:26:54.371438Z",
+    "started_at": "2026-06-11T11:26:54.544981Z",
+    "finished_at": "2026-06-11T11:27:24.249179Z",
+    "result": {
+      "ok": true,
+      "goal": "أخبار الذكاء الاصطناعي",
+      "memory_recall": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "count": 1,
+        "matches": [
+          {
+            "type": "test",
+            "message": "memory online",
+            "time": "2026-06-11T10:31:59.079740Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "success_count": 0,
+        "failure_count": 0,
+        "recommended_route": null,
+        "recommended_target": null,
+        "confidence": 0.0,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "BrainRouter",
+        "intent": "news_research_pipeline",
+        "target": "research",
+        "route": {
+          "ok": true,
+          "route": "research",
+          "reason": "news/research goal"
+        },
+        "reason": "Brain Router وجّه الطلب إلى مسار الأخبار الجاهز"
+      },
+      "execution": {
+        "ok": true,
+        "mode": "GERFEX_AUTONOMOUS_COGNITIVE_LOOP_V1_RESEARCH_PIPELINE",
+        "goal": "أخبار الذكاء الاصطناعي",
+        "news": {
+          "ok": true,
+          "query": "أخبار الذكاء الاصطناعي",
+          "mode": "rss",
+          "count": 8,
+          "top": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            }
+          ],
+          "all": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دراسة جديدة: هل يُحدث الذكاء الاصطناعي تحولاً في أبحاث الصحة النفسية عبر محاكاة المشاعر؟ - Euronews",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 06:30:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNU3BPc2NiMkJSUkRPbU9DUElXNnk5MjFUVmN4STBnNW5LRlQxOTFWblE0RmcyVDB1M2V1aXhXZ09YZEdIU05aN2R4ZXNlenFWRFg5S1F0SDZGVE1RcGhWeHJKcGFxalZBSmQ2TWwycFhNQ3dNQWFLeU44aFMzV1A1TkY0am9IT0NaWWhvaW9EQ1REcWZkLVk0czN5aUlnT0lLSmFhTmpVUDNUZnl2OTg4dW8tdkNXOEp2RjVoTTZUcDFvVTl4LVhybTZiS0V1TTFn?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "أوروبا تجبر \"ميتا\" على فتح \"واتساب\" أمام روبوتات الذكاء الاصطناعي المنافسة مجانًا - العربية",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:46:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiiwVBVV95cUxPcmFoQXRvTzRmWUZjYy1UOXlMelNwRURsV2Jia2M1bjhXa3B6MWpYMkI2QU5RWXlNcVd4V2JjVlQ1RXZPRVJMUkUzaVh2cWRFN3RLMFl6WnNEMGdaQU9LeFMtSmV3U3ZGNjdHT1hJOFA4TGpkb01Mc2hqUmpPQXdyR1VBX05JQTFLZFpVQW9TalF0OWxhMG1UZEJVUzFtSUxQSEx0ejNIQUtNcm5TSUUyVjA2am1qUHZxV3VpekNZYzVvZUR0emtuZ2pJa2pSUVdLQjV5NGdjWHdOWjJxNzJPVGEyYWpkbnhFVGEtSGZEQ0pFeDh3a1VuZ19MY0g1RXZTbWZYTkxWa1FEY0dHcHBnaFlmTVhQWUdlajFJX3FUaGJJQkZ1cG1UdWh2cDhUSkltdHY3LXBzR3BvVkZJWV9ZMElCX2tlS29SbHBIbmF4T0pDRUdYMWhrYUxROEtQX2RxODdGSzdtTHNHVjJiQWM2SW5Yb0hXcjRhSTFNTFN2a0lfS0NjOHRMbFV3WXpJc3VVZERWQ09LbWpreUEtYTNvYmtZR2NlRm5uSXhGdGRVekdFZnNpWFlvSWp5T3NVREppblFITzdISzl4ZWFiaEhMTk5PV1psVks2TjJTVHNJbUV4aldOMktIaDZmb1BBbVQ3M29ZRGV0U0VVNVlRQWZXWmpuc1lPT1BXTWc2VDFvcjNpOW5zWkZwTzZMSEdkQTRvb2F0Q2FaaDItOHZmdEFwR213N3AwZFVMZ1pYU1pIVVktOXhVdU9YYTRLc3RKN1VkbkpwamkwcjE3MnVIRlFYVU9mS3IxX3lPenNyQmJQQzFEazVKbTlIY0xJS2pZMTNPSDU3aWpwc2NBTnPSAZAFQVVfeXFMUGxhR2tFRHVwRzZxZTVjTXRxVDBlY25BRE5yLWFtaUswck55RzJCT1FRWTVHNXlNWlJDX1JwWFVWalZMTl9FcDhVMEJkZXRhTW9KMmV3cldCMVdKNWJRclEzakhPMVhJbE9LcllyWGo2dVk2bnpkLWVicWFEY2tUSUFfeE13ckxudld5STVUQ0NZT1Q0QkM4NVQzdkVNR2NyaFRpUjlJTGp1MHVrVHBXRUNuQ0xkanQ1Z0lMT3VfdXNBcHNhT1plSF9FV1ZzTHZoeEltZzFtNmQ5VmVwaWpDYWxxUWVZR2FKdm5ISGNBR25CbHk2azFubEM4VnloNFItWUh6ZlRPSGJweV9KZ215NVg2Y3NnUi0wSDRmSzNWUnZJUy1NTjNUTGVJcjFrZFBxUDFGaTY4RmpqTS1IWDNnMlNBcDE5SEd1RC04akxfRGdtTVRJc0dJNW1peWlDbjRoVno2TEVDNG1aaFRxak5lTDAzVU9sbVY2M3hfbGx4MVhkV012bUxveGNHS2Zwb25mSXE2dG0xRGhSMzc5YjYwN2VMMDNUNjJvejFXLW9WVUpZSTF4OW4tX3QxUlFQb2JoeUNGeU84S05VeVJaMi1VVXBaem5tckFqNy15YkYxbWIwWUdRSGRkMkR5aGNNQlc3a0luX3ltYmdGdUxSTGx5d1l3eGRSMGFkYlhfWklQQ3JNWFE1N21WR1VhWGhZODRLN0ExanIwZXRVbnplR3I5QzFMRjZ2RWxheVN3X1RDb0VsRkJINm5rbkR2eG4wNEZJWTg0cTVFd0tfLTQ4eDdNTWZzTC14c0tSeEluQ1pFR1N0eE83TWhFOFE4Q2NISHZoMXRaOVJRMjJHcHVQU3Ftckk?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "خطط الإنفاق الضخمة لـ«أوراكل» في الذكاء الاصطناعي تهبط بسهمها 9 % - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 09:26:34 GMT",
+              "link": "https://news.google.com/rss/articles/CBMipwRBVV95cUxONVAzdjVKd0lQQWNZdUFYNks0VXJRN204cEdOZEpqTWIxUTJzdy1mYXhrYV9oNFNxTEZLRjRJNVVPZTRnMGVZa09va0x5aXBHbXotWHAwdGliNWhSckt4YlZ3d0s0clJkVlJrQkhKYkF1Sm9DM3BjTXM3RmhraHBHOERnQmVnT0tIb2dpTi1MNUhVeGpUa2FVdWRWZVRIZ0tOYUJ3Zm9tWXJXRERvUjE0WGkycnNnd0lub1lweGNRbXFJMDAzYlIwN1M2U2tOemVZekN0dDJTRXprVUc1YWtxdWZBdjZvVU5DUmVTZm84SkxnenZ1QUhkS3dMcGEtM2IxMWIyb0tCUFlYU25sNFlXR0plRWFsMEQ5TDVfZFltMkZWUER4b01SeWVsalUtVzlNMWNuZlhJWG53Q1NTcldCUzRwQUpWOWx6NzVZWUtwNU43NGtjMV9GRTdWZnQ5TTlxT05nVkxwRmtJeDBfNGE5NFg5ZjhMeGM0QldTT0pjRTdyTEdhb1NQOFZDXzlVczRRZG5VWlhldzFqVXZOVnlwV0ZVSUNDZzNiT2dQREQzVmpINDd6cnhTVDlYOXhxLUJuUWtuQUFubmtmazlHNEJFT2NMX2VDbDRneGNhNW8zUkROY1dTejV6TkpGQ0FlNUYwZFBrV3lyYUNScHJTTUctQmhsWGtDM2I5U2F2UFNQakRtZ0NDLTJUSjlsV1ZaTFRWUmFNMkJ6bw?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يتوقع بطل كأس العالم 2026.. هل تتفق معه؟ - Kooora",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 17:34:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilARBVV95cUxPSWZ6YTR5WEVtT1VVZGU2Z3A1UTNuUFRVOTVqNnViLWg5enJzMWNOSWstS0tIZU9uWGd3MVhBTTExQnJvaWktUUZWZFBjSll2dnBxLWdmRFpYLXFMbmMyNHBPaHFOekQyZ013SmdXcVNabUVTRXU5ZFQ5Umc2dTRDWWo4RlFXQ0RkNHl1YmVEX3MxeXQxbGJXZEtIYzdyejJDd0dxcG5GZVFGbUtjSUNfQmw2bGpTeGRRTHluM29EOVBLZkRuNzNQMFdwMGJvT0NtQjdDdTQ5bU42V2ZabXlqOGhVbnhraF9wRFZhRzR3dHNlZkV4QjNzMnFkdVRXbmxkMnNqdWhsbkloa3otYjctZ3BnS0xxWko3NVhCSkNySzdQQmM4OFBXTUFNT0VJTnpVelpwY3pGcFRMcnVlYmFiQmxhWXBQamtZVDhJb0NBLU8yWHlxMzdlN3F0S0ZzOWNKOGVSbVZPVzdMWkdlYUpvT2huWW5nUGQ4X1dJN1BzZGZNUHhyY1UtTmw5d2ZUZnM0UUY4bVM0VlAycXo2aklZa044SzF1TGtNYklkdXl6OWdBQk5MNHZCSlpXdHFBUzJEZmhMbmgzTHBBSGM3dDdNSUota2lJTG0wZGVBci1QM0JaVGw0eGRseENiRWFzQkZWM3BhY1B4UWkwYm1EQVVRcmV2eW9YLWo0N3pkbXhXLUlhMmNz?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "\"أنثروبيك\" تطلق أقوى نماذجها للذكاء الاصطناعي - سكاي نيوز عربية",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 13:36:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilANBVV95cUxONVBNMVBmdEtucTd6TDI4ZmxVanNLWmIzRDd6Y3UxdjZrU29JQ2lzTDA0MS11MUpNNzFzejlHU3cxaGdKdENxbjNKaDlvMzBkMGxFWk52Wm1CTS1YcllTLWtybWM3THRncldibkVfQk5LSWlZWkt5TlJDQlM3eWRMRV9NSk5JNmNXOXQ5c0lnMEw1VFl5RVNvSm1Ub1BzN2xOMnFHcXZKT1BsN0o4UTQzZEJUWWtJelZqWE51dnp2OUZxWUFNcWNZaTZlVDNLMzg4bXcwVUVnODRVaS0yYm5ZWjhSNkpZX1RYcHJJdDhxcGZTTHl2a1hMT0JqQ2dOWFFnT3ZNQUhFbjBZdFh0cldaV1hiVGNWOWtya2RCLVZGOVBLai1oMUtVNDM3VTU3dWRyaGkybWJCUzNmM1NKWEo2dFJwTGNId1dQa01NQ01jbjN0RDZ0Y1N1NDRWbWtJRTdLV1dSZnpWUGpNbm5nNkVhVUtnSzcwUUpJTXVtZlRpYmVXZHZrVWdfQk9QN2dPNmVfY25sS9IBmgNBVV95cUxQVXB5RGFWUFVRSVdtNExNNTBNZTZ6RThpOUhQMm9Va09UN2FkOWU0MVdGZXJkbmZNclh0VjRRaVNoZEthMVpmRnVNLUM0VU5KalVncjRxVFE3X3hYMXM4SUxvNldoVVZ0QW9tSk5WcTFTdUF5OU5ZcFNKQ3ZzY25kdU5HTW5iXzNnMzBqQ3pnZnZUNXpMWXE0ZlRfenB1TjAxWWRieWJVcWNmOTZFclVjYnNmQmdweUoyWV9BcnJFZUVRSzY0YlIzSFNJS2tkMTNVRkJsY3dEbTdNZlFYU1dZRVE4T0JpdVFrSTVmajl1amE2N2RpeEVhQ1VVeVdVdngwV3Q0MWpxWDBpTDNTTjZzVWFpVXZ3NVUxRDl0MVRsMVo5OFN1U2xDbFFHRkoxSkNIS3FwczJWUlFnWUtmREU3cXFxTEs1NU5SalhEeHRfSzRJNDJJaW9mdkZydi1MVEtQVnZ6TTRCTlRydUR3b1UxVWlzNXdwcFYxZVBRbkxlY3UyeHc1R1dibTdmek5NbnJySVNjRV9BM2FmUQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            }
+          ]
+        },
+        "opened": {
+          "ok": true,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+          "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+          "score": 60,
+          "domain": "news.google.com",
+          "queued": [
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177216.0762255,
+                "action": "wait",
+                "args": {
+                  "seconds": 1
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177216.0768888,
+                "action": "open_url",
+                "args": {
+                  "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177216.077381,
+                "action": "wait",
+                "args": {
+                  "seconds": 5
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177216.0778177,
+                "action": "dump_ui",
+                "args": {
+                  "focus": "chrome"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            }
+          ]
+        },
+        "article": {
+          "ok": true,
+          "reason": null,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com",
+          "paragraph_count": 26,
+          "paragraphs": [
+            "Investing.com - البوابة الإقتصادية الرائدة",
+            "الرسوم البيانية للعملات الرقمية",
+            "منصات تداول العملات الرقمية",
+            "تقويم انتهاء العقود المستقبلية",
+            "أسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة",
+            "اعرض الأسهم الأقل من قيمتها",
+            "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي",
+            "Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (",
+            ") الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.",
+            "ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.",
+            "احصل على تحديثات فورية حول الأخبار المؤثرة في الأسواق مع InvestingPro",
+            "تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.",
+            "وستكون هذه الزيارة الأولى لألتمان إلى كوريا الجنوبية منذ نحو ثمانية أشهر. وخلال زيارته السابقة في أكتوبر، أجرى لقاءات منفصلة مع رئيس مجلس إدارة سامسونج إلكترونيكس لي جاي-يونغ ورئيس مجموعة SK تشيي تاي-وون.",
+            "وأشارت وكالة يونهاب إلى أنه في أعقاب تلك الاجتماعات، وقّعت OpenAI مذكرات تفاهم مع سامسونج ومجموعة SK للتعاون في تطوير البنية التحتية للذكاء الاصطناعي على المستوى العالمي، مما أرسى الأساس لشراكات استراتيجية أوسع نطاقاً.",
+            "هذه المقالة مترجمة بمساعدة برنامج ذكاء اصطناعي وخضعت لمراجعة أحد المحررين.. لمزيد من التفاصيل يُرجى الرجوع للشروط والأحكام الخاصة بنا",
+            "مدرج ضمن استراتيجياتنا المختارة بواسطة الذكاء الاصطناعي",
+            "samsung-electronics-co-ltd",
+            "رأيت الصفقة على 005930، لكنك لم تستطع اتخاذ القرار؟",
+            "قراءة الرسوم البيانية مهارة يمتلكها الكثيرون، لكن التحدي الأكبر يكمن في اتخاذ القرار: عندما تُفتح نافذة الدخول ويتأكد النموذج الفني، وتجد نفسك متردداً في انتظار إشارة تأكيد إضافية. هذا التردد يقف حاجزاً بينك وبين أرباحك. وأداتنا المتطورة لتحليل الرسوم البيانية صُممت خصيصاً لسد هذه الفجوة. وداعاً للذكاء الاصطناعي الذي يقرأ الأرقام بجمود؛ فتقنية Vision AI لدينا \"ترى\" الرسوم البيانية بعين الخبير، وتقدم لك خطة تداول جاهزة على طبق من ذهب: (نقطة الدخول، وقف الخسارة، وجني الأرباح) في أقل من دقيقة واحدة. اكتشف وجهتك ومسارك بدقة متناهية مع كل صفقة.",
+            "هل لمحّت فرصة استثمارية في 005930، لكن خانتك شجاعة اقتناصها؟",
+            "CAAiEEkkznrjz51gPM9x5YvVuFYqFAgKIhBJJM5648-dYDzPceWL1bhW",
+            "جاري تحميل المقال التالي...",
+            "5 نقاط أساسية ينبغي معرفتها حول موجة التراجع في أسعار الذهب والفضة",
+            "user?screen_name=investingsa",
+            "© 2007-2026 - كل الحقوق محفوظة لشركة Fusion Media Ltd.",
+            "sa.investing.com/news/stock-market-news/article-3272260"
+          ],
+          "preview": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nInvesting.com - البوابة الإقتصادية الرائدة\n\nالرسوم البيانية للعملات الرقمية\n\nمنصات تداول العملات الرقمية\n\nتقويم انتهاء العقود المستقبلية\n\nأسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة"
+        },
+        "summary": {
+          "ok": true,
+          "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n"
+        },
+        "learned": true,
+        "log": "/data/data/com.termux/files/home/GerfexIntegratedV1/learning/autonomous_loop_log.json"
+      },
+      "learning": {
+        "ok": true,
+        "mode": "router_research"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 12
+      }
+    }
+  },
+  {
+    "id": "goal_5_1781166637",
+    "goal": "أخبار الذكاء الاصطناعي",
+    "source": "autonomous_scheduler",
+    "status": "completed",
+    "created_at": "2026-06-11T11:30:37.359160Z",
+    "started_at": "2026-06-11T11:30:51.360768Z",
+    "finished_at": "2026-06-11T11:31:23.083012Z",
+    "result": {
+      "ok": true,
+      "goal": "أخبار الذكاء الاصطناعي",
+      "memory_recall": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "count": 2,
+        "matches": [
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:27:24.246607Z"
+          },
+          {
+            "type": "test",
+            "message": "memory online",
+            "time": "2026-06-11T10:31:59.079740Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "success_count": 1,
+        "failure_count": 0,
+        "recommended_route": "research",
+        "recommended_target": "research",
+        "confidence": 0.5,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "BrainRouter",
+        "intent": "news_research_pipeline",
+        "target": "research",
+        "route": {
+          "ok": true,
+          "route": "research",
+          "reason": "news/research goal"
+        },
+        "reason": "Brain Router وجّه الطلب إلى مسار الأخبار الجاهز"
+      },
+      "execution": {
+        "ok": true,
+        "mode": "GERFEX_AUTONOMOUS_COGNITIVE_LOOP_V1_RESEARCH_PIPELINE",
+        "goal": "أخبار الذكاء الاصطناعي",
+        "news": {
+          "ok": true,
+          "query": "أخبار الذكاء الاصطناعي",
+          "mode": "rss",
+          "count": 8,
+          "top": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            }
+          ],
+          "all": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دراسة جديدة: هل يُحدث الذكاء الاصطناعي تحولاً في أبحاث الصحة النفسية عبر محاكاة المشاعر؟ - Euronews.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 06:30:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNU3BPc2NiMkJSUkRPbU9DUElXNnk5MjFUVmN4STBnNW5LRlQxOTFWblE0RmcyVDB1M2V1aXhXZ09YZEdIU05aN2R4ZXNlenFWRFg5S1F0SDZGVE1RcGhWeHJKcGFxalZBSmQ2TWwycFhNQ3dNQWFLeU44aFMzV1A1TkY0am9IT0NaWWhvaW9EQ1REcWZkLVk0czN5aUlnT0lLSmFhTmpVUDNUZnl2OTg4dW8tdkNXOEp2RjVoTTZUcDFvVTl4LVhybTZiS0V1TTFn?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "أوروبا تجبر \"ميتا\" على فتح \"واتساب\" أمام روبوتات الذكاء الاصطناعي المنافسة مجانًا - العربية",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:46:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiiwVBVV95cUxPcmFoQXRvTzRmWUZjYy1UOXlMelNwRURsV2Jia2M1bjhXa3B6MWpYMkI2QU5RWXlNcVd4V2JjVlQ1RXZPRVJMUkUzaVh2cWRFN3RLMFl6WnNEMGdaQU9LeFMtSmV3U3ZGNjdHT1hJOFA4TGpkb01Mc2hqUmpPQXdyR1VBX05JQTFLZFpVQW9TalF0OWxhMG1UZEJVUzFtSUxQSEx0ejNIQUtNcm5TSUUyVjA2am1qUHZxV3VpekNZYzVvZUR0emtuZ2pJa2pSUVdLQjV5NGdjWHdOWjJxNzJPVGEyYWpkbnhFVGEtSGZEQ0pFeDh3a1VuZ19MY0g1RXZTbWZYTkxWa1FEY0dHcHBnaFlmTVhQWUdlajFJX3FUaGJJQkZ1cG1UdWh2cDhUSkltdHY3LXBzR3BvVkZJWV9ZMElCX2tlS29SbHBIbmF4T0pDRUdYMWhrYUxROEtQX2RxODdGSzdtTHNHVjJiQWM2SW5Yb0hXcjRhSTFNTFN2a0lfS0NjOHRMbFV3WXpJc3VVZERWQ09LbWpreUEtYTNvYmtZR2NlRm5uSXhGdGRVekdFZnNpWFlvSWp5T3NVREppblFITzdISzl4ZWFiaEhMTk5PV1psVks2TjJTVHNJbUV4aldOMktIaDZmb1BBbVQ3M29ZRGV0U0VVNVlRQWZXWmpuc1lPT1BXTWc2VDFvcjNpOW5zWkZwTzZMSEdkQTRvb2F0Q2FaaDItOHZmdEFwR213N3AwZFVMZ1pYU1pIVVktOXhVdU9YYTRLc3RKN1VkbkpwamkwcjE3MnVIRlFYVU9mS3IxX3lPenNyQmJQQzFEazVKbTlIY0xJS2pZMTNPSDU3aWpwc2NBTnPSAZAFQVVfeXFMUGxhR2tFRHVwRzZxZTVjTXRxVDBlY25BRE5yLWFtaUswck55RzJCT1FRWTVHNXlNWlJDX1JwWFVWalZMTl9FcDhVMEJkZXRhTW9KMmV3cldCMVdKNWJRclEzakhPMVhJbE9LcllyWGo2dVk2bnpkLWVicWFEY2tUSUFfeE13ckxudld5STVUQ0NZT1Q0QkM4NVQzdkVNR2NyaFRpUjlJTGp1MHVrVHBXRUNuQ0xkanQ1Z0lMT3VfdXNBcHNhT1plSF9FV1ZzTHZoeEltZzFtNmQ5VmVwaWpDYWxxUWVZR2FKdm5ISGNBR25CbHk2azFubEM4VnloNFItWUh6ZlRPSGJweV9KZ215NVg2Y3NnUi0wSDRmSzNWUnZJUy1NTjNUTGVJcjFrZFBxUDFGaTY4RmpqTS1IWDNnMlNBcDE5SEd1RC04akxfRGdtTVRJc0dJNW1peWlDbjRoVno2TEVDNG1aaFRxak5lTDAzVU9sbVY2M3hfbGx4MVhkV012bUxveGNHS2Zwb25mSXE2dG0xRGhSMzc5YjYwN2VMMDNUNjJvejFXLW9WVUpZSTF4OW4tX3QxUlFQb2JoeUNGeU84S05VeVJaMi1VVXBaem5tckFqNy15YkYxbWIwWUdRSGRkMkR5aGNNQlc3a0luX3ltYmdGdUxSTGx5d1l3eGRSMGFkYlhfWklQQ3JNWFE1N21WR1VhWGhZODRLN0ExanIwZXRVbnplR3I5QzFMRjZ2RWxheVN3X1RDb0VsRkJINm5rbkR2eG4wNEZJWTg0cTVFd0tfLTQ4eDdNTWZzTC14c0tSeEluQ1pFR1N0eE83TWhFOFE4Q2NISHZoMXRaOVJRMjJHcHVQU3Ftckk?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "خطط الإنفاق الضخمة لـ«أوراكل» في الذكاء الاصطناعي تهبط بسهمها 9 % - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 09:26:34 GMT",
+              "link": "https://news.google.com/rss/articles/CBMipwRBVV95cUxONVAzdjVKd0lQQWNZdUFYNks0VXJRN204cEdOZEpqTWIxUTJzdy1mYXhrYV9oNFNxTEZLRjRJNVVPZTRnMGVZa09va0x5aXBHbXotWHAwdGliNWhSckt4YlZ3d0s0clJkVlJrQkhKYkF1Sm9DM3BjTXM3RmhraHBHOERnQmVnT0tIb2dpTi1MNUhVeGpUa2FVdWRWZVRIZ0tOYUJ3Zm9tWXJXRERvUjE0WGkycnNnd0lub1lweGNRbXFJMDAzYlIwN1M2U2tOemVZekN0dDJTRXprVUc1YWtxdWZBdjZvVU5DUmVTZm84SkxnenZ1QUhkS3dMcGEtM2IxMWIyb0tCUFlYU25sNFlXR0plRWFsMEQ5TDVfZFltMkZWUER4b01SeWVsalUtVzlNMWNuZlhJWG53Q1NTcldCUzRwQUpWOWx6NzVZWUtwNU43NGtjMV9GRTdWZnQ5TTlxT05nVkxwRmtJeDBfNGE5NFg5ZjhMeGM0QldTT0pjRTdyTEdhb1NQOFZDXzlVczRRZG5VWlhldzFqVXZOVnlwV0ZVSUNDZzNiT2dQREQzVmpINDd6cnhTVDlYOXhxLUJuUWtuQUFubmtmazlHNEJFT2NMX2VDbDRneGNhNW8zUkROY1dTejV6TkpGQ0FlNUYwZFBrV3lyYUNScHJTTUctQmhsWGtDM2I5U2F2UFNQakRtZ0NDLTJUSjlsV1ZaTFRWUmFNMkJ6bw?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يتوقع بطل كأس العالم 2026.. هل تتفق معه؟ - Kooora",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 17:34:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilARBVV95cUxPSWZ6YTR5WEVtT1VVZGU2Z3A1UTNuUFRVOTVqNnViLWg5enJzMWNOSWstS0tIZU9uWGd3MVhBTTExQnJvaWktUUZWZFBjSll2dnBxLWdmRFpYLXFMbmMyNHBPaHFOekQyZ013SmdXcVNabUVTRXU5ZFQ5Umc2dTRDWWo4RlFXQ0RkNHl1YmVEX3MxeXQxbGJXZEtIYzdyejJDd0dxcG5GZVFGbUtjSUNfQmw2bGpTeGRRTHluM29EOVBLZkRuNzNQMFdwMGJvT0NtQjdDdTQ5bU42V2ZabXlqOGhVbnhraF9wRFZhRzR3dHNlZkV4QjNzMnFkdVRXbmxkMnNqdWhsbkloa3otYjctZ3BnS0xxWko3NVhCSkNySzdQQmM4OFBXTUFNT0VJTnpVelpwY3pGcFRMcnVlYmFiQmxhWXBQamtZVDhJb0NBLU8yWHlxMzdlN3F0S0ZzOWNKOGVSbVZPVzdMWkdlYUpvT2huWW5nUGQ4X1dJN1BzZGZNUHhyY1UtTmw5d2ZUZnM0UUY4bVM0VlAycXo2aklZa044SzF1TGtNYklkdXl6OWdBQk5MNHZCSlpXdHFBUzJEZmhMbmgzTHBBSGM3dDdNSUota2lJTG0wZGVBci1QM0JaVGw0eGRseENiRWFzQkZWM3BhY1B4UWkwYm1EQVVRcmV2eW9YLWo0N3pkbXhXLUlhMmNz?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "\"أنثروبيك\" تطلق أقوى نماذجها للذكاء الاصطناعي - سكاي نيوز عربية",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 13:35:45 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilANBVV95cUxONVBNMVBmdEtucTd6TDI4ZmxVanNLWmIzRDd6Y3UxdjZrU29JQ2lzTDA0MS11MUpNNzFzejlHU3cxaGdKdENxbjNKaDlvMzBkMGxFWk52Wm1CTS1YcllTLWtybWM3THRncldibkVfQk5LSWlZWkt5TlJDQlM3eWRMRV9NSk5JNmNXOXQ5c0lnMEw1VFl5RVNvSm1Ub1BzN2xOMnFHcXZKT1BsN0o4UTQzZEJUWWtJelZqWE51dnp2OUZxWUFNcWNZaTZlVDNLMzg4bXcwVUVnODRVaS0yYm5ZWjhSNkpZX1RYcHJJdDhxcGZTTHl2a1hMT0JqQ2dOWFFnT3ZNQUhFbjBZdFh0cldaV1hiVGNWOWtya2RCLVZGOVBLai1oMUtVNDM3VTU3dWRyaGkybWJCUzNmM1NKWEo2dFJwTGNId1dQa01NQ01jbjN0RDZ0Y1N1NDRWbWtJRTdLV1dSZnpWUGpNbm5nNkVhVUtnSzcwUUpJTXVtZlRpYmVXZHZrVWdfQk9QN2dPNmVfY25sS9IBmgNBVV95cUxQVXB5RGFWUFVRSVdtNExNNTBNZTZ6RThpOUhQMm9Va09UN2FkOWU0MVdGZXJkbmZNclh0VjRRaVNoZEthMVpmRnVNLUM0VU5KalVncjRxVFE3X3hYMXM4SUxvNldoVVZ0QW9tSk5WcTFTdUF5OU5ZcFNKQ3ZzY25kdU5HTW5iXzNnMzBqQ3pnZnZUNXpMWXE0ZlRfenB1TjAxWWRieWJVcWNmOTZFclVjYnNmQmdweUoyWV9BcnJFZUVRSzY0YlIzSFNJS2tkMTNVRkJsY3dEbTdNZlFYU1dZRVE4T0JpdVFrSTVmajl1amE2N2RpeEVhQ1VVeVdVdngwV3Q0MWpxWDBpTDNTTjZzVWFpVXZ3NVUxRDl0MVRsMVo5OFN1U2xDbFFHRkoxSkNIS3FwczJWUlFnWUtmREU3cXFxTEs1NU5SalhEeHRfSzRJNDJJaW9mdkZydi1MVEtQVnZ6TTRCTlRydUR3b1UxVWlzNXdwcFYxZVBRbkxlY3UyeHc1R1dibTdmek5NbnJySVNjRV9BM2FmUQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            }
+          ]
+        },
+        "opened": {
+          "ok": true,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+          "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+          "score": 60,
+          "domain": "news.google.com",
+          "queued": [
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177453.1610324,
+                "action": "wait",
+                "args": {
+                  "seconds": 1
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177453.1616952,
+                "action": "open_url",
+                "args": {
+                  "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177453.1621351,
+                "action": "wait",
+                "args": {
+                  "seconds": 5
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177453.1626062,
+                "action": "dump_ui",
+                "args": {
+                  "focus": "chrome"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            }
+          ]
+        },
+        "article": {
+          "ok": false,
+          "reason": "dirty_termux_dump",
+          "title": "",
+          "paragraphs": []
+        },
+        "summary": {
+          "ok": false,
+          "summary": "فشل التلخيص: القراءة غير صالحة. السبب: dirty_termux_dump"
+        },
+        "learned": true,
+        "log": "/data/data/com.termux/files/home/GerfexIntegratedV1/learning/autonomous_loop_log.json"
+      },
+      "learning": {
+        "ok": true,
+        "mode": "router_research"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 13
+      }
+    }
+  },
+  {
+    "id": "goal_6_1781166804",
+    "goal": "أخبار الذكاء الاصطناعي",
+    "source": "autonomous_scheduler",
+    "status": "completed",
+    "created_at": "2026-06-11T11:33:24.966542Z",
+    "started_at": "2026-06-11T11:33:24.970732Z",
+    "finished_at": "2026-06-11T11:33:55.072611Z",
+    "result": {
+      "ok": true,
+      "goal": "أخبار الذكاء الاصطناعي",
+      "memory_recall": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "count": 3,
+        "matches": [
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "فشل التلخيص: القراءة غير صالحة. السبب: dirty_termux_dump",
+            "time": "2026-06-11T11:31:23.078234Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:27:24.246607Z"
+          },
+          {
+            "type": "test",
+            "message": "memory online",
+            "time": "2026-06-11T10:31:59.079740Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "success_count": 2,
+        "failure_count": 0,
+        "recommended_route": "research",
+        "recommended_target": "research",
+        "confidence": 0.67,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "BrainRouter",
+        "intent": "news_research_pipeline",
+        "target": "research",
+        "route": {
+          "ok": true,
+          "route": "research",
+          "reason": "news/research goal"
+        },
+        "reason": "Brain Router وجّه الطلب إلى مسار الأخبار الجاهز"
+      },
+      "execution": {
+        "ok": true,
+        "mode": "GERFEX_AUTONOMOUS_COGNITIVE_LOOP_V1_RESEARCH_PIPELINE",
+        "goal": "أخبار الذكاء الاصطناعي",
+        "news": {
+          "ok": true,
+          "query": "أخبار الذكاء الاصطناعي",
+          "mode": "rss",
+          "count": 8,
+          "top": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            }
+          ],
+          "all": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دراسة جديدة: هل يُحدث الذكاء الاصطناعي تحولاً في أبحاث الصحة النفسية عبر محاكاة المشاعر؟ - Euronews.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 06:30:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNU3BPc2NiMkJSUkRPbU9DUElXNnk5MjFUVmN4STBnNW5LRlQxOTFWblE0RmcyVDB1M2V1aXhXZ09YZEdIU05aN2R4ZXNlenFWRFg5S1F0SDZGVE1RcGhWeHJKcGFxalZBSmQ2TWwycFhNQ3dNQWFLeU44aFMzV1A1TkY0am9IT0NaWWhvaW9EQ1REcWZkLVk0czN5aUlnT0lLSmFhTmpVUDNUZnl2OTg4dW8tdkNXOEp2RjVoTTZUcDFvVTl4LVhybTZiS0V1TTFn?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "أوروبا تجبر \"ميتا\" على فتح \"واتساب\" أمام روبوتات الذكاء الاصطناعي المنافسة مجانًا - العربية",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:46:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiiwVBVV95cUxPcmFoQXRvTzRmWUZjYy1UOXlMelNwRURsV2Jia2M1bjhXa3B6MWpYMkI2QU5RWXlNcVd4V2JjVlQ1RXZPRVJMUkUzaVh2cWRFN3RLMFl6WnNEMGdaQU9LeFMtSmV3U3ZGNjdHT1hJOFA4TGpkb01Mc2hqUmpPQXdyR1VBX05JQTFLZFpVQW9TalF0OWxhMG1UZEJVUzFtSUxQSEx0ejNIQUtNcm5TSUUyVjA2am1qUHZxV3VpekNZYzVvZUR0emtuZ2pJa2pSUVdLQjV5NGdjWHdOWjJxNzJPVGEyYWpkbnhFVGEtSGZEQ0pFeDh3a1VuZ19MY0g1RXZTbWZYTkxWa1FEY0dHcHBnaFlmTVhQWUdlajFJX3FUaGJJQkZ1cG1UdWh2cDhUSkltdHY3LXBzR3BvVkZJWV9ZMElCX2tlS29SbHBIbmF4T0pDRUdYMWhrYUxROEtQX2RxODdGSzdtTHNHVjJiQWM2SW5Yb0hXcjRhSTFNTFN2a0lfS0NjOHRMbFV3WXpJc3VVZERWQ09LbWpreUEtYTNvYmtZR2NlRm5uSXhGdGRVekdFZnNpWFlvSWp5T3NVREppblFITzdISzl4ZWFiaEhMTk5PV1psVks2TjJTVHNJbUV4aldOMktIaDZmb1BBbVQ3M29ZRGV0U0VVNVlRQWZXWmpuc1lPT1BXTWc2VDFvcjNpOW5zWkZwTzZMSEdkQTRvb2F0Q2FaaDItOHZmdEFwR213N3AwZFVMZ1pYU1pIVVktOXhVdU9YYTRLc3RKN1VkbkpwamkwcjE3MnVIRlFYVU9mS3IxX3lPenNyQmJQQzFEazVKbTlIY0xJS2pZMTNPSDU3aWpwc2NBTnPSAZAFQVVfeXFMUGxhR2tFRHVwRzZxZTVjTXRxVDBlY25BRE5yLWFtaUswck55RzJCT1FRWTVHNXlNWlJDX1JwWFVWalZMTl9FcDhVMEJkZXRhTW9KMmV3cldCMVdKNWJRclEzakhPMVhJbE9LcllyWGo2dVk2bnpkLWVicWFEY2tUSUFfeE13ckxudld5STVUQ0NZT1Q0QkM4NVQzdkVNR2NyaFRpUjlJTGp1MHVrVHBXRUNuQ0xkanQ1Z0lMT3VfdXNBcHNhT1plSF9FV1ZzTHZoeEltZzFtNmQ5VmVwaWpDYWxxUWVZR2FKdm5ISGNBR25CbHk2azFubEM4VnloNFItWUh6ZlRPSGJweV9KZ215NVg2Y3NnUi0wSDRmSzNWUnZJUy1NTjNUTGVJcjFrZFBxUDFGaTY4RmpqTS1IWDNnMlNBcDE5SEd1RC04akxfRGdtTVRJc0dJNW1peWlDbjRoVno2TEVDNG1aaFRxak5lTDAzVU9sbVY2M3hfbGx4MVhkV012bUxveGNHS2Zwb25mSXE2dG0xRGhSMzc5YjYwN2VMMDNUNjJvejFXLW9WVUpZSTF4OW4tX3QxUlFQb2JoeUNGeU84S05VeVJaMi1VVXBaem5tckFqNy15YkYxbWIwWUdRSGRkMkR5aGNNQlc3a0luX3ltYmdGdUxSTGx5d1l3eGRSMGFkYlhfWklQQ3JNWFE1N21WR1VhWGhZODRLN0ExanIwZXRVbnplR3I5QzFMRjZ2RWxheVN3X1RDb0VsRkJINm5rbkR2eG4wNEZJWTg0cTVFd0tfLTQ4eDdNTWZzTC14c0tSeEluQ1pFR1N0eE83TWhFOFE4Q2NISHZoMXRaOVJRMjJHcHVQU3Ftckk?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "خطط الإنفاق الضخمة لـ«أوراكل» في الذكاء الاصطناعي تهبط بسهمها 9 % - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 09:26:34 GMT",
+              "link": "https://news.google.com/rss/articles/CBMipwRBVV95cUxONVAzdjVKd0lQQWNZdUFYNks0VXJRN204cEdOZEpqTWIxUTJzdy1mYXhrYV9oNFNxTEZLRjRJNVVPZTRnMGVZa09va0x5aXBHbXotWHAwdGliNWhSckt4YlZ3d0s0clJkVlJrQkhKYkF1Sm9DM3BjTXM3RmhraHBHOERnQmVnT0tIb2dpTi1MNUhVeGpUa2FVdWRWZVRIZ0tOYUJ3Zm9tWXJXRERvUjE0WGkycnNnd0lub1lweGNRbXFJMDAzYlIwN1M2U2tOemVZekN0dDJTRXprVUc1YWtxdWZBdjZvVU5DUmVTZm84SkxnenZ1QUhkS3dMcGEtM2IxMWIyb0tCUFlYU25sNFlXR0plRWFsMEQ5TDVfZFltMkZWUER4b01SeWVsalUtVzlNMWNuZlhJWG53Q1NTcldCUzRwQUpWOWx6NzVZWUtwNU43NGtjMV9GRTdWZnQ5TTlxT05nVkxwRmtJeDBfNGE5NFg5ZjhMeGM0QldTT0pjRTdyTEdhb1NQOFZDXzlVczRRZG5VWlhldzFqVXZOVnlwV0ZVSUNDZzNiT2dQREQzVmpINDd6cnhTVDlYOXhxLUJuUWtuQUFubmtmazlHNEJFT2NMX2VDbDRneGNhNW8zUkROY1dTejV6TkpGQ0FlNUYwZFBrV3lyYUNScHJTTUctQmhsWGtDM2I5U2F2UFNQakRtZ0NDLTJUSjlsV1ZaTFRWUmFNMkJ6bw?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يتوقع بطل كأس العالم 2026.. هل تتفق معه؟ - Kooora",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 17:34:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilARBVV95cUxPSWZ6YTR5WEVtT1VVZGU2Z3A1UTNuUFRVOTVqNnViLWg5enJzMWNOSWstS0tIZU9uWGd3MVhBTTExQnJvaWktUUZWZFBjSll2dnBxLWdmRFpYLXFMbmMyNHBPaHFOekQyZ013SmdXcVNabUVTRXU5ZFQ5Umc2dTRDWWo4RlFXQ0RkNHl1YmVEX3MxeXQxbGJXZEtIYzdyejJDd0dxcG5GZVFGbUtjSUNfQmw2bGpTeGRRTHluM29EOVBLZkRuNzNQMFdwMGJvT0NtQjdDdTQ5bU42V2ZabXlqOGhVbnhraF9wRFZhRzR3dHNlZkV4QjNzMnFkdVRXbmxkMnNqdWhsbkloa3otYjctZ3BnS0xxWko3NVhCSkNySzdQQmM4OFBXTUFNT0VJTnpVelpwY3pGcFRMcnVlYmFiQmxhWXBQamtZVDhJb0NBLU8yWHlxMzdlN3F0S0ZzOWNKOGVSbVZPVzdMWkdlYUpvT2huWW5nUGQ4X1dJN1BzZGZNUHhyY1UtTmw5d2ZUZnM0UUY4bVM0VlAycXo2aklZa044SzF1TGtNYklkdXl6OWdBQk5MNHZCSlpXdHFBUzJEZmhMbmgzTHBBSGM3dDdNSUota2lJTG0wZGVBci1QM0JaVGw0eGRseENiRWFzQkZWM3BhY1B4UWkwYm1EQVVRcmV2eW9YLWo0N3pkbXhXLUlhMmNz?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "\"أنثروبيك\" تطلق أقوى نماذجها للذكاء الاصطناعي - سكاي نيوز عربية",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 13:35:45 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilANBVV95cUxONVBNMVBmdEtucTd6TDI4ZmxVanNLWmIzRDd6Y3UxdjZrU29JQ2lzTDA0MS11MUpNNzFzejlHU3cxaGdKdENxbjNKaDlvMzBkMGxFWk52Wm1CTS1YcllTLWtybWM3THRncldibkVfQk5LSWlZWkt5TlJDQlM3eWRMRV9NSk5JNmNXOXQ5c0lnMEw1VFl5RVNvSm1Ub1BzN2xOMnFHcXZKT1BsN0o4UTQzZEJUWWtJelZqWE51dnp2OUZxWUFNcWNZaTZlVDNLMzg4bXcwVUVnODRVaS0yYm5ZWjhSNkpZX1RYcHJJdDhxcGZTTHl2a1hMT0JqQ2dOWFFnT3ZNQUhFbjBZdFh0cldaV1hiVGNWOWtya2RCLVZGOVBLai1oMUtVNDM3VTU3dWRyaGkybWJCUzNmM1NKWEo2dFJwTGNId1dQa01NQ01jbjN0RDZ0Y1N1NDRWbWtJRTdLV1dSZnpWUGpNbm5nNkVhVUtnSzcwUUpJTXVtZlRpYmVXZHZrVWdfQk9QN2dPNmVfY25sS9IBmgNBVV95cUxQVXB5RGFWUFVRSVdtNExNNTBNZTZ6RThpOUhQMm9Va09UN2FkOWU0MVdGZXJkbmZNclh0VjRRaVNoZEthMVpmRnVNLUM0VU5KalVncjRxVFE3X3hYMXM4SUxvNldoVVZ0QW9tSk5WcTFTdUF5OU5ZcFNKQ3ZzY25kdU5HTW5iXzNnMzBqQ3pnZnZUNXpMWXE0ZlRfenB1TjAxWWRieWJVcWNmOTZFclVjYnNmQmdweUoyWV9BcnJFZUVRSzY0YlIzSFNJS2tkMTNVRkJsY3dEbTdNZlFYU1dZRVE4T0JpdVFrSTVmajl1amE2N2RpeEVhQ1VVeVdVdngwV3Q0MWpxWDBpTDNTTjZzVWFpVXZ3NVUxRDl0MVRsMVo5OFN1U2xDbFFHRkoxSkNIS3FwczJWUlFnWUtmREU3cXFxTEs1NU5SalhEeHRfSzRJNDJJaW9mdkZydi1MVEtQVnZ6TTRCTlRydUR3b1UxVWlzNXdwcFYxZVBRbkxlY3UyeHc1R1dibTdmek5NbnJySVNjRV9BM2FmUQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            }
+          ]
+        },
+        "opened": {
+          "ok": true,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+          "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+          "score": 60,
+          "domain": "news.google.com",
+          "queued": [
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177606.5664487,
+                "action": "wait",
+                "args": {
+                  "seconds": 1
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177606.5671535,
+                "action": "open_url",
+                "args": {
+                  "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177606.5675876,
+                "action": "wait",
+                "args": {
+                  "seconds": 5
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781177606.567935,
+                "action": "dump_ui",
+                "args": {
+                  "focus": "chrome"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            }
+          ]
+        },
+        "article": {
+          "ok": true,
+          "reason": null,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com",
+          "paragraph_count": 25,
+          "paragraphs": [
+            "Investing.com - البوابة الإقتصادية الرائدة",
+            "الرسوم البيانية للعملات الرقمية",
+            "منصات تداول العملات الرقمية",
+            "تقويم انتهاء العقود المستقبلية",
+            "أسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة",
+            "اعرض الأسهم الأقل من قيمتها",
+            "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي",
+            "Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (",
+            ") الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.",
+            "ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.",
+            "احصل على تحديثات فورية حول الأخبار المؤثرة في الأسواق مع InvestingPro",
+            "تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.",
+            "وستكون هذه الزيارة الأولى لألتمان إلى كوريا الجنوبية منذ نحو ثمانية أشهر. وخلال زيارته السابقة في أكتوبر، أجرى لقاءات منفصلة مع رئيس مجلس إدارة سامسونج إلكترونيكس لي جاي-يونغ ورئيس مجموعة SK تشيي تاي-وون.",
+            "وأشارت وكالة يونهاب إلى أنه في أعقاب تلك الاجتماعات، وقّعت OpenAI مذكرات تفاهم مع سامسونج ومجموعة SK للتعاون في تطوير البنية التحتية للذكاء الاصطناعي على المستوى العالمي، مما أرسى الأساس لشراكات استراتيجية أوسع نطاقاً.",
+            "هذه المقالة مترجمة بمساعدة برنامج ذكاء اصطناعي وخضعت لمراجعة أحد المحررين.. لمزيد من التفاصيل يُرجى الرجوع للشروط والأحكام الخاصة بنا",
+            "مدرج ضمن استراتيجياتنا المختارة بواسطة الذكاء الاصطناعي",
+            "samsung-electronics-co-ltd",
+            "هل استثمار 2,000 دولار في 005930 الآن هو القرار الصحيح؟",
+            "يضع الذكاء الاصطناعي لـ ProPicks سهم 005930 تحت المجهر شهرياً، ويقارنه بآلاف الشركات الأخرى باستخدام أكثر من 100 معيار مالي صارم. لا نكتفي بشعبية السهم! بل نستخدم تقنيات الذكاء الاصطناعي الفائقة لاقتناص الأفكار الاستثمارية المثيرة عبر تحليل دقيق للأساسيات، والزخم، والتقييم. أداة خالية تماماً من العواطف والتحيز؛ هدفها الوحيد هو رصد الأسهم التي تمنحك أفضل نسبة \"عائد للمخاطرة\" بناءً على معطيات السوق الحالية. وقد أثبتت الأداة كفاءتها باقتناص نجاحات تاريخية مثل سوبر ميكرو كومبيوتر (+185%) وآب لوفين (+157%). هل تود اكتشاف ما إذا كان 005930 يتربع الآن على قائمة استراتيجيات ProPicks AI، أم أن هناك جواهر مخفية أخرى تقدم لك فرصاً أقوى في نفس السوق؟",
+            "CAAiEEkkznrjz51gPM9x5YvVuFYqFAgKIhBJJM5648-dYDzPceWL1bhW",
+            "جاري تحميل المقال التالي...",
+            "5 نقاط أساسية ينبغي معرفتها حول موجة التراجع في أسعار الذهب والفضة",
+            "user?screen_name=investingsa",
+            "© 2007-2026 - كل الحقوق محفوظة لشركة Fusion Media Ltd.",
+            "sa.investing.com/news/stock-market-news/article-3272260"
+          ],
+          "preview": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nInvesting.com - البوابة الإقتصادية الرائدة\n\nالرسوم البيانية للعملات الرقمية\n\nمنصات تداول العملات الرقمية\n\nتقويم انتهاء العقود المستقبلية\n\nأسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة"
+        },
+        "summary": {
+          "ok": true,
+          "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n"
+        },
+        "learned": true,
+        "log": "/data/data/com.termux/files/home/GerfexIntegratedV1/learning/autonomous_loop_log.json"
+      },
+      "learning": {
+        "ok": true,
+        "mode": "router_research"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 14
+      }
+    }
+  },
+  {
+    "id": "goal_7_1781167348",
+    "goal": "أخبار الذكاء الاصطناعي",
+    "source": "autonomous_scheduler",
+    "status": "completed",
+    "created_at": "2026-06-11T11:42:28.102878Z",
+    "started_at": "2026-06-11T11:42:28.107911Z",
+    "finished_at": "2026-06-11T11:42:59.468062Z",
+    "result": {
+      "ok": true,
+      "goal": "أخبار الذكاء الاصطناعي",
+      "memory_recall": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "count": 5,
+        "matches": [
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:37:30.105528Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:33:55.069758Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "فشل التلخيص: القراءة غير صالحة. السبب: dirty_termux_dump",
+            "time": "2026-06-11T11:31:23.078234Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:27:24.246607Z"
+          },
+          {
+            "type": "test",
+            "message": "memory online",
+            "time": "2026-06-11T10:31:59.079740Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "success_count": 4,
+        "failure_count": 0,
+        "recommended_route": "research",
+        "recommended_target": "research",
+        "confidence": 0.8,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "BrainRouter",
+        "intent": "news_research_pipeline",
+        "target": "research",
+        "route": {
+          "ok": true,
+          "route": "research",
+          "reason": "news/research goal"
+        },
+        "reason": "Brain Router وجّه الطلب إلى مسار الأخبار الجاهز"
+      },
+      "execution": {
+        "ok": true,
+        "mode": "GERFEX_AUTONOMOUS_COGNITIVE_LOOP_V1_RESEARCH_PIPELINE",
+        "goal": "أخبار الذكاء الاصطناعي",
+        "news": {
+          "ok": true,
+          "query": "أخبار الذكاء الاصطناعي",
+          "mode": "rss",
+          "count": 8,
+          "top": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "السعودية تؤكد أهمية تعزيز التنوع اللغوي والثقافي في أنظمة الذكاء الاصطناعي - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 00:49:30 GMT",
+              "link": "https://news.google.com/rss/articles/CBMimAVBVV95cUxPSl9TUG9IOUJ6NGhmSFZSZzh6RFYtY09CUUFQaHhNNzhrYlkzYTFYdW14TkpnWVNXRjdMN0R3VkItdkhSaElPUnFLMF9laGtiUms5Ti01cXR0dUhadGUxUUVfTjc2QjRzUTlUcVVWdHd5TGRGVEJTN1hqaFZyay01V01JY2NZYU1ZZWt1ckU1ZjU1NXRUb1VLV2ZoQWR6MEJWSmJHS0REdjNJLVlsVUtENktaaGtMNDhRcUwwZGpSMy03b2JHTjBobzhXMGhoS3VIY3VldWVhYl84WGlxX0Z2XzlfdVBDcFNYZE1VNGdYZmlOMVdqbGRvT1lCVWsxSEZsbUpGc0t2el9Qd0xaUW9KMnNoYVpVZVJLa1FrNTZ4VTFvMWJkNndYb2JTSnpYZm1lVFYwM0xXQmdNQkFjV0UySlE4S3U3WGVaUU0zY0VKOUdCNEZOUXZCWmNGczFtSTBiRmNQYjY1NzdFRFNjRTQwSEZTUl9sRU01WVhMOV84bTB6Q0p2aEM5ME9IODJET25RbmIyQ1JWZi1ELTR3QlRaQnR0WVRidkNGVnB0ZGZ0bFJmOEw3UzJldTZBVHRSUEt5T3pWYkdQMjVqdUNvQ0V2VW9zWEpES0VUNzJNV0ZzVkJRb1F2VkZPYVgxOUh2QndaY285OXBYWlBXMklWSDhkUU5ONkVsbnZPZHJoV3ZRSkF1VjlONm9MRnlpQjczSkRoZzFFQXRZbVN2bHNYQ2ZTeG9YZC1XTHlQNlFFYkl4UmNhMXFEc1dwOVdHT0RxN2FtYVBjTkd6TC10aG9Bd2N1UVJhNEF0U2lfM2trekVXUzJYRU5INWJBc1p3RllMeFJPdWhoNVJYa1hPeWdBa2FRMnlkREo3QXh4?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            }
+          ],
+          "all": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "السعودية تؤكد أهمية تعزيز التنوع اللغوي والثقافي في أنظمة الذكاء الاصطناعي - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 00:49:30 GMT",
+              "link": "https://news.google.com/rss/articles/CBMimAVBVV95cUxPSl9TUG9IOUJ6NGhmSFZSZzh6RFYtY09CUUFQaHhNNzhrYlkzYTFYdW14TkpnWVNXRjdMN0R3VkItdkhSaElPUnFLMF9laGtiUms5Ti01cXR0dUhadGUxUUVfTjc2QjRzUTlUcVVWdHd5TGRGVEJTN1hqaFZyay01V01JY2NZYU1ZZWt1ckU1ZjU1NXRUb1VLV2ZoQWR6MEJWSmJHS0REdjNJLVlsVUtENktaaGtMNDhRcUwwZGpSMy03b2JHTjBobzhXMGhoS3VIY3VldWVhYl84WGlxX0Z2XzlfdVBDcFNYZE1VNGdYZmlOMVdqbGRvT1lCVWsxSEZsbUpGc0t2el9Qd0xaUW9KMnNoYVpVZVJLa1FrNTZ4VTFvMWJkNndYb2JTSnpYZm1lVFYwM0xXQmdNQkFjV0UySlE4S3U3WGVaUU0zY0VKOUdCNEZOUXZCWmNGczFtSTBiRmNQYjY1NzdFRFNjRTQwSEZTUl9sRU01WVhMOV84bTB6Q0p2aEM5ME9IODJET25RbmIyQ1JWZi1ELTR3QlRaQnR0WVRidkNGVnB0ZGZ0bFJmOEw3UzJldTZBVHRSUEt5T3pWYkdQMjVqdUNvQ0V2VW9zWEpES0VUNzJNV0ZzVkJRb1F2VkZPYVgxOUh2QndaY285OXBYWlBXMklWSDhkUU5ONkVsbnZPZHJoV3ZRSkF1VjlONm9MRnlpQjczSkRoZzFFQXRZbVN2bHNYQ2ZTeG9YZC1XTHlQNlFFYkl4UmNhMXFEc1dwOVdHT0RxN2FtYVBjTkd6TC10aG9Bd2N1UVJhNEF0U2lfM2trekVXUzJYRU5INWJBc1p3RllMeFJPdWhoNVJYa1hPeWdBa2FRMnlkREo3QXh4?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دراسة جديدة: هل يُحدث الذكاء الاصطناعي تحولاً في أبحاث الصحة النفسية عبر محاكاة المشاعر؟ - Euronews.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 06:30:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNU3BPc2NiMkJSUkRPbU9DUElXNnk5MjFUVmN4STBnNW5LRlQxOTFWblE0RmcyVDB1M2V1aXhXZ09YZEdIU05aN2R4ZXNlenFWRFg5S1F0SDZGVE1RcGhWeHJKcGFxalZBSmQ2TWwycFhNQ3dNQWFLeU44aFMzV1A1TkY0am9IT0NaWWhvaW9EQ1REcWZkLVk0czN5aUlnT0lLSmFhTmpVUDNUZnl2OTg4dW8tdkNXOEp2RjVoTTZUcDFvVTl4LVhybTZiS0V1TTFn?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "أوروبا تجبر \"ميتا\" على فتح \"واتساب\" أمام روبوتات الذكاء الاصطناعي المنافسة مجانًا - العربية",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:46:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiiwVBVV95cUxPcmFoQXRvTzRmWUZjYy1UOXlMelNwRURsV2Jia2M1bjhXa3B6MWpYMkI2QU5RWXlNcVd4V2JjVlQ1RXZPRVJMUkUzaVh2cWRFN3RLMFl6WnNEMGdaQU9LeFMtSmV3U3ZGNjdHT1hJOFA4TGpkb01Mc2hqUmpPQXdyR1VBX05JQTFLZFpVQW9TalF0OWxhMG1UZEJVUzFtSUxQSEx0ejNIQUtNcm5TSUUyVjA2am1qUHZxV3VpekNZYzVvZUR0emtuZ2pJa2pSUVdLQjV5NGdjWHdOWjJxNzJPVGEyYWpkbnhFVGEtSGZEQ0pFeDh3a1VuZ19MY0g1RXZTbWZYTkxWa1FEY0dHcHBnaFlmTVhQWUdlajFJX3FUaGJJQkZ1cG1UdWh2cDhUSkltdHY3LXBzR3BvVkZJWV9ZMElCX2tlS29SbHBIbmF4T0pDRUdYMWhrYUxROEtQX2RxODdGSzdtTHNHVjJiQWM2SW5Yb0hXcjRhSTFNTFN2a0lfS0NjOHRMbFV3WXpJc3VVZERWQ09LbWpreUEtYTNvYmtZR2NlRm5uSXhGdGRVekdFZnNpWFlvSWp5T3NVREppblFITzdISzl4ZWFiaEhMTk5PV1psVks2TjJTVHNJbUV4aldOMktIaDZmb1BBbVQ3M29ZRGV0U0VVNVlRQWZXWmpuc1lPT1BXTWc2VDFvcjNpOW5zWkZwTzZMSEdkQTRvb2F0Q2FaaDItOHZmdEFwR213N3AwZFVMZ1pYU1pIVVktOXhVdU9YYTRLc3RKN1VkbkpwamkwcjE3MnVIRlFYVU9mS3IxX3lPenNyQmJQQzFEazVKbTlIY0xJS2pZMTNPSDU3aWpwc2NBTnPSAZAFQVVfeXFMUGxhR2tFRHVwRzZxZTVjTXRxVDBlY25BRE5yLWFtaUswck55RzJCT1FRWTVHNXlNWlJDX1JwWFVWalZMTl9FcDhVMEJkZXRhTW9KMmV3cldCMVdKNWJRclEzakhPMVhJbE9LcllyWGo2dVk2bnpkLWVicWFEY2tUSUFfeE13ckxudld5STVUQ0NZT1Q0QkM4NVQzdkVNR2NyaFRpUjlJTGp1MHVrVHBXRUNuQ0xkanQ1Z0lMT3VfdXNBcHNhT1plSF9FV1ZzTHZoeEltZzFtNmQ5VmVwaWpDYWxxUWVZR2FKdm5ISGNBR25CbHk2azFubEM4VnloNFItWUh6ZlRPSGJweV9KZ215NVg2Y3NnUi0wSDRmSzNWUnZJUy1NTjNUTGVJcjFrZFBxUDFGaTY4RmpqTS1IWDNnMlNBcDE5SEd1RC04akxfRGdtTVRJc0dJNW1peWlDbjRoVno2TEVDNG1aaFRxak5lTDAzVU9sbVY2M3hfbGx4MVhkV012bUxveGNHS2Zwb25mSXE2dG0xRGhSMzc5YjYwN2VMMDNUNjJvejFXLW9WVUpZSTF4OW4tX3QxUlFQb2JoeUNGeU84S05VeVJaMi1VVXBaem5tckFqNy15YkYxbWIwWUdRSGRkMkR5aGNNQlc3a0luX3ltYmdGdUxSTGx5d1l3eGRSMGFkYlhfWklQQ3JNWFE1N21WR1VhWGhZODRLN0ExanIwZXRVbnplR3I5QzFMRjZ2RWxheVN3X1RDb0VsRkJINm5rbkR2eG4wNEZJWTg0cTVFd0tfLTQ4eDdNTWZzTC14c0tSeEluQ1pFR1N0eE83TWhFOFE4Q2NISHZoMXRaOVJRMjJHcHVQU3Ftckk?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يتوقع بطل كأس العالم 2026.. هل تتفق معه؟ - Kooora",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 17:34:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilARBVV95cUxPSWZ6YTR5WEVtT1VVZGU2Z3A1UTNuUFRVOTVqNnViLWg5enJzMWNOSWstS0tIZU9uWGd3MVhBTTExQnJvaWktUUZWZFBjSll2dnBxLWdmRFpYLXFMbmMyNHBPaHFOekQyZ013SmdXcVNabUVTRXU5ZFQ5Umc2dTRDWWo4RlFXQ0RkNHl1YmVEX3MxeXQxbGJXZEtIYzdyejJDd0dxcG5GZVFGbUtjSUNfQmw2bGpTeGRRTHluM29EOVBLZkRuNzNQMFdwMGJvT0NtQjdDdTQ5bU42V2ZabXlqOGhVbnhraF9wRFZhRzR3dHNlZkV4QjNzMnFkdVRXbmxkMnNqdWhsbkloa3otYjctZ3BnS0xxWko3NVhCSkNySzdQQmM4OFBXTUFNT0VJTnpVelpwY3pGcFRMcnVlYmFiQmxhWXBQamtZVDhJb0NBLU8yWHlxMzdlN3F0S0ZzOWNKOGVSbVZPVzdMWkdlYUpvT2huWW5nUGQ4X1dJN1BzZGZNUHhyY1UtTmw5d2ZUZnM0UUY4bVM0VlAycXo2aklZa044SzF1TGtNYklkdXl6OWdBQk5MNHZCSlpXdHFBUzJEZmhMbmgzTHBBSGM3dDdNSUota2lJTG0wZGVBci1QM0JaVGw0eGRseENiRWFzQkZWM3BhY1B4UWkwYm1EQVVRcmV2eW9YLWo0N3pkbXhXLUlhMmNz?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "\"أنثروبيك\" تطلق أقوى نماذجها للذكاء الاصطناعي - سكاي نيوز عربية",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 13:35:45 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilANBVV95cUxONVBNMVBmdEtucTd6TDI4ZmxVanNLWmIzRDd6Y3UxdjZrU29JQ2lzTDA0MS11MUpNNzFzejlHU3cxaGdKdENxbjNKaDlvMzBkMGxFWk52Wm1CTS1YcllTLWtybWM3THRncldibkVfQk5LSWlZWkt5TlJDQlM3eWRMRV9NSk5JNmNXOXQ5c0lnMEw1VFl5RVNvSm1Ub1BzN2xOMnFHcXZKT1BsN0o4UTQzZEJUWWtJelZqWE51dnp2OUZxWUFNcWNZaTZlVDNLMzg4bXcwVUVnODRVaS0yYm5ZWjhSNkpZX1RYcHJJdDhxcGZTTHl2a1hMT0JqQ2dOWFFnT3ZNQUhFbjBZdFh0cldaV1hiVGNWOWtya2RCLVZGOVBLai1oMUtVNDM3VTU3dWRyaGkybWJCUzNmM1NKWEo2dFJwTGNId1dQa01NQ01jbjN0RDZ0Y1N1NDRWbWtJRTdLV1dSZnpWUGpNbm5nNkVhVUtnSzcwUUpJTXVtZlRpYmVXZHZrVWdfQk9QN2dPNmVfY25sS9IBmgNBVV95cUxQVXB5RGFWUFVRSVdtNExNNTBNZTZ6RThpOUhQMm9Va09UN2FkOWU0MVdGZXJkbmZNclh0VjRRaVNoZEthMVpmRnVNLUM0VU5KalVncjRxVFE3X3hYMXM4SUxvNldoVVZ0QW9tSk5WcTFTdUF5OU5ZcFNKQ3ZzY25kdU5HTW5iXzNnMzBqQ3pnZnZUNXpMWXE0ZlRfenB1TjAxWWRieWJVcWNmOTZFclVjYnNmQmdweUoyWV9BcnJFZUVRSzY0YlIzSFNJS2tkMTNVRkJsY3dEbTdNZlFYU1dZRVE4T0JpdVFrSTVmajl1amE2N2RpeEVhQ1VVeVdVdngwV3Q0MWpxWDBpTDNTTjZzVWFpVXZ3NVUxRDl0MVRsMVo5OFN1U2xDbFFHRkoxSkNIS3FwczJWUlFnWUtmREU3cXFxTEs1NU5SalhEeHRfSzRJNDJJaW9mdkZydi1MVEtQVnZ6TTRCTlRydUR3b1UxVWlzNXdwcFYxZVBRbkxlY3UyeHc1R1dibTdmek5NbnJySVNjRV9BM2FmUQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            }
+          ]
+        },
+        "opened": {
+          "ok": true,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+          "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+          "score": 60,
+          "domain": "news.google.com",
+          "queued": [
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178149.8146884,
+                "action": "wait",
+                "args": {
+                  "seconds": 1
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178149.8153403,
+                "action": "open_url",
+                "args": {
+                  "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178149.8157458,
+                "action": "wait",
+                "args": {
+                  "seconds": 5
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178149.8160825,
+                "action": "dump_ui",
+                "args": {
+                  "focus": "chrome"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            }
+          ]
+        },
+        "article": {
+          "ok": true,
+          "reason": null,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com",
+          "paragraph_count": 24,
+          "paragraphs": [
+            "Investing.com - البوابة الإقتصادية الرائدة",
+            "الرسوم البيانية للعملات الرقمية",
+            "منصات تداول العملات الرقمية",
+            "تقويم انتهاء العقود المستقبلية",
+            "أسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة",
+            "اعرض الأسهم الأقل من قيمتها",
+            "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي",
+            "Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (",
+            ") الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.",
+            "ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.",
+            "احصل على تحديثات فورية حول الأخبار المؤثرة في الأسواق مع InvestingPro",
+            "تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.",
+            "وستكون هذه الزيارة الأولى لألتمان إلى كوريا الجنوبية منذ نحو ثمانية أشهر. وخلال زيارته السابقة في أكتوبر، أجرى لقاءات منفصلة مع رئيس مجلس إدارة سامسونج إلكترونيكس لي جاي-يونغ ورئيس مجموعة SK تشيي تاي-وون.",
+            "وأشارت وكالة يونهاب إلى أنه في أعقاب تلك الاجتماعات، وقّعت OpenAI مذكرات تفاهم مع سامسونج ومجموعة SK للتعاون في تطوير البنية التحتية للذكاء الاصطناعي على المستوى العالمي، مما أرسى الأساس لشراكات استراتيجية أوسع نطاقاً.",
+            "هذه المقالة مترجمة بمساعدة برنامج ذكاء اصطناعي وخضعت لمراجعة أحد المحررين.. لمزيد من التفاصيل يُرجى الرجوع للشروط والأحكام الخاصة بنا",
+            "مدرج ضمن استراتيجياتنا المختارة بواسطة الذكاء الاصطناعي",
+            "samsung-electronics-co-ltd",
+            "أسرع طريقة لمعرفة ذلك هي باستخدام حاسبة القيمة العادلة الخاصة بنا. التي تستخدم مزيجًا من 17 نموذج تقييم صناعي مجربة لتوفير أقصى قدر من الدقة. احصل على النتيجة النهائية لسهم 005930 بالإضافة إلى آلاف الأسهم الأخرى واعثر على جوهرتك المخفية التالية ذات الإمكانات الهائلة.",
+            "CAAiEEkkznrjz51gPM9x5YvVuFYqFAgKIhBJJM5648-dYDzPceWL1bhW",
+            "جاري تحميل المقال التالي...",
+            "5 نقاط أساسية ينبغي معرفتها حول موجة التراجع في أسعار الذهب والفضة",
+            "user?screen_name=investingsa",
+            "© 2007-2026 - كل الحقوق محفوظة لشركة Fusion Media Ltd.",
+            "sa.investing.com/news/stock-market-news/article-3272260"
+          ],
+          "preview": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nInvesting.com - البوابة الإقتصادية الرائدة\n\nالرسوم البيانية للعملات الرقمية\n\nمنصات تداول العملات الرقمية\n\nتقويم انتهاء العقود المستقبلية\n\nأسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة"
+        },
+        "summary": {
+          "ok": true,
+          "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n"
+        },
+        "learned": true,
+        "log": "/data/data/com.termux/files/home/GerfexIntegratedV1/learning/autonomous_loop_log.json"
+      },
+      "learning": {
+        "ok": true,
+        "mode": "router_research"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 16
+      }
+    }
+  },
+  {
+    "id": "goal_8_1781167390",
+    "goal": "أخبار الذكاء الاصطناعي",
+    "source": "autonomous_scheduler",
+    "status": "completed",
+    "created_at": "2026-06-11T11:43:10.552111Z",
+    "started_at": "2026-06-11T11:43:10.556920Z",
+    "finished_at": "2026-06-11T11:43:40.897625Z",
+    "result": {
+      "ok": true,
+      "goal": "أخبار الذكاء الاصطناعي",
+      "memory_recall": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "count": 5,
+        "matches": [
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:42:59.462102Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:37:30.105528Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:33:55.069758Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "فشل التلخيص: القراءة غير صالحة. السبب: dirty_termux_dump",
+            "time": "2026-06-11T11:31:23.078234Z"
+          },
+          {
+            "type": "goal_learning",
+            "goal": "أخبار الذكاء الاصطناعي",
+            "route": {
+              "ok": true,
+              "route": "research",
+              "reason": "news/research goal"
+            },
+            "intent": "news_research_pipeline",
+            "target": "research",
+            "ok": true,
+            "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+            "time": "2026-06-11T11:27:24.246607Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "أخبار الذكاء الاصطناعي",
+        "success_count": 5,
+        "failure_count": 0,
+        "recommended_route": "research",
+        "recommended_target": "research",
+        "confidence": 1.0,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "research",
+        "reason": "news/research goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "BrainRouter",
+        "intent": "news_research_pipeline",
+        "target": "research",
+        "route": {
+          "ok": true,
+          "route": "research",
+          "reason": "news/research goal"
+        },
+        "reason": "Brain Router وجّه الطلب إلى مسار الأخبار الجاهز"
+      },
+      "execution": {
+        "ok": true,
+        "mode": "GERFEX_AUTONOMOUS_COGNITIVE_LOOP_V1_RESEARCH_PIPELINE",
+        "goal": "أخبار الذكاء الاصطناعي",
+        "news": {
+          "ok": true,
+          "query": "أخبار الذكاء الاصطناعي",
+          "mode": "rss",
+          "count": 8,
+          "top": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "السعودية تؤكد أهمية تعزيز التنوع اللغوي والثقافي في أنظمة الذكاء الاصطناعي - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 00:49:30 GMT",
+              "link": "https://news.google.com/rss/articles/CBMimAVBVV95cUxPSl9TUG9IOUJ6NGhmSFZSZzh6RFYtY09CUUFQaHhNNzhrYlkzYTFYdW14TkpnWVNXRjdMN0R3VkItdkhSaElPUnFLMF9laGtiUms5Ti01cXR0dUhadGUxUUVfTjc2QjRzUTlUcVVWdHd5TGRGVEJTN1hqaFZyay01V01JY2NZYU1ZZWt1ckU1ZjU1NXRUb1VLV2ZoQWR6MEJWSmJHS0REdjNJLVlsVUtENktaaGtMNDhRcUwwZGpSMy03b2JHTjBobzhXMGhoS3VIY3VldWVhYl84WGlxX0Z2XzlfdVBDcFNYZE1VNGdYZmlOMVdqbGRvT1lCVWsxSEZsbUpGc0t2el9Qd0xaUW9KMnNoYVpVZVJLa1FrNTZ4VTFvMWJkNndYb2JTSnpYZm1lVFYwM0xXQmdNQkFjV0UySlE4S3U3WGVaUU0zY0VKOUdCNEZOUXZCWmNGczFtSTBiRmNQYjY1NzdFRFNjRTQwSEZTUl9sRU01WVhMOV84bTB6Q0p2aEM5ME9IODJET25RbmIyQ1JWZi1ELTR3QlRaQnR0WVRidkNGVnB0ZGZ0bFJmOEw3UzJldTZBVHRSUEt5T3pWYkdQMjVqdUNvQ0V2VW9zWEpES0VUNzJNV0ZzVkJRb1F2VkZPYVgxOUh2QndaY285OXBYWlBXMklWSDhkUU5ONkVsbnZPZHJoV3ZRSkF1VjlONm9MRnlpQjczSkRoZzFFQXRZbVN2bHNYQ2ZTeG9YZC1XTHlQNlFFYkl4UmNhMXFEc1dwOVdHT0RxN2FtYVBjTkd6TC10aG9Bd2N1UVJhNEF0U2lfM2trekVXUzJYRU5INWJBc1p3RllMeFJPdWhoNVJYa1hPeWdBa2FRMnlkREo3QXh4?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            }
+          ],
+          "all": [
+            {
+              "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 01:57:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 60,
+              "readable_candidate": true,
+              "quality_reasons": [
+                "known_source:investing.com:55",
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دور الذكاء الاصطناعي المصمم باللغة العربية والكفاءات المحلية في رسم مستقبل قطاع خدمات الأعمال في منطقة الخليج - جريدة الرياض",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:08:15 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1ybkJDZE9EdmZDR1AtZFozTW5KUEhLZnJyRUtxNkVQWDdNTUVQX3ZSUlYxLTk4aDhON2w0MThqNVJCWDU3WlBj?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "السعودية تؤكد أهمية تعزيز التنوع اللغوي والثقافي في أنظمة الذكاء الاصطناعي - الشرق الأوسط",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 00:49:30 GMT",
+              "link": "https://news.google.com/rss/articles/CBMimAVBVV95cUxPSl9TUG9IOUJ6NGhmSFZSZzh6RFYtY09CUUFQaHhNNzhrYlkzYTFYdW14TkpnWVNXRjdMN0R3VkItdkhSaElPUnFLMF9laGtiUms5Ti01cXR0dUhadGUxUUVfTjc2QjRzUTlUcVVWdHd5TGRGVEJTN1hqaFZyay01V01JY2NZYU1ZZWt1ckU1ZjU1NXRUb1VLV2ZoQWR6MEJWSmJHS0REdjNJLVlsVUtENktaaGtMNDhRcUwwZGpSMy03b2JHTjBobzhXMGhoS3VIY3VldWVhYl84WGlxX0Z2XzlfdVBDcFNYZE1VNGdYZmlOMVdqbGRvT1lCVWsxSEZsbUpGc0t2el9Qd0xaUW9KMnNoYVpVZVJLa1FrNTZ4VTFvMWJkNndYb2JTSnpYZm1lVFYwM0xXQmdNQkFjV0UySlE4S3U3WGVaUU0zY0VKOUdCNEZOUXZCWmNGczFtSTBiRmNQYjY1NzdFRFNjRTQwSEZTUl9sRU01WVhMOV84bTB6Q0p2aEM5ME9IODJET25RbmIyQ1JWZi1ELTR3QlRaQnR0WVRidkNGVnB0ZGZ0bFJmOEw3UzJldTZBVHRSUEt5T3pWYkdQMjVqdUNvQ0V2VW9zWEpES0VUNzJNV0ZzVkJRb1F2VkZPYVgxOUh2QndaY285OXBYWlBXMklWSDhkUU5ONkVsbnZPZHJoV3ZRSkF1VjlONm9MRnlpQjczSkRoZzFFQXRZbVN2bHNYQ2ZTeG9YZC1XTHlQNlFFYkl4UmNhMXFEc1dwOVdHT0RxN2FtYVBjTkd6TC10aG9Bd2N1UVJhNEF0U2lfM2trekVXUzJYRU5INWJBc1p3RllMeFJPdWhoNVJYa1hPeWdBa2FRMnlkREo3QXh4?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يطور لقاحاً للحماية من كورونا وفايروسات الخفافيش - عكاظ",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 22:00:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBNYk1yWklmLXZLZW9yT3Nja0d6N0ZSRmRrbnNSdHRFdjRyNmFrQTJXUEI0aGVRWVZ2UmprRzZXQUc4a0dVRjNweDZ1QkQxSzJkb0FqRdIBVEFVX3lxTE12TGd2T0lVZG9XQlFZYzJYTGpuWVlUbDY0U1kteXU5NDByQkRma3M1R3ZITGxVQXpzSEx6VWdkR29QYzN5WEdLU2J6cUUzWkg4Y3ZGZQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "دراسة جديدة: هل يُحدث الذكاء الاصطناعي تحولاً في أبحاث الصحة النفسية عبر محاكاة المشاعر؟ - Euronews.com",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 06:30:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNU3BPc2NiMkJSUkRPbU9DUElXNnk5MjFUVmN4STBnNW5LRlQxOTFWblE0RmcyVDB1M2V1aXhXZ09YZEdIU05aN2R4ZXNlenFWRFg5S1F0SDZGVE1RcGhWeHJKcGFxalZBSmQ2TWwycFhNQ3dNQWFLeU44aFMzV1A1TkY0am9IT0NaWWhvaW9EQ1REcWZkLVk0czN5aUlnT0lLSmFhTmpVUDNUZnl2OTg4dW8tdkNXOEp2RjVoTTZUcDFvVTl4LVhybTZiS0V1TTFn?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 55,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "أوروبا تجبر \"ميتا\" على فتح \"واتساب\" أمام روبوتات الذكاء الاصطناعي المنافسة مجانًا - العربية",
+              "source": "google_news_rss",
+              "date": "Thu, 11 Jun 2026 10:46:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMiiwVBVV95cUxPcmFoQXRvTzRmWUZjYy1UOXlMelNwRURsV2Jia2M1bjhXa3B6MWpYMkI2QU5RWXlNcVd4V2JjVlQ1RXZPRVJMUkUzaVh2cWRFN3RLMFl6WnNEMGdaQU9LeFMtSmV3U3ZGNjdHT1hJOFA4TGpkb01Mc2hqUmpPQXdyR1VBX05JQTFLZFpVQW9TalF0OWxhMG1UZEJVUzFtSUxQSEx0ejNIQUtNcm5TSUUyVjA2am1qUHZxV3VpekNZYzVvZUR0emtuZ2pJa2pSUVdLQjV5NGdjWHdOWjJxNzJPVGEyYWpkbnhFVGEtSGZEQ0pFeDh3a1VuZ19MY0g1RXZTbWZYTkxWa1FEY0dHcHBnaFlmTVhQWUdlajFJX3FUaGJJQkZ1cG1UdWh2cDhUSkltdHY3LXBzR3BvVkZJWV9ZMElCX2tlS29SbHBIbmF4T0pDRUdYMWhrYUxROEtQX2RxODdGSzdtTHNHVjJiQWM2SW5Yb0hXcjRhSTFNTFN2a0lfS0NjOHRMbFV3WXpJc3VVZERWQ09LbWpreUEtYTNvYmtZR2NlRm5uSXhGdGRVekdFZnNpWFlvSWp5T3NVREppblFITzdISzl4ZWFiaEhMTk5PV1psVks2TjJTVHNJbUV4aldOMktIaDZmb1BBbVQ3M29ZRGV0U0VVNVlRQWZXWmpuc1lPT1BXTWc2VDFvcjNpOW5zWkZwTzZMSEdkQTRvb2F0Q2FaaDItOHZmdEFwR213N3AwZFVMZ1pYU1pIVVktOXhVdU9YYTRLc3RKN1VkbkpwamkwcjE3MnVIRlFYVU9mS3IxX3lPenNyQmJQQzFEazVKbTlIY0xJS2pZMTNPSDU3aWpwc2NBTnPSAZAFQVVfeXFMUGxhR2tFRHVwRzZxZTVjTXRxVDBlY25BRE5yLWFtaUswck55RzJCT1FRWTVHNXlNWlJDX1JwWFVWalZMTl9FcDhVMEJkZXRhTW9KMmV3cldCMVdKNWJRclEzakhPMVhJbE9LcllyWGo2dVk2bnpkLWVicWFEY2tUSUFfeE13ckxudld5STVUQ0NZT1Q0QkM4NVQzdkVNR2NyaFRpUjlJTGp1MHVrVHBXRUNuQ0xkanQ1Z0lMT3VfdXNBcHNhT1plSF9FV1ZzTHZoeEltZzFtNmQ5VmVwaWpDYWxxUWVZR2FKdm5ISGNBR25CbHk2azFubEM4VnloNFItWUh6ZlRPSGJweV9KZ215NVg2Y3NnUi0wSDRmSzNWUnZJUy1NTjNUTGVJcjFrZFBxUDFGaTY4RmpqTS1IWDNnMlNBcDE5SEd1RC04akxfRGdtTVRJc0dJNW1peWlDbjRoVno2TEVDNG1aaFRxak5lTDAzVU9sbVY2M3hfbGx4MVhkV012bUxveGNHS2Zwb25mSXE2dG0xRGhSMzc5YjYwN2VMMDNUNjJvejFXLW9WVUpZSTF4OW4tX3QxUlFQb2JoeUNGeU84S05VeVJaMi1VVXBaem5tckFqNy15YkYxbWIwWUdRSGRkMkR5aGNNQlc3a0luX3ltYmdGdUxSTGx5d1l3eGRSMGFkYlhfWklQQ3JNWFE1N21WR1VhWGhZODRLN0ExanIwZXRVbnplR3I5QzFMRjZ2RWxheVN3X1RDb0VsRkJINm5rbkR2eG4wNEZJWTg0cTVFd0tfLTQ4eDdNTWZzTC14c0tSeEluQ1pFR1N0eE83TWhFOFE4Q2NISHZoMXRaOVJRMjJHcHVQU3Ftckk?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "الذكاء الاصطناعي يتوقع بطل كأس العالم 2026.. هل تتفق معه؟ - Kooora",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 17:34:00 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilARBVV95cUxPSWZ6YTR5WEVtT1VVZGU2Z3A1UTNuUFRVOTVqNnViLWg5enJzMWNOSWstS0tIZU9uWGd3MVhBTTExQnJvaWktUUZWZFBjSll2dnBxLWdmRFpYLXFMbmMyNHBPaHFOekQyZ013SmdXcVNabUVTRXU5ZFQ5Umc2dTRDWWo4RlFXQ0RkNHl1YmVEX3MxeXQxbGJXZEtIYzdyejJDd0dxcG5GZVFGbUtjSUNfQmw2bGpTeGRRTHluM29EOVBLZkRuNzNQMFdwMGJvT0NtQjdDdTQ5bU42V2ZabXlqOGhVbnhraF9wRFZhRzR3dHNlZkV4QjNzMnFkdVRXbmxkMnNqdWhsbkloa3otYjctZ3BnS0xxWko3NVhCSkNySzdQQmM4OFBXTUFNT0VJTnpVelpwY3pGcFRMcnVlYmFiQmxhWXBQamtZVDhJb0NBLU8yWHlxMzdlN3F0S0ZzOWNKOGVSbVZPVzdMWkdlYUpvT2huWW5nUGQ4X1dJN1BzZGZNUHhyY1UtTmw5d2ZUZnM0UUY4bVM0VlAycXo2aklZa044SzF1TGtNYklkdXl6OWdBQk5MNHZCSlpXdHFBUzJEZmhMbmgzTHBBSGM3dDdNSUota2lJTG0wZGVBci1QM0JaVGw0eGRseENiRWFzQkZWM3BhY1B4UWkwYm1EQVVRcmV2eW9YLWo0N3pkbXhXLUlhMmNz?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            },
+            {
+              "title": "\"أنثروبيك\" تطلق أقوى نماذجها للذكاء الاصطناعي - سكاي نيوز عربية",
+              "source": "google_news_rss",
+              "date": "Wed, 10 Jun 2026 13:36:35 GMT",
+              "link": "https://news.google.com/rss/articles/CBMilANBVV95cUxONVBNMVBmdEtucTd6TDI4ZmxVanNLWmIzRDd6Y3UxdjZrU29JQ2lzTDA0MS11MUpNNzFzejlHU3cxaGdKdENxbjNKaDlvMzBkMGxFWk52Wm1CTS1YcllTLWtybWM3THRncldibkVfQk5LSWlZWkt5TlJDQlM3eWRMRV9NSk5JNmNXOXQ5c0lnMEw1VFl5RVNvSm1Ub1BzN2xOMnFHcXZKT1BsN0o4UTQzZEJUWWtJelZqWE51dnp2OUZxWUFNcWNZaTZlVDNLMzg4bXcwVUVnODRVaS0yYm5ZWjhSNkpZX1RYcHJJdDhxcGZTTHl2a1hMT0JqQ2dOWFFnT3ZNQUhFbjBZdFh0cldaV1hiVGNWOWtya2RCLVZGOVBLai1oMUtVNDM3VTU3dWRyaGkybWJCUzNmM1NKWEo2dFJwTGNId1dQa01NQ01jbjN0RDZ0Y1N1NDRWbWtJRTdLV1dSZnpWUGpNbm5nNkVhVUtnSzcwUUpJTXVtZlRpYmVXZHZrVWdfQk9QN2dPNmVfY25sS9IBmgNBVV95cUxQVXB5RGFWUFVRSVdtNExNNTBNZTZ6RThpOUhQMm9Va09UN2FkOWU0MVdGZXJkbmZNclh0VjRRaVNoZEthMVpmRnVNLUM0VU5KalVncjRxVFE3X3hYMXM4SUxvNldoVVZ0QW9tSk5WcTFTdUF5OU5ZcFNKQ3ZzY25kdU5HTW5iXzNnMzBqQ3pnZnZUNXpMWXE0ZlRfenB1TjAxWWRieWJVcWNmOTZFclVjYnNmQmdweUoyWV9BcnJFZUVRSzY0YlIzSFNJS2tkMTNVRkJsY3dEbTdNZlFYU1dZRVE4T0JpdVFrSTVmajl1amE2N2RpeEVhQ1VVeVdVdngwV3Q0MWpxWDBpTDNTTjZzVWFpVXZ3NVUxRDl0MVRsMVo5OFN1U2xDbFFHRkoxSkNIS3FwczJWUlFnWUtmREU3cXFxTEs1NU5SalhEeHRfSzRJNDJJaW9mdkZydi1MVEtQVnZ6TTRCTlRydUR3b1UxVWlzNXdwcFYxZVBRbkxlY3UyeHc1R1dibTdmek5NbnJySVNjRV9BM2FmUQ?oc=5",
+              "domain": "news.google.com",
+              "source_quality_score": 30,
+              "readable_candidate": false,
+              "quality_reasons": [
+                "google_news_redirect",
+                "video_or_social_hint",
+                "article_hint"
+              ]
+            }
+          ]
+        },
+        "opened": {
+          "ok": true,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي - Investing.com",
+          "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5",
+          "score": 60,
+          "domain": "news.google.com",
+          "queued": [
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178192.4562376,
+                "action": "wait",
+                "args": {
+                  "seconds": 1
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178192.4569395,
+                "action": "open_url",
+                "args": {
+                  "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178192.4574018,
+                "action": "wait",
+                "args": {
+                  "seconds": 5
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            },
+            {
+              "ok": true,
+              "queued": {
+                "time": 1781178192.4578419,
+                "action": "dump_ui",
+                "args": {
+                  "focus": "chrome"
+                },
+                "source": "GerfexIntegratedV1"
+              },
+              "queue_file": "/data/data/com.termux/files/home/GerfexIntegratedV1/runtime/android_queue.txt"
+            }
+          ]
+        },
+        "article": {
+          "ok": true,
+          "reason": null,
+          "title": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com",
+          "paragraph_count": 24,
+          "paragraphs": [
+            "Investing.com - البوابة الإقتصادية الرائدة",
+            "الرسوم البيانية للعملات الرقمية",
+            "منصات تداول العملات الرقمية",
+            "تقويم انتهاء العقود المستقبلية",
+            "أسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة",
+            "اعرض الأسهم الأقل من قيمتها",
+            "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي",
+            "Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (",
+            ") الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.",
+            "ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.",
+            "احصل على تحديثات فورية حول الأخبار المؤثرة في الأسواق مع InvestingPro",
+            "تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.",
+            "وستكون هذه الزيارة الأولى لألتمان إلى كوريا الجنوبية منذ نحو ثمانية أشهر. وخلال زيارته السابقة في أكتوبر، أجرى لقاءات منفصلة مع رئيس مجلس إدارة سامسونج إلكترونيكس لي جاي-يونغ ورئيس مجموعة SK تشيي تاي-وون.",
+            "وأشارت وكالة يونهاب إلى أنه في أعقاب تلك الاجتماعات، وقّعت OpenAI مذكرات تفاهم مع سامسونج ومجموعة SK للتعاون في تطوير البنية التحتية للذكاء الاصطناعي على المستوى العالمي، مما أرسى الأساس لشراكات استراتيجية أوسع نطاقاً.",
+            "هذه المقالة مترجمة بمساعدة برنامج ذكاء اصطناعي وخضعت لمراجعة أحد المحررين.. لمزيد من التفاصيل يُرجى الرجوع للشروط والأحكام الخاصة بنا",
+            "مدرج ضمن استراتيجياتنا المختارة بواسطة الذكاء الاصطناعي",
+            "samsung-electronics-co-ltd",
+            "أسرع طريقة لمعرفة ذلك هي باستخدام حاسبة القيمة العادلة الخاصة بنا. التي تستخدم مزيجًا من 17 نموذج تقييم صناعي مجربة لتوفير أقصى قدر من الدقة. احصل على النتيجة النهائية لسهم 005930 بالإضافة إلى آلاف الأسهم الأخرى واعثر على جوهرتك المخفية التالية ذات الإمكانات الهائلة.",
+            "CAAiEEkkznrjz51gPM9x5YvVuFYqFAgKIhBJJM5648-dYDzPceWL1bhW",
+            "جاري تحميل المقال التالي...",
+            "5 نقاط أساسية ينبغي معرفتها حول موجة التراجع في أسعار الذهب والفضة",
+            "user?screen_name=investingsa",
+            "© 2007-2026 - كل الحقوق محفوظة لشركة Fusion Media Ltd.",
+            "sa.investing.com/news/stock-market-news/article-3272260"
+          ],
+          "preview": "ألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nInvesting.com - البوابة الإقتصادية الرائدة\n\nالرسوم البيانية للعملات الرقمية\n\nمنصات تداول العملات الرقمية\n\nتقويم انتهاء العقود المستقبلية\n\nأسهم مقومة بأقل من قيمتها الحقيقية مع محفزات نمو واضحة"
+        },
+        "summary": {
+          "ok": true,
+          "summary": "ملخص المقال:\n\nالعنوان:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي بواسطة Investing.com\n\nالفكرة الرئيسية:\nألتمان من OpenAI يلتقي مسؤولي سامسونج لبحث تبني الذكاء الاصطناعي\n\nأهم النقاط:\n1. Investing.com- أفادت وكالة يونهاب للأنباء، الخميس، بأن الرئيس التنفيذي لشركة OpenAI سام ألتمان سيلتقي مسؤولين تنفيذيين في شركة سامسونج إلكترونيكس (\n2. ) الأسبوع المقبل خلال زيارته لكوريا الجنوبية، حيث ستتمحور المناقشات حول جهود الشركة لدمج الذكاء الاصطناعي في مختلف عملياتها.\n3. ووفقاً للوكالة، من المقرر أن يزور ألتمان مكتب سامسونج في مدينة سوون جنوب سيول يوم الاثنين، حيث سيلقي محاضرة حول تأثير تقنيات الذكاء الاصطناعي واستراتيجيات الابتكار في بيئة العمل المدفوعة بالذكاء الاصطناعي.\n4. تأتي هذه الزيارة في وقت تسعى فيه سامسونج إلى إجراء إصلاح شامل لعملياتها وثقافتها المؤسسية من خلال تبني أدوات وأنظمة الذكاء الاصطناعي على نطاق واسع.\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n"
+        },
+        "learned": true,
+        "log": "/data/data/com.termux/files/home/GerfexIntegratedV1/learning/autonomous_loop_log.json"
+      },
+      "learning": {
+        "ok": true,
+        "mode": "router_research"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 17
+      }
+    }
+  },
+  {
+    "id": "goal_9_1781167716",
+    "goal": "حلل الشاشة الحالية",
+    "source": "autonomous_goal_generator",
+    "status": "completed",
+    "created_at": "2026-06-11T11:48:36.953923Z",
+    "started_at": "2026-06-11T11:48:37.069515Z",
+    "finished_at": "2026-06-11T11:48:37.154878Z",
+    "result": {
+      "ok": true,
+      "goal": "حلل الشاشة الحالية",
+      "memory_recall": {
+        "ok": true,
+        "goal": "حلل الشاشة الحالية",
+        "count": 1,
+        "matches": [
+          {
+            "type": "test",
+            "message": "memory online",
+            "time": "2026-06-11T10:31:59.079740Z"
+          }
+        ]
+      },
+      "memory_advice": {
+        "ok": true,
+        "goal": "حلل الشاشة الحالية",
+        "success_count": 0,
+        "failure_count": 0,
+        "recommended_route": null,
+        "recommended_target": null,
+        "confidence": 0.0,
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+      },
+      "routing": {
+        "ok": true,
+        "route": "cognitive",
+        "reason": "thinking/planning goal"
+      },
+      "decision": {
+        "ok": true,
+        "brain": "BrainRouter",
+        "intent": "cognitive",
+        "target": "cognitive",
+        "route": {
+          "ok": true,
+          "route": "cognitive",
+          "reason": "thinking/planning goal"
+        },
+        "reason": "Brain Router وجّه الطلب إلى التفكير/التخطيط"
+      },
+      "execution": {
+        "ok": true,
+        "mode": "cognitive_plan_only",
+        "goal": "حلل الشاشة الحالية",
+        "perception": {
+          "ok": true,
+          "goal": "حلل الشاشة الحالية",
+          "observation": {
+            "top_package": "com.android.chrome",
+            "item_count": 283,
+            "clickable_count": 134
+          },
+          "understanding": {
+            "screen_type": "browser",
+            "summary": "Google Chrome browser",
+            "capabilities": [
+              "navigate",
+              "search",
+              "open_url",
+              "read_page"
+            ],
+            "confidence": 0.95
+          },
+          "plan": {
+            "ok": true,
+            "action": "unknown",
+            "reason": "no_rule_matched",
+            "steps": []
+          }
+        },
+        "note": "Cognitive mode observes, understands, and plans without direct execution."
+      },
+      "learning": {
+        "ok": true,
+        "mode": "router_cognitive"
+      },
+      "runtime_state": {
+        "ok": true,
+        "state_file": "runtime/runtime_state.json",
+        "status": "idle"
+      },
+      "unified_learning": {
+        "ok": true,
+        "memory_file": "memory/gerfex_unified_memory.json",
+        "count": 18
+      }
+    }
+  }
+]
