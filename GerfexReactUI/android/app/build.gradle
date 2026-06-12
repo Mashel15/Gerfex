@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
 
 android {
     namespace = "com.mashel15.gerfex"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
+        ndk {
+            abiFilters "arm64-v8a"
+        }
+        python {
+            version "3.11"
+        }
         applicationId "com.mashel15.gerfex"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
