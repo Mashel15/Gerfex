@@ -1,7 +1,18 @@
-import { registerPlugin } from "@capacitor/core";
-const API_BASE = "http://192.168.1.4:8000";
-
 import { useEffect, useRef, useState } from "react";
+import { registerPlugin } from "@capacitor/core";
+
+const GerfexNative = registerPlugin("Gerfex");
+
+async function askGerfexNative(prompt, modelState = {}) {
+  const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
+  const parsed = JSON.parse(nativeRes.result || "{}");
+  return {
+    ok: parsed.ok,
+    reply: parsed.reply || "لا يوجد رد.",
+    speaker: "Gerfex",
+    raw: parsed.raw
+  };
+}
 
 const sections = [
   ["models", "🤖", "النماذج"],
@@ -24,19 +35,7 @@ function load(key, fallback) {
   }
 }
 
-export default 
-async function askGerfexNative(prompt, modelState = {}) {
-  const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
-  const parsed = JSON.parse(nativeRes.result || "{}");
-  return {
-    ok: parsed.ok,
-    reply: parsed.reply || "لا يوجد رد.",
-    speaker: "Gerfex",
-    raw: parsed.raw
-  };
-}
-
-function App() {
+export default function App() {
   const [menu, setMenu] = useState(false);
   const [quick, setQuick] = useState(false);
   const [section, setSection] = useState("sessions");
