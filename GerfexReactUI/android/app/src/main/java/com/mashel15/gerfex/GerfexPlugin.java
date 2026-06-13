@@ -91,6 +91,9 @@ public class GerfexPlugin extends Plugin {
             }
 
             if ("press_home".equals(name)) {
+                if (GerfexAccessibilityService.isReady()) {
+                    return GerfexAccessibilityService.pressHome();
+                }
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -99,7 +102,24 @@ public class GerfexPlugin extends Plugin {
             }
 
             if ("press_back".equals(name)) {
-                return false; // يحتاج Accessibility لاحقاً
+                return GerfexAccessibilityService.pressBack();
+            }
+
+            if ("tap".equals(name)) {
+                return GerfexAccessibilityService.tap(
+                    (float) args.optDouble("x", 0),
+                    (float) args.optDouble("y", 0)
+                );
+            }
+
+            if ("swipe".equals(name)) {
+                return GerfexAccessibilityService.swipe(
+                    (float) args.optDouble("x1", 0),
+                    (float) args.optDouble("y1", 0),
+                    (float) args.optDouble("x2", 0),
+                    (float) args.optDouble("y2", 0),
+                    args.optLong("duration", 400)
+                );
             }
 
             if ("wait".equals(name)) {
@@ -108,7 +128,7 @@ public class GerfexPlugin extends Plugin {
             }
 
             if ("dump_ui".equals(name)) {
-                return false; // يحتاج AccessibilityService
+                return GerfexAccessibilityService.isReady();
             }
 
             return false;
@@ -156,6 +176,15 @@ public class GerfexPlugin extends Plugin {
         } catch (Exception ignored) {}
 
         return count;
+    }
+
+    @PluginMethod
+    public void accessibilityStatus(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("ok", true);
+        ret.put("ready", GerfexAccessibilityService.isReady());
+        ret.put("screen_text", GerfexAccessibilityService.dumpText());
+        call.resolve(ret);
     }
 
     @PluginMethod
