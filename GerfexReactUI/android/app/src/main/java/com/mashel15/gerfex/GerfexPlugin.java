@@ -136,6 +136,15 @@ public class GerfexPlugin extends Plugin {
             JSONObject execution = raw.optJSONObject("execution");
             if (execution == null) return 0;
 
+            JSONArray nativeActions = execution.optJSONArray("native_actions");
+            if (nativeActions != null) {
+                for (int i = 0; i < nativeActions.length(); i++) {
+                    JSONObject a = nativeActions.optJSONObject(i);
+                    if (a != null && executeAction(a)) count++;
+                }
+                return count;
+            }
+
             JSONObject decision = execution.optJSONObject("decision");
             if (decision == null) decision = raw.optJSONObject("decision");
             if (decision == null) return 0;

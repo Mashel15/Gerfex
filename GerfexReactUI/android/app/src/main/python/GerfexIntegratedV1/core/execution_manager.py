@@ -32,10 +32,17 @@ def execute(decision):
             if not r.get("ok"):
                 all_ok = False
 
+        native_actions = [
+            r.get("native_action") or r.get("queued")
+            for r in results
+            if r.get("native_action") or r.get("queued")
+        ]
+
         return {
             "ok": all_ok,
             "queued_count": sum(1 for r in results if r.get("ok")),
             "blocked_count": sum(1 for r in results if r.get("blocked")),
+            "native_actions": native_actions,
             "results": results,
             "decision": decision
         }
@@ -55,8 +62,11 @@ def execute(decision):
         result = queue_action(action)
         result["safety"] = safety
 
+        native_action = result.get("native_action") or result.get("queued")
+
         return {
             "ok": bool(result.get("ok")),
+            "native_actions": [native_action] if native_action else [],
             "queued": result,
             "decision": decision
         }
