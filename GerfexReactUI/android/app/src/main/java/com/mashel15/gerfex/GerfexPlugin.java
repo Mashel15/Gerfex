@@ -169,28 +169,32 @@ public class GerfexPlugin extends Plugin {
     @PluginMethod
     public void think(PluginCall call) {
         String message = call.getString("message", "");
-        JSObject ret = new JSObject();
 
-        try {
-            if (!Python.isStarted()) {
-                Python.start(new AndroidPlatform(getContext()));
+        new Thread(() -> {
+            JSObject ret = new JSObject();
+
+            try {
+                if (!Python.isStarted()) {
+                    Python.start(new AndroidPlatform(getContext()));
+                }
+
+                Python py = Python.getInstance();
+                PyObject entry = py.getModule("gerfex_entry");
+                String result = entry.callAttr("think", message).toString();
+
+                int nativeCount = executeFromResult(result);
+
+                ret.put("ok", true);
+                ret.put("result", result);
+                ret.put("native_executed_count", nativeCount);
+
+                call.resolve(ret);
+
+            } catch (Exception e) {
+                ret.put("ok", false);
+                ret.put("error", e.toString());
+                call.resolve(ret);
             }
-
-            Python py = Python.getInstance();
-            PyObject entry = py.getModule("gerfex_entry");
-            String result = entry.callAttr("think", message).toString();
-
-            int nativeCount = executeFromResult(result);
-
-            ret.put("ok", true);
-            ret.put("result", result);
-            ret.put("native_executed_count", nativeCount);
-            call.resolve(ret);
-
-        } catch (Exception e) {
-            ret.put("ok", false);
-            ret.put("error", e.toString());
-            call.resolve(ret);
-        }
+        }).start();
     }
 }
