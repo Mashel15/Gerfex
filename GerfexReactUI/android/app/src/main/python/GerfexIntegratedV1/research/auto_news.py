@@ -12,15 +12,12 @@ def run(cmd):
     }
 
 def process_queue():
-    code = """
-import sys
-from pathlib import Path
-ROOT = Path.cwd()
-sys.path.insert(0, str(ROOT / "runtime"))
-import queue_runner
-queue_runner.process_queue()
-"""
-    return run(["python", "-c", code])
+    return {
+        "ok": True,
+        "stdout": "APK runtime skips Termux queue_runner",
+        "stderr": "",
+        "skipped": True
+    }
 
 def main():
     query = " ".join(sys.argv[1:]) or "أخبار الذكاء الاصطناعي"

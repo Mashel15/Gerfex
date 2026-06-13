@@ -41,12 +41,12 @@ def main():
 
         run(["python", "-m", "research.open_news_result", f"افتح {i}"])
 
-        q = run([
-            "python", "-c",
-            "import sys; from pathlib import Path; "
-            "sys.path.insert(0, str(Path.cwd()/'runtime')); "
-            "import queue_runner; queue_runner.process_queue()"
-        ])
+        q = {
+            "ok": True,
+            "stdout": "APK runtime skips Termux queue_runner",
+            "stderr": "",
+            "skipped": True
+        }
 
         reader = run(["python", "-m", "research.article_reader"])
         summarizer = run(["python", "-m", "research.article_summarizer"])

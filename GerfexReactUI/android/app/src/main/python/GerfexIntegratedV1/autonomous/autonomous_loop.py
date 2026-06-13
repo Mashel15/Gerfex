@@ -1,4 +1,5 @@
 import json
+from apk_runtime import is_apk_runtime, skip_external_runner_result
 import sys
 import time
 from pathlib import Path
@@ -38,12 +39,15 @@ def run_autonomous_goal(goal):
     news = run_news_pipeline(goal)
     opened = open_best(open_chrome=False)
 
-    # تنفيذ فتح رابط الخبر قبل محاولة قراءة المقال
-    try:
-        from runtime.queue_runner import process_queue
-        process_queue()
-    except Exception as e:
-        opened["queue_process_error"] = str(e)
+    # APK runtime: لا نستخدم Termux queue_runner
+    if is_apk_runtime():
+        opened["queue_process"] = skip_external_runner_result("autonomous_loop.initial_queue")
+    else:
+        try:
+            from runtime.queue_runner import process_queue
+            process_queue()
+        except Exception as e:
+            opened["queue_process_error"] = str(e)
 
 
     # نترك queue_runner يفتح الرابط ويعمل dump_ui
@@ -54,12 +58,14 @@ def run_autonomous_goal(goal):
     if not article.get("ok") and article.get("reason") == "dirty_termux_dump":
         try:
             from android.android_bridge import queue_action
-            from runtime.queue_runner import process_queue
 
             queue_action({"action": "open_app", "args": {"package": "chrome"}})
             queue_action({"action": "wait", "args": {"seconds": 2}})
             queue_action({"action": "dump_ui", "args": {"focus": "chrome"}})
-            process_queue()
+
+            if not is_apk_runtime():
+                from runtime.queue_runner import process_queue
+                process_queue()
 
             article = read_article()
         except Exception as e:
