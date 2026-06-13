@@ -25,8 +25,8 @@ public class GerfexPlugin extends Plugin {
     private String mapPackage(String name) {
         if (name == null) return "";
         String p = name.toLowerCase();
-        if (p.equals("chrome")) return "android.intent.web";
-        if (p.equals("youtube")) return "android.intent.youtube";
+        if (p.equals("chrome")) return "com.android.chrome";
+        if (p.equals("youtube")) return "com.google.android.youtube";
         if (p.equals("settings")) return "android.settings";
         return p;
     }
@@ -39,14 +39,6 @@ public class GerfexPlugin extends Plugin {
                 Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
-                return true;
-            }
-
-            if ("android.intent.web".equals(mapped)) {
-                return true;
-            }
-
-            if ("android.intent.youtube".equals(mapped)) {
                 return true;
             }
 
@@ -116,7 +108,7 @@ public class GerfexPlugin extends Plugin {
             }
 
             if ("dump_ui".equals(name)) {
-                return true; // مؤجل إلى Accessibility
+                return false; // يحتاج AccessibilityService
             }
 
             return false;
