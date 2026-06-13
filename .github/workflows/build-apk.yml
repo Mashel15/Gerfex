@@ -27,14 +27,7 @@ jobs:
         run: |
           cd GerfexReactUI
           npm ci
-          python3 - <<'PATCH'
-          from pathlib import Path
-          p = Path("node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java")
-          s = p.read_text(encoding="utf-8")
-          s = s.replace("Build.VERSION_CODES.VANILLA_ICE_CREAM", "35")
-          p.write_text(s, encoding="utf-8")
-          print("Patched Capacitor SystemBars")
-          PATCH
+          python3 -c "from pathlib import Path; p=Path('node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java'); s=p.read_text(); s=s.replace('Build.VERSION_CODES.VANILLA_ICE_CREAM','35'); p.write_text(s); print('Patched SystemBars')"
           npm run build
           npx cap sync android
 
