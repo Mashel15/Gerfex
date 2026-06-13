@@ -8,36 +8,42 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: GerfexReactUI/package-lock.json
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
+
       - name: Install and build web
         run: |
           cd GerfexReactUI
           npm ci
-          python - <<'PATCH'
-from pathlib import Path
-p = Path("node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java")
-s = p.read_text(encoding="utf-8")
-s = s.replace("Build.VERSION_CODES.VANILLA_ICE_CREAM", "35")
-p.write_text(s, encoding="utf-8")
-print("Patched Capacitor SystemBars for SDK34")
-PATCH
+          python3 - <<'PATCH'
+          from pathlib import Path
+          p = Path("node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java")
+          s = p.read_text(encoding="utf-8")
+          s = s.replace("Build.VERSION_CODES.VANILLA_ICE_CREAM", "35")
+          p.write_text(s, encoding="utf-8")
+          print("Patched Capacitor SystemBars")
+          PATCH
           npm run build
           npx cap sync android
+
       - name: Build APK
         run: |
           cd GerfexReactUI/android
           chmod +x gradlew
           ./gradlew assembleDebug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
