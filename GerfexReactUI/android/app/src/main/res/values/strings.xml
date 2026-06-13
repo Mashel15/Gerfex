@@ -4,4 +4,5 @@
     <string name="title_activity_main">Gerfex</string>
     <string name="package_name">com.mashel15.gerfex</string>
     <string name="custom_url_scheme">com.mashel15.gerfex</string>
+    <string name="gerfex_accessibility_description">Gerfex screen control service</string>
 </resources>
