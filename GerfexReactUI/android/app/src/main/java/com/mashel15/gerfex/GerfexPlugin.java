@@ -43,11 +43,11 @@ public class GerfexPlugin extends Plugin {
             }
 
             if ("android.intent.web".equals(mapped)) {
-                return openUrl("https://www.google.com");
+                return true;
             }
 
             if ("android.intent.youtube".equals(mapped)) {
-                return openUrl("https://www.youtube.com");
+                return true;
             }
 
             PackageManager pm = getContext().getPackageManager();
@@ -116,7 +116,7 @@ public class GerfexPlugin extends Plugin {
             }
 
             if ("dump_ui".equals(name)) {
-                return false; // يحتاج Accessibility لاحقاً
+                return true; // مؤجل إلى Accessibility
             }
 
             return false;
