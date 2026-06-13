@@ -44,7 +44,17 @@ public class GerfexPlugin extends Plugin {
 
             PackageManager pm = getContext().getPackageManager();
             Intent intent = pm.getLaunchIntentForPackage(mapped);
+
+            if (intent == null && "com.android.chrome".equals(mapped)) {
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+            }
+
+            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com"));
+            }
+
             if (intent == null) return false;
+
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(intent);
             return true;
