@@ -25,8 +25,8 @@ public class GerfexPlugin extends Plugin {
     private String mapPackage(String name) {
         if (name == null) return "";
         String p = name.toLowerCase();
-        if (p.equals("chrome")) return "com.android.chrome";
-        if (p.equals("youtube")) return "com.google.android.youtube";
+        if (p.equals("chrome")) return "android.intent.web";
+        if (p.equals("youtube")) return "android.intent.youtube";
         if (p.equals("settings")) return "android.settings";
         return p;
     }
@@ -40,6 +40,14 @@ public class GerfexPlugin extends Plugin {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
                 return true;
+            }
+
+            if ("android.intent.web".equals(mapped)) {
+                return openUrl("https://www.google.com");
+            }
+
+            if ("android.intent.youtube".equals(mapped)) {
+                return openUrl("https://www.youtube.com");
             }
 
             PackageManager pm = getContext().getPackageManager();
