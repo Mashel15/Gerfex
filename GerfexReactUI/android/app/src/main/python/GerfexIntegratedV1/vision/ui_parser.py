@@ -1,3 +1,6 @@
+# LEGACY XML UI PARSER:
+# Reads old uiautomator XML dumps from /sdcard/Download.
+# APK native perception should use observation.native_screen_observer first.
 import json
 import re
 from pathlib import Path
