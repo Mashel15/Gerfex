@@ -17,6 +17,7 @@ from brain.brain_manager import decide, remember
 from brain.brain_router import route
 from core.execution_manager import execute
 from learning.learning_manager import learn
+from runtime.execution_trace import add_stage
 
 
 def clear_queue():
@@ -25,17 +26,25 @@ def clear_queue():
     return True
 
 
-def run_goal(goal):
+def run_goal(goal, trace=None):
+    add_stage(trace, "core_start", source="gerfex_core", goal=goal)
+
     try:
         memory_recall = recall(goal)
+        add_stage(trace, "memory_recall", source="memory_recall", ok=memory_recall.get("ok"))
     except Exception as e:
         memory_recall = {"ok": False, "error": str(e)}
+        add_stage(trace, "memory_recall_error", source="memory_recall", error=str(e))
 
     try:
         memory_advice = advise(goal, memory_recall)
+        add_stage(trace, "memory_advice", source="memory_advisor", ok=memory_advice.get("ok"))
     except Exception as e:
         memory_advice = {"ok": False, "error": str(e)}
+        add_stage(trace, "memory_advice_error", source="memory_advisor", error=str(e))
+
     routing = route(goal)
+    add_stage(trace, "brain_router", source="brain_router", route=routing.get("route"), ok=routing.get("ok"))
 
     # Multi-step commands must go to Queen first.
     # Example: "افتح كروم وابحث عن أخبار الذكاء الاصطناعي"
@@ -48,7 +57,9 @@ def run_goal(goal):
 
     if multi_step_request:
         routing = {"ok": True, "route": "android", "reason": "multi_step_priority_to_queen"}
+        add_stage(trace, "provider_request", source="gerfex_core", provider="queen", route=routing.get("route"))
         decision = decide(goal)
+        add_stage(trace, "provider_response", source="brain_manager", provider="queen", intent=decision.get("intent"), target=decision.get("target"), ok=decision.get("ok"), reason=decision.get("reason"))
         decision["route"] = routing
 
         try:
@@ -56,7 +67,7 @@ def run_goal(goal):
         except Exception as e:
             decision["experience_error"] = str(e)
 
-        execution = execute(decision)
+        execution = execute(decision, trace=trace)
         learning = learn(goal, decision, execution)
 
     elif routing.get("route") == "research":
@@ -93,7 +104,9 @@ def run_goal(goal):
         }
         learning = {"ok": True, "mode": "router_cognitive"}
     else:
+        add_stage(trace, "provider_request", source="gerfex_core", provider="queen", route=routing.get("route"))
         decision = decide(goal)
+        add_stage(trace, "provider_response", source="brain_manager", provider="queen", intent=decision.get("intent"), target=decision.get("target"), ok=decision.get("ok"), reason=decision.get("reason"))
         decision["route"] = routing
 
         try:
@@ -101,7 +114,7 @@ def run_goal(goal):
         except Exception as e:
             decision["experience_error"] = str(e)
 
-        execution = execute(decision)
+        execution = execute(decision, trace=trace)
         learning = learn(goal, decision, execution)
 
     out = {
@@ -146,6 +159,7 @@ def run_goal(goal):
     except Exception as e:
         out["unified_learning"] = {"ok": False, "error": str(e)}
 
+    add_stage(trace, "core_end", source="gerfex_core", ok=out.get("ok"))
     return out
 
 

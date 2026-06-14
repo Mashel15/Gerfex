@@ -21,7 +21,15 @@ import com.chaquo.python.android.AndroidPlatform;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 @CapacitorPlugin(name = "Gerfex")
 public class GerfexPlugin extends Plugin {
@@ -144,10 +152,80 @@ public class GerfexPlugin extends Plugin {
         }
     }
 
+
+    private String isoNow() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(new Date());
+    }
+
+    private File executionTraceFile() {
+        File runtimeDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
+        runtimeDir.mkdirs();
+        return new File(runtimeDir, "execution_trace.jsonl");
+    }
+
+    private void appendPluginTrace(String traceId, JSONObject action, String stageName, boolean ok) {
+        try {
+            if (traceId == null || traceId.length() == 0) return;
+
+            File file = executionTraceFile();
+            if (!file.exists()) return;
+
+            List<String> lines = new ArrayList<>();
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)
+            );
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().length() > 0) lines.add(line);
+            }
+            br.close();
+
+            List<String> out = new ArrayList<>();
+
+            for (String rawLine : lines) {
+                JSONObject obj = new JSONObject(rawLine);
+
+                if (traceId.equals(obj.optString("trace_id", ""))) {
+                    JSONArray stages = obj.optJSONArray("stages");
+                    if (stages == null) stages = new JSONArray();
+
+                    JSONObject stage = new JSONObject();
+                    stage.put("time", isoNow());
+                    stage.put("stage", stageName);
+                    stage.put("source", "GerfexPlugin");
+
+                    if (action != null) {
+                        stage.put("action", action.optString("action", ""));
+                        JSONObject args = action.optJSONObject("args");
+                        if (args != null) stage.put("args", args);
+                    }
+
+                    if ("plugin_execute_end".equals(stageName)) {
+                        stage.put("ok", ok);
+                    }
+
+                    stages.put(stage);
+                    obj.put("stages", stages);
+                }
+
+                out.add(obj.toString());
+            }
+
+            FileOutputStream fos = new FileOutputStream(file, false);
+            fos.write((String.join("\n", out) + "\n").getBytes(StandardCharsets.UTF_8));
+            fos.close();
+
+        } catch (Exception ignored) {}
+    }
+
     private int executeFromResult(String result) {
         int count = 0;
         try {
             JSONObject root = new JSONObject(result);
+            String traceId = root.optString("trace_id", "");
             JSONObject raw = root.optJSONObject("raw");
             if (raw == null) return 0;
 
@@ -158,7 +236,12 @@ public class GerfexPlugin extends Plugin {
             if (nativeActions != null) {
                 for (int i = 0; i < nativeActions.length(); i++) {
                     JSONObject a = nativeActions.optJSONObject(i);
-                    if (a != null && executeAction(a)) count++;
+                    if (a != null) {
+                        appendPluginTrace(traceId, a, "plugin_execute_start", true);
+                        boolean executed = executeAction(a);
+                        appendPluginTrace(traceId, a, "plugin_execute_end", executed);
+                        if (executed) count++;
+                    }
                 }
                 return count;
             }
@@ -171,13 +254,23 @@ public class GerfexPlugin extends Plugin {
             if (actions != null) {
                 for (int i = 0; i < actions.length(); i++) {
                     JSONObject a = actions.optJSONObject(i);
-                    if (a != null && executeAction(a)) count++;
+                    if (a != null) {
+                        appendPluginTrace(traceId, a, "plugin_execute_start", true);
+                        boolean executed = executeAction(a);
+                        appendPluginTrace(traceId, a, "plugin_execute_end", executed);
+                        if (executed) count++;
+                    }
                 }
                 return count;
             }
 
             JSONObject action = decision.optJSONObject("action");
-            if (action != null && executeAction(action)) count++;
+            if (action != null) {
+                appendPluginTrace(traceId, action, "plugin_execute_start", true);
+                boolean executed = executeAction(action);
+                appendPluginTrace(traceId, action, "plugin_execute_end", executed);
+                if (executed) count++;
+            }
 
         } catch (Exception ignored) {}
 
