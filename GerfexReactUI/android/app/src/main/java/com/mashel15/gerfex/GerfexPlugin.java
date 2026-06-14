@@ -19,6 +19,10 @@ import com.chaquo.python.Python;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.android.AndroidPlatform;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+
 @CapacitorPlugin(name = "Gerfex")
 public class GerfexPlugin extends Plugin {
 
@@ -178,12 +182,32 @@ public class GerfexPlugin extends Plugin {
         return count;
     }
 
+    private String saveNativeScreenText(String text) {
+        try {
+            File runtimeDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
+            runtimeDir.mkdirs();
+
+            File out = new File(runtimeDir, "native_screen_text.txt");
+            FileOutputStream fos = new FileOutputStream(out, false);
+            fos.write((text == null ? "" : text).getBytes(StandardCharsets.UTF_8));
+            fos.close();
+
+            return out.getAbsolutePath();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     @PluginMethod
     public void accessibilityStatus(PluginCall call) {
         JSObject ret = new JSObject();
+        String screenText = GerfexAccessibilityService.dumpText();
+        String savedPath = saveNativeScreenText(screenText);
+
         ret.put("ok", true);
         ret.put("ready", GerfexAccessibilityService.isReady());
-        ret.put("screen_text", GerfexAccessibilityService.dumpText());
+        ret.put("screen_text", screenText);
+        ret.put("screen_text_saved_path", savedPath);
         call.resolve(ret);
     }
 
