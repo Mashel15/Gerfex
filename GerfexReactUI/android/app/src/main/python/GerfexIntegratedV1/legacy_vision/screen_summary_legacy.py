@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from vision.screen_analyzer import analyze_screen
+from legacy_vision.screen_analyzer_legacy import analyze_screen
 
 SUMMARY_FILE = Path(__file__).resolve().parent / "screen_summary.json"
 

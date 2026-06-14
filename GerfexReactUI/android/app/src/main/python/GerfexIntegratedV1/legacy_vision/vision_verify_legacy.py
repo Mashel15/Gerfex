@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from vision.screen_summary import summarize_screen
+from legacy_vision.screen_summary_legacy import summarize_screen
 
 VERIFY_FILE = Path(__file__).resolve().parent / "last_action_verify.json"
 
