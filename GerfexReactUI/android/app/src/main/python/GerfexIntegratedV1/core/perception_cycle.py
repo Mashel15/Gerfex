@@ -6,11 +6,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from observation.screen_observer import observe
+from observation.native_screen_observer import observe_native_text
 from understanding.screen_understanding import understand_screen
 from planner.action_planner import create_plan
 
 def run_perception_cycle(goal):
-    observation = observe()
+    observation = observe_native_text()
+    if not observation.get("ok"):
+        legacy_observation = observe()
+        if legacy_observation.get("ok"):
+            observation = legacy_observation
     understanding = understand_screen(observation)
     plan = create_plan(goal, understanding)
 
