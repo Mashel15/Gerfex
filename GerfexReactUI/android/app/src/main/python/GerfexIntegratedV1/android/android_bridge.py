@@ -13,7 +13,7 @@ def queue_action(action):
 
     # APK standalone mode:
     # Return native_action for GerfexPlugin Java executor.
-    # No Termux queue file and no external queue_runner dependency.
+    # No external legacy queue dependency.
     return {
         "ok": True,
         "native_action": item

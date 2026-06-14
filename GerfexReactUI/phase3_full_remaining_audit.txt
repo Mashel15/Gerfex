@@ -1,0 +1,60 @@
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:163:    "summary": "فشل التلخيص: القراءة غير صالحة. السبب: dirty_termux_dump",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:92:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:161:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:230:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:312:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:381:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:627:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:721:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:789:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:951:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:1020:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:1091:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:14:QUEUE_FILE = str(Path(__file__).resolve().parent / "android_queue.txt")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:15:RISH = os.path.expanduser("~/rish/rish")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:16:SCREEN_FILE = "/sdcard/Download/gerfex_screen.png"
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:25:def rish_cmd(command):
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:31:        env={**os.environ, "RISH_APPLICATION_ID": "com.termux"}
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:56:        rish_cmd(f"am start -a android.intent.action.VIEW -d '{url}' -p com.android.chrome")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:64:            rish_cmd(f"am start -n {component}")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:80:            rish_cmd(f"input keyevent {code}")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:83:        rish_cmd("input keyevent 4")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:87:        rish_cmd("input keyevent 3")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:91:        rish_cmd("input keyevent 187")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:95:        rish_cmd("input keyevent 66")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:100:        rish_cmd(f"input tap {int(args['x'])} {int(args['y'])}")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:104:        rish_cmd(
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:112:        rish_cmd("input text " + shlex.quote(safe))
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:121:    if action == "dump_ui":
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:126:                rish_cmd(f"am start -n {component}")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:128:        rish_cmd("uiautomator dump /sdcard/Download/gerfex_ui.xml")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:129:        print("UI DUMP SAVED: /sdcard/Download/gerfex_ui.xml")
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:133:        rish_cmd(f"screencap -p {SCREEN_FILE}")
+android/app/src/main/python/GerfexIntegratedV1/legacy_tools/clear_queue_legacy.py:3:q = Path("runtime/android_queue.txt")
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:14:    dirty_termux = (
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:15:        "com.termux" in ids
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:16:        or "termux" in texts
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:26:    elif "com.termux" in ids:
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:27:        app_guess = "termux"
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:32:        "dirty_termux_dump": dirty_termux,
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:33:        "usable_for_app_understanding": bool(parsed.get("ok")) and not dirty_termux,
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_summary_legacy.py:34:        "dirty_termux_dump": analysis.get("dirty_termux_dump", False),
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_verify_legacy.py:12:        "dirty": s.get("dirty_termux_dump"),
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/ui_parser_legacy.py:2:# Reads old uiautomator XML dumps from /sdcard/Download.
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/ui_parser_legacy.py:9:UI_XML = Path("/sdcard/Download/gerfex_ui.xml")
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_observer_legacy.py:2:# This observer reads old uiautomator XML dumps from /sdcard/Download.
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_observer_legacy.py:9:UI_PATH = Path("/sdcard/Download/gerfex_ui.xml")
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:80:            {"action": "dump_ui", "args": {"focus": "chrome"}}
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:30:    queued.append(queue_action({"action": "dump_ui", "args": {"focus": app}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:52:        {"action": "dump_ui", "args": {"focus": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:14:    "com.termux",
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:106:    if "com.termux" in raw or "activity_termux" in raw:
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:109:            "reason": "dirty_termux_dump",
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_news_legacy.py:17:        "stdout": "APK runtime skips Termux queue_runner",
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_fallback_reader_legacy.py:46:            "stdout": "APK runtime skips Termux queue_runner",
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:33:    queued.append(queue_action({"action": "dump_ui", "args": {"focus": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:43:    queued.append(queue_action({"action": "dump_ui", "args": {"focus": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:50:    if not article.get("ok") and article.get("reason") == "dirty_termux_dump":
+android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:56:            queue_action({"action": "dump_ui", "args": {"focus": "chrome"}})
+android/app/src/main/python/GerfexIntegratedV1/legacy_api/gerfex_api_legacy.py:7:from fastapi import FastAPI
+android/app/src/main/python/GerfexIntegratedV1/legacy_tests/test_api_v1_legacy.py:7:from fastapi.testclient import TestClient

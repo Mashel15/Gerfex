@@ -9,5 +9,5 @@ def skip_external_runner_result(source="apk_runtime"):
         "ok": True,
         "skipped": True,
         "source": source,
-        "reason": "APK runtime does not use Termux queue_runner. Actions are executed by native Android bridge."
+        "reason": "APK runtime executes actions through the native Android bridge."
     }
