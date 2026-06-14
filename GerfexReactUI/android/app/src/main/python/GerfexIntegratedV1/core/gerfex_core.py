@@ -20,9 +20,9 @@ from learning.learning_manager import learn
 
 
 def clear_queue():
-    q = app_path("runtime", "android_queue.txt")
-    q.parent.mkdir(parents=True, exist_ok=True)
-    q.write_text("", encoding="utf-8")
+    # APK standalone mode: no external android_queue.txt is used.
+    # Kept as a compatibility no-op for old research paths.
+    return True
 
 
 def run_goal(goal):
