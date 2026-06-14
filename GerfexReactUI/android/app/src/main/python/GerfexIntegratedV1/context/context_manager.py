@@ -29,7 +29,7 @@ def prepare_context(goal):
         })
 
         queue_action({
-            "action": "dump_ui",
+            "action": "observe_screen",
             "args": {}
         })
 

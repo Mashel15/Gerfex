@@ -41,6 +41,6 @@ def plan_action(prompt, intent=None):
         }
 
     return {
-        "action": "dump_ui",
+        "action": "observe_screen",
         "args": {}
     }

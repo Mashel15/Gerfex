@@ -22,7 +22,7 @@ def ask_queen(goal):
                 {"action": "wait", "args": {"seconds": 2}},
                 {"action": "open_url", "args": {"url": url}},
                 {"action": "wait", "args": {"seconds": 3}},
-                {"action": "dump_ui", "args": {}}
+                {"action": "observe_screen", "args": {}}
             ],
             "reason": f"Queen قررت فتح كروم والبحث عن: {q}"
         }
@@ -52,7 +52,7 @@ def ask_queen(goal):
         return {"intent":"wait","target":"android","action":{"action":"wait","args":{"seconds":2}},"reason":"Queen قررت الانتظار"}
 
     if "صورة الشاشة" in text or "تفريغ الشاشة" in text or "dump" in text:
-        return {"intent":"dump_ui","target":"android","action":{"action":"dump_ui","args":{}},"reason":"Queen قررت حفظ تفريغ الشاشة"}
+        return {"intent":"observe_screen","target":"android","action":{"action":"observe_screen","args":{}},"reason":"Queen قررت حفظ تفريغ الشاشة"}
 
     return {"intent":"unknown","target":None,"action":None,"reason":"Queen لم تجد قرار تنفيذي آمن"}
 
@@ -64,7 +64,7 @@ def build_search_actions(query):
         {"action": "wait", "args": {"seconds": 2}},
         {"action": "open_url", "args": {"url": url}},
         {"action": "wait", "args": {"seconds": 4}},
-        {"action": "dump_ui", "args": {}},
+        {"action": "observe_screen", "args": {}},
     ]
 
 
@@ -103,7 +103,7 @@ def decide(goal, model_state=None):
                 {"action": "wait", "args": {"seconds": 2}},
                 {"action": "open_url", "args": {"url": url}},
                 {"action": "wait", "args": {"seconds": 4}},
-                {"action": "dump_ui", "args": {}},
+                {"action": "observe_screen", "args": {}},
             ],
             "reason": f"Queen قررت البحث عن {q}"
         }

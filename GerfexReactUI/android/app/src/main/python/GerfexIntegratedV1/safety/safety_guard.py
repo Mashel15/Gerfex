@@ -8,7 +8,7 @@ SAFE_ACTIONS = {
     "press_home",
     "press_recent",
     "wait",
-    "dump_ui"
+    "observe_screen"
 }
 
 HIGH_RISK_ACTIONS = {
