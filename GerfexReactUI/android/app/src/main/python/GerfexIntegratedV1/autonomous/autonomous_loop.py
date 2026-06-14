@@ -39,18 +39,10 @@ def run_autonomous_goal(goal):
     news = run_news_pipeline(goal)
     opened = open_best(open_chrome=False)
 
-    # APK runtime: لا نستخدم Termux queue_runner
-    if is_apk_runtime():
-        opened["queue_process"] = skip_external_runner_result("autonomous_loop.initial_queue")
-    else:
-        try:
-            from legacy_termux_runtime.queue_runner_legacy_termux import process_queue
-            process_queue()
-        except Exception as e:
-            opened["queue_process_error"] = str(e)
+    # APK standalone mode: native Java executor handles actions.
+    opened["queue_process"] = skip_external_runner_result("autonomous_loop.initial_queue")
 
-
-    # نترك queue_runner يفتح الرابط ويعمل dump_ui
+    # APK native perception replaces old external dump flow.
     time.sleep(7)
 
     article = read_article()
@@ -63,10 +55,7 @@ def run_autonomous_goal(goal):
             queue_action({"action": "wait", "args": {"seconds": 2}})
             queue_action({"action": "dump_ui", "args": {"focus": "chrome"}})
 
-            if not is_apk_runtime():
-                from legacy_termux_runtime.queue_runner_legacy_termux import process_queue
-                process_queue()
-
+            # APK standalone mode: no external queue runner.
             article = read_article()
         except Exception as e:
             article["recovery_error"] = str(e)
