@@ -20,7 +20,7 @@ from learning.learning_manager import learn
 
 
 def clear_queue():
-    # APK standalone mode: no external android_queue.txt is used.
+    # APK standalone mode: no external legacy queue is used.
     # Kept as a compatibility no-op for old research paths.
     return True
 

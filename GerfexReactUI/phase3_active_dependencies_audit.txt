@@ -1,0 +1,1 @@
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:163:    "summary": "فشل التلخيص: القراءة غير صالحة. السبب: dirty_termux_dump",

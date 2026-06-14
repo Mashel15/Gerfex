@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 
 from research.news_pipeline import run as run_news_pipeline
 from research.open_best_news_result import open_best
-from research.article_reader import read_article
+from legacy_research.article_reader_legacy import read_article
 from research.article_summarizer import summarize
 
 LOG = app_path("learning", "autonomous_loop_log.json")

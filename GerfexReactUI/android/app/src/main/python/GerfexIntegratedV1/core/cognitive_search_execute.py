@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from context.context_manager import prepare_context
-from observation.screen_observer import observe
+from observation.native_screen_observer import observe_native_text
 from understanding.screen_understanding import understand_screen
 from planner.action_planner import create_plan
 from planner.action_builder import build_actions
@@ -27,7 +27,7 @@ def execute_goal(goal):
 
     time.sleep(4)
 
-    obs = observe()
+    obs = observe_native_text()
     understanding = understand_screen()
     plan = create_plan(goal, understanding)
     bundle = build_actions(goal, plan, understanding)

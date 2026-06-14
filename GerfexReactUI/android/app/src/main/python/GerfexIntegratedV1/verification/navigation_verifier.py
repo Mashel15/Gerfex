@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from android.android_bridge import queue_action
-from observation.screen_observer import observe
+from observation.native_screen_observer import observe_native_text
 
 def verify_navigation(url, expected_terms=None):
     expected_terms = expected_terms or []
@@ -22,14 +22,9 @@ def verify_navigation(url, expected_terms=None):
         "args": {"seconds": 4}
     })
 
-    queue_action({
-        "action": "dump_ui",
-        "args": {}
-    })
+    time.sleep(2)
 
-    time.sleep(6)
-
-    obs = observe()
+    obs = observe_native_text()
     texts = []
 
     for item in obs.get("items", []):

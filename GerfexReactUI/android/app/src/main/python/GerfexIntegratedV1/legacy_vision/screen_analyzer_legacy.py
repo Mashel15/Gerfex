@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from vision.ui_parser import parse_ui
+from legacy_vision.ui_parser_legacy import parse_ui
 
 STATE_FILE = Path(__file__).resolve().parent / "screen_analysis.json"
 

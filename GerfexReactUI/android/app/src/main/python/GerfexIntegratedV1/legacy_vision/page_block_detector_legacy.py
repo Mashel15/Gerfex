@@ -1,5 +1,5 @@
 import json
-from vision.ui_parser import parse_ui
+from legacy_vision.ui_parser_legacy import parse_ui
 
 BLOCK_WORDS = [
     "sign in",

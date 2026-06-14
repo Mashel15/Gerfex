@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from pathlib import Path
-from vision.ui_parser import parse_ui
+from legacy_vision.ui_parser_legacy import parse_ui
 
 OUT = Path(__file__).resolve().parent / "google_results.json"
 

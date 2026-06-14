@@ -1,6 +1,6 @@
 import json
 from math import hypot
-from vision.ui_parser import parse_ui
+from legacy_vision.ui_parser_legacy import parse_ui
 
 SEARCH_WORDS = ["بحث", "search", "find"]
 SEARCH_ICONS = ["", "🔍", "⌕"]

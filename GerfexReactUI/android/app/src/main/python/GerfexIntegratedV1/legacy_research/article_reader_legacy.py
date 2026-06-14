@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from vision.ui_parser import parse_ui
+from legacy_vision.ui_parser_legacy import parse_ui
 
 OUT = Path("research/last_article_read.json")
 
