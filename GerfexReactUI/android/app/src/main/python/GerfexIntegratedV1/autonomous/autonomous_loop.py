@@ -44,7 +44,7 @@ def run_autonomous_goal(goal):
         opened["queue_process"] = skip_external_runner_result("autonomous_loop.initial_queue")
     else:
         try:
-            from runtime.queue_runner import process_queue
+            from legacy_termux_runtime.queue_runner_legacy_termux import process_queue
             process_queue()
         except Exception as e:
             opened["queue_process_error"] = str(e)
@@ -64,7 +64,7 @@ def run_autonomous_goal(goal):
             queue_action({"action": "dump_ui", "args": {"focus": "chrome"}})
 
             if not is_apk_runtime():
-                from runtime.queue_runner import process_queue
+                from legacy_termux_runtime.queue_runner_legacy_termux import process_queue
                 process_queue()
 
             article = read_article()
