@@ -223,6 +223,9 @@ public class GerfexPlugin extends Plugin {
                     Python.start(new AndroidPlatform(getContext()));
                 }
 
+                String screenTextBeforeThink = GerfexAccessibilityService.dumpText();
+                String screenTextPath = saveNativeScreenText(screenTextBeforeThink);
+
                 Python py = Python.getInstance();
                 PyObject entry = py.getModule("gerfex_entry");
                 String result = entry.callAttr("think", message).toString();
@@ -232,6 +235,7 @@ public class GerfexPlugin extends Plugin {
                 ret.put("ok", true);
                 ret.put("result", result);
                 ret.put("native_executed_count", nativeCount);
+                ret.put("screen_text_saved_path", screenTextPath);
 
                 call.resolve(ret);
 
