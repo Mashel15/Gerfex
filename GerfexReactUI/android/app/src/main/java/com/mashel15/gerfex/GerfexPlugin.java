@@ -131,7 +131,9 @@ public class GerfexPlugin extends Plugin {
                 return true;
             }
 
-            if ("dump_ui".equals(name)) {
+            if ("dump_ui".equals(name) || "observe_screen".equals(name)) {
+                String screenText = GerfexAccessibilityService.dumpText();
+                saveNativeScreenText(screenText);
                 return GerfexAccessibilityService.isReady();
             }
 
