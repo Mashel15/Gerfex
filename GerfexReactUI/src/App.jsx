@@ -24,6 +24,21 @@ async function askGerfexNative(prompt, modelState = {}) {
   };
 }
 
+
+async function getNativePerceptionStatus() {
+  const nativeRes = await GerfexNative.accessibilityStatus();
+  const text = nativeRes?.screen_text || "";
+  const preview = text.split("\n").filter(Boolean).slice(0, 8).join("\n");
+
+  return {
+    ok: !!nativeRes?.ok,
+    ready: !!nativeRes?.ready,
+    length: text.length,
+    savedPath: nativeRes?.screen_text_saved_path || "",
+    preview
+  };
+}
+
 const sections = [
   ["models", "🤖", "النماذج"],
   ["sessions", "💬", "الجلسات"],
@@ -210,6 +225,22 @@ export default function App() {
     }
 
     if (modelState.hold) {
+      return;
+    }
+
+    if (text === "حالة الإدراك" || text === "حالة الادراك") {
+      setMessages((m) => [...m, { speaker: "Mashel", content: text }]);
+      setInput("");
+      setVoiceInput(false);
+
+      try {
+        const st = await getNativePerceptionStatus();
+        addReply(
+          `Native Perception\nready: ${st.ready}\ntext_length: ${st.length}\nsaved_path: ${st.savedPath || "none"}\n---\n${st.preview || "لا يوجد نص شاشة بعد."}`
+        );
+      } catch (err) {
+        addReply("فشل فحص الإدراك: " + (err?.message || err));
+      }
       return;
     }
 
