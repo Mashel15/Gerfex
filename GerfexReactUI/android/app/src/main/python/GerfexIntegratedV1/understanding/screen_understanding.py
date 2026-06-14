@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from observation.screen_observer import observe
+from observation.native_screen_observer import observe_native_text
 
 PACKAGE_TYPES = {
     "com.sec.android.app.sbrowser": {
@@ -35,7 +35,7 @@ PACKAGE_TYPES = {
 }
 
 def understand_screen(observation=None):
-    obs = observation or observe()
+    obs = observation or observe_native_text()
 
     if not obs.get("ok"):
         return {
