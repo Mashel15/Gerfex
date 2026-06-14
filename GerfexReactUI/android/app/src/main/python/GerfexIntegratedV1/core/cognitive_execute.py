@@ -7,6 +7,7 @@ sys.path.insert(0, str(ROOT))
 
 from core.perception_cycle import run_perception_cycle
 from planner.action_builder import build_actions
+from core.execution_manager import execute
 
 def build_execution_bundle(goal):
     perception = run_perception_cycle(goal)
@@ -30,7 +31,44 @@ def build_execution_bundle(goal):
         "perception": perception,
         "bundle": bundle,
         "executable_actions": executable,
-        "note": "Execution preview only. No actions executed."
+        "note": "Execution bundle built. execute_cognitive_goal may execute executable actions."
+    }
+
+
+def execute_cognitive_goal(goal):
+    bundle_result = build_execution_bundle(goal)
+    actions = bundle_result.get("executable_actions", [])
+
+    if not actions:
+        return {
+            "ok": False,
+            "mode": "cognitive_execute",
+            "reason": "no_executable_actions",
+            "goal": goal,
+            "bundle_result": bundle_result
+        }
+
+    decision = {
+        "ok": True,
+        "brain": "CognitiveExecute",
+        "intent": bundle_result.get("bundle", {}).get("intent", "cognitive_action"),
+        "target": bundle_result.get("bundle", {}).get("query") or "android",
+        "actions": [
+            {"action": a.get("action"), "args": a.get("args", {})}
+            for a in actions
+        ],
+        "reason": "perception_plan_action_bundle"
+    }
+
+    execution = execute(decision)
+
+    return {
+        "ok": execution.get("ok", False),
+        "mode": "cognitive_execute",
+        "goal": goal,
+        "decision": decision,
+        "execution": execution,
+        "bundle_result": bundle_result
     }
 
 if __name__ == "__main__":

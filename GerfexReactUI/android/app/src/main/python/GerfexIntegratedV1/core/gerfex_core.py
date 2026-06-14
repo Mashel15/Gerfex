@@ -73,7 +73,16 @@ def run_goal(goal):
         }
         learning = {"ok": True, "mode": "router_research"}
     elif routing.get("route") == "cognitive":
-        execution = run_cognitive_goal(goal)
+        try:
+            from core.cognitive_execute import execute_cognitive_goal
+            execution = execute_cognitive_goal(goal)
+        except Exception as e:
+            execution = {
+                "ok": False,
+                "mode": "cognitive_execute",
+                "reason": "cognitive_execute_error",
+                "error": str(e)
+            }
         decision = {
             "ok": True,
             "brain": "BrainRouter",
