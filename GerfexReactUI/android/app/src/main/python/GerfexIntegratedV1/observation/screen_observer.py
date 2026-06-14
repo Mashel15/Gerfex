@@ -1,3 +1,6 @@
+# LEGACY FALLBACK ONLY:
+# This observer reads old uiautomator XML dumps from /sdcard/Download.
+# APK native perception should prefer observation.native_screen_observer.
 import json
 import re
 import xml.etree.ElementTree as ET
