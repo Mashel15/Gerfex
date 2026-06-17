@@ -1,0 +1,28 @@
+android/app/src/main/python/GerfexIntegratedV1/android/action_planner.py:1:def plan_action(prompt, intent=None):
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py:23:def _search_query(text):
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:29:def run_goal(goal, trace=None):
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:187:def run_cognitive_goal(goal):
+android/app/src/main/python/GerfexIntegratedV1/core/execution_manager.py:23:def execute(decision, trace=None):
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:12:def run_perception_cycle(goal):
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:38:def execute_cognitive_goal(goal):
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:25:def execute_goal(goal):
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:13:def plan_to_decision(goal, perception):
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:87:def run_autonomous_cognitive_loop(goal, max_steps=3, delay=1.0, execute_actions=True):
+android/app/src/main/python/GerfexIntegratedV1/observation/native_screen_observer.py:12:def observe_native_text(path=SCREEN_TEXT_FILE):
+android/app/src/main/python/GerfexIntegratedV1/planner/action_planner.py:4:def create_plan(goal, understanding):
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:13:def build_actions(goal, plan, understanding=None):
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:46:def run(query):
+android/app/src/main/python/GerfexIntegratedV1/research/direct_article_reader.py:15:def read(index=1):
+android/app/src/main/python/GerfexIntegratedV1/research/direct_url_reader.py:15:def read(url):
+android/app/src/main/python/GerfexIntegratedV1/runtime/goal_worker.py:11:def run_next_goal():
+android/app/src/main/python/GerfexIntegratedV1/runtime/goal_worker.py:32:def run_all_pending(limit=10):
+android/app/src/main/python/GerfexIntegratedV1/runtime/autonomous_scheduler.py:35:def run_ticks(count=1, sleep_seconds=0):
+android/app/src/main/python/GerfexIntegratedV1/runtime/execution_trace.py:36:def _read_jsonl(path):
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/screen_reader.py:7:def read_screen(path=UI_FILE):
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:19:def extract_search_results(limit=10):
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:12:def verify_navigation(url, expected_terms=None):
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:41:def verify_search_page(data):
+android/app/src/main/python/GerfexIntegratedV1/vision/vision_action_planner.py:3:def plan_tap_target(query):
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:6:def queue_chrome_search(query, open_chrome=True):
+android/app/src/main/python/GerfexIntegratedV1/apk_runtime.py:3:def is_apk_runtime():
+android/app/src/main/python/GerfexIntegratedV1/apk_runtime.py:7:def skip_external_runner_result(source="apk_runtime"):
