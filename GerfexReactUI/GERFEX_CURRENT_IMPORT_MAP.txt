@@ -1,0 +1,332 @@
+
+### android/__init__.py
+
+### android/action_planner.py
+
+### android/android_bridge.py
+IMPORT time
+
+### apk_runtime.py
+IMPORT os
+
+### autonomous/__init__.py
+
+### brain/__init__.py
+
+### brain/brain_manager.py
+IMPORT json
+FROM urllib.parse
+FROM gerfex_android_paths
+
+### brain/brain_router.py
+
+### brain/experience_decision.py
+
+### cognitive/action_selector.py
+
+### context/__init__.py
+
+### context/context_manager.py
+IMPORT json
+IMPORT time
+IMPORT sys
+FROM pathlib
+FROM android.android_bridge
+
+### core/__init__.py
+
+### core/autonomous_cognitive_loop_v1.py
+IMPORT json
+IMPORT sys
+IMPORT time
+FROM pathlib
+FROM core.perception_cycle
+FROM core.execution_manager
+
+### core/cognitive_execute.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM core.perception_cycle
+FROM search_bundle.core.action_builder
+FROM core.execution_manager
+
+### core/cognitive_search_execute.py
+IMPORT json
+IMPORT sys
+IMPORT time
+FROM pathlib
+FROM context.context_manager
+FROM observation.native_screen_observer
+FROM search_bundle.core.screen_understanding
+FROM search_bundle.core.action_builder
+FROM search_bundle.core.action_builder
+FROM search_bundle.core.target_resolver
+FROM android.android_bridge
+
+### core/execution_manager.py
+FROM android.android_bridge
+FROM safety.safety_guard
+FROM runtime.execution_trace
+
+### core/gerfex_core.py
+IMPORT sys
+FROM pathlib
+FROM gerfex_android_paths
+FROM learning.unified_learning
+FROM runtime.runtime_state_manager
+FROM brain.experience_decision
+FROM memory.memory_advisor
+FROM memory.memory_recall
+IMPORT json
+FROM brain.brain_manager
+FROM brain.brain_router
+FROM core.execution_manager
+FROM learning.learning_manager
+FROM runtime.execution_trace
+FROM core.perception_cycle
+FROM search_bundle.core.news_pipeline
+FROM core.cognitive_execute
+
+### core/perception_cycle.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM observation.native_screen_observer
+FROM search_bundle.core.screen_understanding
+FROM search_bundle.core.action_builder
+IMPORT sys
+
+### gerfex_android_paths.py
+IMPORT os
+FROM pathlib
+
+### learning/conversational_learning.py
+IMPORT time
+IMPORT json
+
+### learning/learning_manager.py
+IMPORT json
+FROM pathlib
+FROM gerfex_android_paths
+FROM datetime
+
+### learning/unified_learning.py
+FROM memory.unified_memory
+
+### memory/memory_advisor.py
+
+### memory/memory_recall.py
+IMPORT json
+FROM pathlib
+
+### memory/unified_memory.py
+IMPORT json
+FROM pathlib
+FROM gerfex_android_paths
+FROM datetime
+
+### observation/__init__.py
+
+### observation/native_screen_observer.py
+IMPORT sys
+FROM pathlib
+FROM gerfex_android_paths
+IMPORT json
+
+### runtime/autonomous_goal_generator.py
+IMPORT sys
+FROM pathlib
+FROM memory.unified_memory
+FROM runtime.goal_manager
+FROM runtime.runtime_state_manager
+IMPORT json
+
+### runtime/autonomous_scheduler.py
+IMPORT sys
+IMPORT json
+IMPORT time
+FROM pathlib
+FROM runtime.goal_manager
+FROM runtime.goal_worker
+FROM runtime.autonomous_goal_generator
+
+### runtime/execution_trace.py
+IMPORT json
+IMPORT time
+IMPORT uuid
+FROM gerfex_android_paths
+
+### runtime/goal_manager.py
+IMPORT json
+FROM pathlib
+FROM gerfex_android_paths
+FROM datetime
+
+### runtime/goal_worker.py
+IMPORT sys
+IMPORT json
+FROM pathlib
+FROM runtime.goal_manager
+FROM core.gerfex_core
+
+### runtime/runtime_state.py
+IMPORT json
+IMPORT time
+FROM pathlib
+FROM gerfex_android_paths
+
+### runtime/runtime_state_manager.py
+IMPORT json
+FROM pathlib
+FROM gerfex_android_paths
+FROM datetime
+
+### safety/__init__.py
+
+### safety/safety_guard.py
+
+### search_bundle/core/action_builder.py
+IMPORT json
+FROM urllib.parse
+
+### search_bundle/core/article_summarizer.py
+IMPORT json
+FROM pathlib
+
+### search_bundle/core/direct_url_reader.py
+IMPORT json
+IMPORT re
+IMPORT html
+IMPORT urllib.request
+FROM pathlib
+IMPORT sys
+
+### search_bundle/core/navigation_recovery.py
+IMPORT json
+IMPORT sys
+IMPORT time
+FROM pathlib
+FROM android.android_bridge
+FROM observation.native_screen_observer
+
+### search_bundle/core/navigation_verifier.py
+IMPORT json
+IMPORT sys
+IMPORT time
+FROM pathlib
+FROM android.android_bridge
+FROM observation.native_screen_observer
+
+### search_bundle/core/news_pipeline.py
+IMPORT json
+IMPORT urllib.parse
+IMPORT urllib.request
+IMPORT xml.etree.ElementTree
+FROM search_bundle.core.source_filter
+FROM datetime
+FROM email.utils
+FROM pathlib
+IMPORT sys
+
+### search_bundle/core/screen_understanding.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM observation.native_screen_observer
+
+### search_bundle/core/source_filter.py
+IMPORT json
+IMPORT re
+FROM pathlib
+FROM urllib.parse
+IMPORT sys
+
+### search_bundle/core/target_resolver.py
+IMPORT json
+
+### tests/test_action_selector_v1.py
+IMPORT sys
+FROM pathlib
+FROM cognitive.action_selector
+FROM planner.action_planner
+
+### tests/test_autonomous_goal_generator_v1.py
+IMPORT sys
+FROM pathlib
+FROM runtime.autonomous_goal_generator
+
+### tests/test_autonomous_scheduler_v1.py
+IMPORT sys
+FROM pathlib
+FROM runtime.autonomous_scheduler
+
+### tests/test_cognitive_execute_live_v1.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM android.android_bridge
+
+### tests/test_executive_brain.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM core.gerfex_core
+
+### tests/test_executive_brain_v2.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM core.gerfex_core
+
+### tests/test_executive_brain_v3.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM core.gerfex_core
+
+### tests/test_executive_brain_v4.py
+IMPORT json
+IMPORT sys
+FROM pathlib
+FROM core.gerfex_core
+
+### tests/test_experience_decision_v1.py
+IMPORT sys
+FROM pathlib
+FROM brain.experience_decision
+
+### tests/test_goal_manager_v1.py
+IMPORT sys
+FROM pathlib
+FROM runtime.goal_manager
+
+### tests/test_goal_worker_v1.py
+IMPORT sys
+FROM pathlib
+FROM runtime.goal_manager
+FROM runtime.goal_worker
+
+### tests/test_integrated_memory_learning_v1.py
+IMPORT sys
+FROM pathlib
+FROM memory.unified_memory
+FROM learning.unified_learning
+
+### tests/test_memory_advisor_v1.py
+IMPORT sys
+FROM pathlib
+FROM memory.memory_advisor
+
+### tests/test_memory_recall_engine_v1.py
+IMPORT sys
+FROM pathlib
+FROM memory.unified_memory
+FROM memory.memory_recall
+
+### tests/test_runtime_state_manager_v2.py
+IMPORT sys
+FROM pathlib
+FROM runtime.runtime_state_manager
+
+### tools/__init__.py
