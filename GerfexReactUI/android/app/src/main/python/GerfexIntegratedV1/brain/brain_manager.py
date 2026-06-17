@@ -1,6 +1,5 @@
 import json
 from urllib.parse import quote_plus
-from vision.chrome_search_executor import queue_chrome_search
 from gerfex_android_paths import app_path
 
 MEMORY = app_path("memory", "brain_memory.json")
@@ -35,22 +34,21 @@ def decide(goal):
 
     q = _search_query(text)
     if q:
-        chrome_result = queue_chrome_search(q, open_chrome=True)
-        native_actions = [
-            item.get("native_action")
-            for item in chrome_result.get("queued", [])
-            if isinstance(item, dict) and item.get("native_action")
-        ]
-
+        url = "https://www.google.com/search?q=" + quote_plus(q)
         return {
-            "ok": bool(chrome_result.get("ok")) and bool(native_actions),
+            "ok": True,
             "brain": "GerfexCore",
             "intent": "web_search",
             "target": "chrome",
             "action": None,
-            "actions": native_actions,
-            "reason": f"Gerfex ربط البحث عبر vision/chrome_search_executor.py: {q}",
-            "planner_result": chrome_result
+            "actions": [
+                {"action": "open_app", "args": {"package": "chrome"}},
+                {"action": "wait", "args": {"seconds": 2}},
+                {"action": "open_url", "args": {"url": url}},
+                {"action": "wait", "args": {"seconds": 3}},
+                {"action": "observe_screen", "args": {}}
+            ],
+            "reason": f"Gerfex قرر فتح كروم والبحث عن: {q}"
         }
 
     apps = {

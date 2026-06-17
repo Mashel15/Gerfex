@@ -1,0 +1,246 @@
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py:24:def _search_query(text):
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_router.py:4:    news_words = ["أخبار", "خبر", "تابع", "news"]
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_router.py:9:    if any(w in text for w in news_words):
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_router.py:10:        return {"ok": True, "route": "research", "reason": "news/research goal"}
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:75:            from research.news_pipeline import run as run_news_pipeline
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:78:            for w in ["تابع", "آخر", "اخر", "أخبار", "اخبار", "خبر", "news"]:
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:82:            news_result = run_news_pipeline(query)
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:84:                "ok": bool(news_result.get("ok")),
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:85:                "mode": "research_news_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:87:                "result": news_result,
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:88:                "reply": "تم تشغيل مسار الأخبار الداخلي." if news_result.get("ok") else "فشل مسار الأخبار الداخلي."
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:93:                "mode": "research_news_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:101:            "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:104:            "reason": "Brain Router وجّه الطلب إلى research/news_pipeline.py"
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:18:    "open_url",
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:36:                "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:38:                    "url": "https://www.google.com/search?q=" + goal.replace(" ", "+")
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:144:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:146:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:158:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:160:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:172:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:174:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:186:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:188:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:200:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:202:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:214:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:216:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:298:      "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:300:    "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/memory/gerfex_unified_memory.json:303:    "summary": "ملخص المقال:\n\nالعنوان:\nأخبار الذكاء الاصطناعي - Google Search\n\nالفكرة الرئيسية:\nتشهد ساحة الذكاء الاصطناعي حالياً تسارعاً غير مسبوق في الاستثمارات\n\nأهم النقاط:\n1. ، حيث تستحوذ الشركات الكبرى على تقنيات التسويق الذكي، وتتنافس لتعزيز البنية التحتية، وسط نقاشات حول حجم الإنفاق مقابل العوائد الحقيقية.\n2. تعاقدت شركة Google مع SpaceX التابعة لإيلون ماسك في صفقة ضخمة تصل قيمتها إلى 30 مليار دولار لتأمين قدرات حوسبة سحابية متقدمة تمتد حتى عام 2029.\n3. الذكاء الاصطناعي بين إعادة التدريب وتحسين المهارات\n4. * العالم * الاقتصاد * الرياضة ... ألعاب * إيران السعودية مصر * العالم * الاقتصاد * سينما * الرياضة ... ربما، لكن تلك هي تحديداً القطاعات التي يبخس كثيرٌ من المج...\n\nخلاصة Gerfex:\nتم فتح المقال وقراءته من الشاشة الحالية، وهذا الملخص مبني على النص المستخرج فعليًا من المقال.\n",
+android/app/src/main/python/GerfexIntegratedV1/planner/action_planner.py:21:        "summary": "Google Chrome browser",
+android/app/src/main/python/GerfexIntegratedV1/planner/action_planner.py:22:        "capabilities": ["navigate", "search", "open_url", "read_page"],
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:20:        url = "https://www.google.com/search?q=" + quote_plus(query)
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:25:            "strategy": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:30:                    "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/planner/target_resolver.py:28:                if "search" in text.lower() or "بحث" in text or "google" in text.lower():
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:7:TRUSTED = ["الجزيرة", "BBC", "رويترز", "Reuters", "AP", "Google", "OpenAI", "Microsoft"]
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:32:    url = f"https://news.google.com/rss/search?q={q}&hl=ar&gl=SA&ceid=SA:ar"
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:40:            "source": "google_news_rss",
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:58:    Path("research/last_news_results.json").write_text(
+android/app/src/main/python/GerfexIntegratedV1/research/article_summarizer.py:39:    "google.com",
+android/app/src/main/python/GerfexIntegratedV1/research/direct_article_reader.py:4:RESULTS = Path("research/last_news_results.json")
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:10:    "apnews.com": 95,
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:32:    "article", "news", "سياسة", "اقتصاد", "تقنية", "علوم",
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:75:    if "news.google.com/rss/articles" in link:
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:77:        reasons.append("google_news_redirect")
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:132:    path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("research/last_news_results.json")
+android/app/src/main/python/GerfexIntegratedV1/research/source_score.json:3:  "apnews.com": 95,
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:64:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:66:            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:106:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:108:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:133:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:135:            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:175:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:177:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:202:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:204:            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:244:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:246:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:257:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:259:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:284:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:286:            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:326:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:328:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:353:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:355:            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5OeHVWQlVQcEtQUFNHMzBnMGdmZVNQM0MzazAyYXZjVVNnNE5BSF9WbW5TSjlkOXA2Z1U3WFV1QlNLWEU1VEVXZnhZb0pzVzdGVlhNVG9CbV8wbE5aMVk3NVJNdkQ0T2NZRUJ2Z0RjMlE?oc=5"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:395:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:397:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:599:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:601:            "url": "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:639:        "reason": "news/research goal"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:641:      "intent": "news_research_pipeline",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:693:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:695:            "url": "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:761:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:763:            "url": "https://www.google.com/search?q=%D8%A2%D8%AE%D8%B1+%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC"
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:923:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:925:            "url": "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+android/app/src/main/python/GerfexIntegratedV1/safety/safety_guard.py:3:    "open_url",
+android/app/src/main/python/GerfexIntegratedV1/tests/test_action_selector_v1.py:12:    "capabilities": ["navigate", "search", "open_url", "read_page"]
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:5:    "google", "google search", "clear search", "search by voice",
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:6:    "ai mode", "all", "news", "videos", "images", "short videos",
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:19:def extract_search_results(limit=10):
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:43:            "google search", "google account", "أخبار الذكاء الاصطناعي - google search",
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:47:        if low in ui_noise or any(x in low for x in ["google account", "corroboration"]):
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:92:    print(json.dumps(extract_search_results(), ensure_ascii=False, indent=2))
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_search_reader_v6.py:8:from perception.search_reader import extract_search_results
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_search_reader_v6.py:10:result = extract_search_results(limit=10)
+android/app/src/main/python/GerfexIntegratedV1/understanding/screen_understanding.py:14:        "capabilities": ["navigate", "search", "open_url", "read_page"],
+android/app/src/main/python/GerfexIntegratedV1/understanding/screen_understanding.py:19:        "summary": "Google Chrome browser",
+android/app/src/main/python/GerfexIntegratedV1/understanding/screen_understanding.py:20:        "capabilities": ["navigate", "search", "open_url", "read_page"],
+android/app/src/main/python/GerfexIntegratedV1/understanding/screen_understanding.py:23:    "com.google.android.youtube": {
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:16:        "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:38:        "google": "google" in joined,
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:45:        signals["google"]
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:61:    url = "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:69:            "google"
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:41:def verify_search_page(data):
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:61:            "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:101:    url = "https://www.google.com/search?q=%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1+%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1+%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A"
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_planner.py:4:def find_chrome_url_bar():
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_planner.py:17:        elif "ابحث في Google" in hint or "اكتب عنوان URL" in hint:
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_planner.py:45:def plan_chrome_search(query):
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_planner.py:86:    q = " ".join(sys.argv[1:]) or "latest AI news"
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:385:      "class": "com.google.android.material.navigation.NavigationView",
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:1179:      "id": "google_ads_iframe_/5113/alarabiya.net/Arabic/Technology/Ai/Main_0__container__",
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:1194:      "id": "google_ads_iframe_/5113/alarabiya.net/Arabic/Technology/Ai/Main_0",
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:2109:      "id": "google_ads_iframe_/5113/alarabiya.net/Arabic/Technology/Ai/Main_2__container__",
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:2124:      "id": "google_ads_iframe_/5113/alarabiya.net/Arabic/Technology/Ai/Main_2",
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:9416:      "hint": "‏ابحث في Google أو اكتب عنوان URL",
+android/app/src/main/python/GerfexIntegratedV1/vision/screen_state.json:9503:      "desc": "‏تخصيص Google Chrome والتحكم فيه",
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:6:def queue_chrome_search(query, open_chrome=True):
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:47:    q = " ".join(sys.argv[1:]) or "latest AI news"
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:3:def _search_query(text):
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:16:        url = "https://www.google.com/search?q=" + quote_plus(q)
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:23:                {"action": "open_url", "args": {"url": url}},
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:60:def build_search_actions(query):
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:61:    url = "https://www.google.com/search?q=" + quote_plus(query)
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:65:        {"action": "open_url", "args": {"url": url}},
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:94:        url = "https://www.google.com/search?q=" + quote_plus(q)
+cleanup_quarantine_v1/before_files/android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:104:                {"action": "open_url", "args": {"url": url}},
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_workplace_cleanup:41:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_workplace_cleanup:61:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_workplace_cleanup:64:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_workplace_cleanup:101:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_native_voice_v1:41:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_native_voice_v1:61:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_native_voice_v1:64:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_native_voice_v1:101:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_voice_integration_phase_v1:41:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_voice_integration_phase_v1:61:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_voice_integration_phase_v1:64:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_voice_integration_phase_v1:101:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_viewer_v1:45:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_viewer_v1:65:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_viewer_v1:68:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_viewer_v1:105:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_compact_v1:45:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_compact_v1:65:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_compact_v1:68:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_compact_v1:105:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_execution_path_v1:45:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_execution_path_v1:65:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_execution_path_v1:68:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_execution_path_v1:105:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_verified_execution_loop_v1:45:        if (p.equals("youtube")) return "com.google.android.youtube";
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_verified_execution_loop_v1:65:                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_verified_execution_loop_v1:68:            if (intent == null && "com.google.android.youtube".equals(mapped)) {
+cleanup_quarantine_v1/before_files/android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_verified_execution_loop_v1:105:            if ("open_url".equals(name)) {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_workplace_stable_v1:345:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_workplace_stable_v1:564:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_workplace_cleanup:345:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_workplace_cleanup:564:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_core_workshop_v1:345:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_core_workshop_v1:564:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_native_voice_v1:346:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_native_voice_v1:565:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_voice_integration_phase_v1:328:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_voice_integration_phase_v1:547:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_trace_viewer_v1:327:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_trace_viewer_v1:546:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_trace_compact_v1:342:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_trace_compact_v1:561:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_trace_dev_menu_only_v1:342:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_trace_dev_menu_only_v1:561:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_dev_trace_only_v1:342:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_dev_trace_only_v1:561:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_remove_chat_trace_command_v1:342:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_remove_chat_trace_command_v1:561:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/before_files/src/App.jsx.before_execution_path_v1:327:  function newSession() {
+cleanup_quarantine_v1/before_files/src/App.jsx.before_execution_path_v1:546:        <button style={st.item} onClick={newSession}>➕ جلسة جديدة</button>
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:11:from research.news_pipeline import run as run_news_pipeline
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:12:from research.open_best_news_result import open_best
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:13:from legacy_research.article_reader_legacy import read_article
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:39:    news = run_news_pipeline(goal)
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:48:    article = read_article()
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:59:            article = read_article()
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:68:        "news_ok": news.get("ok"),
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:69:        "news_count": news.get("count"),
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:85:        "news": news,
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:25:    "تخصيص Google Chrome",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:42:    "play.google",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:53:    "Google",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:54:    "Google Search",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:59:    "News",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:101:def read_article():
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/article_reader_legacy.py:147:    print(json.dumps(read_article(), ensure_ascii=False, indent=2))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_fallback_reader_legacy.py:5:RESULTS = Path("research/last_news_results.json")
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_fallback_reader_legacy.py:42:        run(["python", "-m", "research.open_news_result", f"افتح {i}"])
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_news_legacy.py:27:    steps.append(("search", run(["python", "-m", "research.news_pipeline", query])))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_news_legacy.py:28:    steps.append(("open", run(["python", "-m", "research.open_news_result", "افتح 1"])))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_news_legacy.py:32:    # المسار الحالي يعتمد على open_news_result ثم قراءة الشاشة مباشرة.
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_news_legacy.py:33:    steps.append(("read_article", run(["python", "-m", "research.article_reader"])))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/auto_news_legacy.py:46:    Path("research/last_auto_news.json").write_text(
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/full_news_task_legacy.py:20:        "step": "search_news",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/full_news_task_legacy.py:21:        "result": run_cmd(["python", "-m", "research.news_pipeline", query])
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/full_news_task_legacy.py:26:        "result": run_cmd(["python", "-m", "research.open_news_result", "افتح 1"])
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:5:RESULTS = Path("research/last_news_results.json")
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:7:def open_best(open_chrome=True):
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:9:        return {"ok": False, "reason": "no_saved_news_results"}
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:41:    queued.append(queue_action({"action": "open_url", "args": {"url": link}}))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:5:RESULTS = Path("research/last_news_results.json")
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:9:        return {"ok": False, "reason": "no_saved_news_results"}
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:31:    queued.append(queue_action({"action": "open_url", "args": {"url": link}}))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:19:    "chrome": "com.android.chrome/com.google.android.apps.chrome.Main",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:22:    "youtube": "com.google.android.youtube/com.google.android.apps.youtube.app.WatchWhileActivity"
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:51:    if action == "open_url":
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:54:            print("OPEN_URL ERROR: missing url")
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:4:def find_chrome_url_bar():
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:17:        elif "ابحث في Google" in hint or "اكتب عنوان URL" in hint:
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:45:def plan_chrome_search(query):
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:86:    q = " ".join(sys.argv[1:]) or "latest AI news"
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:8:from vision.google_results_extractor import extract_google_results
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:12:OUT = Path("vision/google_best_result.json")
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:15:    "Google Search", "Google Account", "View related links",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:16:    "Instagram", "play.google", "صور", "فيديوهات"
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:35:    data = extract_google_results()
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:10:OUT = Path(__file__).resolve().parent / "google_results.json"
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:13:    "Google Account",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:14:    "Google Search",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:26:    "AP News",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:33:    "Google",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:60:def extract_google_results():
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_results_extractor_legacy.py:98:    print(json.dumps(extract_google_results(), ensure_ascii=False, indent=2))
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/page_block_detector_legacy.py:10:    "google-one-tap",
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/screen_analyzer_legacy.py:24:    elif "com.google.android.youtube" in ids:
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/semantic_target_finder_legacy.py:11:def is_search_like(label):
+cleanup_quarantine_v1/legacy_files/android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:5:def queue_semantic_tap(role, app="chrome", wait_before=2, wait_after=2):
+cleanup_quarantine_v1/old_queen/queen_provider_source.py:33:def search_knowledge(question, items):
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:3:def _search_query(text):
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:16:        url = "https://www.google.com/search?q=" + quote_plus(q)
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:23:                {"action": "open_url", "args": {"url": url}},
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:60:def build_search_actions(query):
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:61:    url = "https://www.google.com/search?q=" + quote_plus(query)
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:65:        {"action": "open_url", "args": {"url": url}},
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:94:        url = "https://www.google.com/search?q=" + quote_plus(q)
+cleanup_quarantine_v1/removed_providers/providers/queen_provider.py:104:                {"action": "open_url", "args": {"url": url}},
+cleanup_quarantine_v1/obsolete_tests/test_multi_step_execution_v1.py:14:assert any(a["action"] == "open_url" for a in r["actions"])
+cleanup_quarantine_v1/gerfex_core_before_research_route_fix_v1.py:80:            "intent": "news_research_pipeline",
+cleanup_quarantine_v1/brain_manager_before_chrome_executor_link_v1.py:23:def _search_query(text):
+cleanup_quarantine_v1/brain_manager_before_chrome_executor_link_v1.py:37:        url = "https://www.google.com/search?q=" + quote_plus(q)
+cleanup_quarantine_v1/brain_manager_before_chrome_executor_link_v1.py:47:                {"action": "open_url", "args": {"url": url}},
