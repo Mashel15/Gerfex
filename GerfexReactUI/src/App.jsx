@@ -152,30 +152,29 @@ export default function App() {
     if (withVoice) speak(content);
   }
 
-  function startVoice() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) return addReply("المتصفح لا يدعم الصوت.");
+  async function startVoice() {
+    try {
+      setListening(true);
 
-    const r = new SR();
-    r.lang = "ar-SA";
-    r.continuous = false;
-    r.interimResults = false;
+      if (!GerfexNative?.startSpeech) {
+        setListening(false);
+        return addReply("الصوت غير مربوط Native داخل التطبيق.");
+      }
 
-    r.onstart = () => setListening(true);
-    r.onend = () => setListening(false);
-    r.onerror = (e) => {
-      setListening(false);
-      addReply("خطأ في الصوت: " + (e.error || "unknown"));
-    };
-    r.onresult = (e) => {
-      const t = e.results?.[0]?.[0]?.transcript || "";
-      if (t.trim()) {
+      const res = await GerfexNative.startSpeech();
+      const t = (res?.text || "").trim();
+
+      if (t) {
         setInput(t);
         setVoiceInput(true);
+      } else {
+        addReply("لم ألتقط صوت واضح.");
       }
-    };
-
-    r.start();
+    } catch (e) {
+      addReply("خطأ في الصوت: " + (e?.message || e || "unknown"));
+    } finally {
+      setListening(false);
+    }
   }
 
   function handleAttach(e) {

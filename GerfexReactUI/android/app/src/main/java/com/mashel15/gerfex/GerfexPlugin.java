@@ -1,6 +1,10 @@
 package com.mashel15.gerfex;
 
 import android.content.Intent;
+import com.getcapacitor.annotation.ActivityCallback;
+import androidx.activity.result.ActivityResult;
+import android.speech.RecognizerIntent;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -341,4 +345,42 @@ public class GerfexPlugin extends Plugin {
             }
         }).start();
     }
+
+    @PluginMethod
+    public void startSpeech(PluginCall call) {
+        try {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-SA");
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "تكلم الآن");
+            startActivityForResult(call, intent, "speechResult");
+        } catch (Exception e) {
+            call.reject("speech_start_failed: " + e.getMessage());
+        }
+    }
+
+    @ActivityCallback
+    private void speechResult(PluginCall call, ActivityResult result) {
+        try {
+            JSObject ret = new JSObject();
+
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                ArrayList<String> matches = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = "";
+                if (matches != null && matches.size() > 0) text = matches.get(0);
+
+                ret.put("ok", true);
+                ret.put("text", text);
+                call.resolve(ret);
+                return;
+            }
+
+            ret.put("ok", false);
+            ret.put("text", "");
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject("speech_result_failed: " + e.getMessage());
+        }
+    }
+
 }
