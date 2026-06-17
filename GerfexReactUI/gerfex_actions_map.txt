@@ -1,0 +1,112 @@
+android/app/src/main/python/GerfexIntegratedV1/android/action_planner.py:9:            "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/android/action_planner.py:17:            "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/android/action_planner.py:25:            "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/android/action_planner.py:44:        "action": "observe_screen",
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:21:                {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:23:                {"action": "open_url", "args": {"url": url}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:25:                {"action": "observe_screen", "args": {}}
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:41:                "action": {"action": "open_app", "args": {"package": package}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:55:        return {"intent":"observe_screen","target":"android","action":{"action":"observe_screen","args":{}},"reason":"Gerfex قرر حفظ تفريغ الشاشة"}
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:63:        {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:65:        {"action": "open_url", "args": {"url": url}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:67:        {"action": "observe_screen", "args": {}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:102:                {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:104:                {"action": "open_url", "args": {"url": url}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:106:                {"action": "observe_screen", "args": {}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:123:        "action": {"action": "open_app", "args": {"package": target}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:21:                {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:23:                {"action": "open_url", "args": {"url": url}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:25:                {"action": "observe_screen", "args": {}}
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:41:                "action": {"action": "open_app", "args": {"package": package}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:55:        return {"intent":"observe_screen","target":"android","action":{"action":"observe_screen","args":{}},"reason":"Queen قررت حفظ تفريغ الشاشة"}
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:63:        {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:65:        {"action": "open_url", "args": {"url": url}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:67:        {"action": "observe_screen", "args": {}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:102:                {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:104:                {"action": "open_url", "args": {"url": url}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:106:                {"action": "observe_screen", "args": {}},
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:123:        "action": {"action": "open_app", "args": {"package": target}},
+android/app/src/main/python/GerfexIntegratedV1/cognitive/action_selector.py:29:            "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/context/context_manager.py:18:            "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/context/context_manager.py:32:            "action": "observe_screen",
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:36:                "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:45:    if action_name == "open_app":
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:58:                "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:30:                    "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:40:    if action == "open_app":
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:47:                    "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/planner/target_resolver.py:51:                    "action": "tap",
+android/app/src/main/python/GerfexIntegratedV1/planner/target_resolver.py:87:                "action": "type_text",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:23:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:64:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:92:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:133:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:161:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:202:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:230:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:284:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:312:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:353:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:381:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:460:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:487:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:501:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:515:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:529:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:543:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:557:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:571:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:599:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:627:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:665:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:693:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:721:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:733:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:761:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:789:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:801:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:839:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:853:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:867:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:881:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:895:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:923:          "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:951:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:963:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:991:          "action": "tap",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:1020:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:1034:          "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:1062:          "action": "tap",
+android/app/src/main/python/GerfexIntegratedV1/runtime/runtime_state.json:1091:          "action": "dump_ui",
+android/app/src/main/python/GerfexIntegratedV1/tests/test_cognitive_execute_live_v1.py:11:    "action": "open_app",
+android/app/src/main/python/GerfexIntegratedV1/tests/test_multi_step_execution_v1.py:13:assert r["actions"][0]["action"] == "open_app"
+android/app/src/main/python/GerfexIntegratedV1/tests/test_multi_step_execution_v1.py:14:assert any(a["action"] == "open_url" for a in r["actions"])
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:16:        "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:61:            "action": "open_url",
+android/app/src/main/python/GerfexIntegratedV1/vision/vision_action_planner.py:39:            "action": "tap",
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:21:        queued.append(queue_action({"action": "open_app", "args": {"package": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:51:    if action == "open_url":
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:61:    elif action == "open_app":
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:99:    if action == "tap":
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:110:    if action == "type_text":
+android/app/src/main/python/GerfexIntegratedV1/legacy_termux_runtime/queue_runner_legacy_termux.py:121:    if action == "dump_ui":
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:75:            {"action": "tap", "args": {"x": center[0], "y": center[1]}},
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:77:            {"action": "type_text", "args": {"text": query}},
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/chrome_search_planner_legacy.py:80:            {"action": "dump_ui", "args": {"focus": "chrome"}}
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:19:    tap_action = {"action": "tap", "args": {"x": center[0], "y": center[1]}}
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:20:    safety = check_action(tap_action)
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:26:    queued.append(queue_action({"action": "open_app", "args": {"package": app}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:28:    queued.append(queue_action(tap_action))
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:30:    queued.append(queue_action({"action": "dump_ui", "args": {"focus": app}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/vision_executor_legacy.py:37:        "tap_action": tap_action,
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:48:        {"action": "open_app", "args": {"package": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:50:        {"action": "tap", "args": {"x": int(x), "y": int(y)}},
+android/app/src/main/python/GerfexIntegratedV1/legacy_vision/google_open_best_result_legacy.py:52:        {"action": "dump_ui", "args": {"focus": "chrome"}},
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:29:        queued.append(queue_action({"action": "open_app", "args": {"package": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:31:    queued.append(queue_action({"action": "open_url", "args": {"url": link}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_news_result_legacy.py:33:    queued.append(queue_action({"action": "dump_ui", "args": {"focus": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:39:        queued.append(queue_action({"action": "open_app", "args": {"package": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:41:    queued.append(queue_action({"action": "open_url", "args": {"url": link}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_research/open_best_news_result_legacy.py:43:    queued.append(queue_action({"action": "dump_ui", "args": {"focus": "chrome"}}))
+android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:54:            queue_action({"action": "open_app", "args": {"package": "chrome"}})
+android/app/src/main/python/GerfexIntegratedV1/legacy_autonomous/autonomous_loop_legacy.py:56:            queue_action({"action": "dump_ui", "args": {"focus": "chrome"}})
