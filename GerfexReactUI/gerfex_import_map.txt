@@ -1,0 +1,135 @@
+android/app/src/main/python/gerfex_entry.py:1:import json
+android/app/src/main/python/gerfex_entry.py:2:import os
+android/app/src/main/python/gerfex_entry.py:3:import sys
+android/app/src/main/python/gerfex_entry.py:4:from pathlib import Path
+android/app/src/main/python/gerfex_entry.py:19:from core.gerfex_core import run_goal
+android/app/src/main/python/gerfex_entry.py:20:from runtime.execution_trace import new_trace, add_stage, save_trace
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:1:import sys
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:3:from gerfex_android_paths import app_path
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:8:from learning.unified_learning import learn_from_goal
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:9:from runtime.runtime_state_manager import update_state
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:10:from brain.experience_decision import apply_experience_advice
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:11:from memory.memory_advisor import advise
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:12:from memory.memory_recall import recall
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:13:import json
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:16:from brain.brain_manager import decide, remember
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:17:from brain.brain_router import route
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:18:from core.execution_manager import execute
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:19:from learning.learning_manager import learn
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:20:from runtime.execution_trace import add_stage
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:75:        from autonomous.autonomous_loop import run_autonomous_goal
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:88:            from core.cognitive_execute import execute_cognitive_goal
+android/app/src/main/python/GerfexIntegratedV1/core/gerfex_core.py:167:    from core.perception_cycle import run_perception_cycle
+android/app/src/main/python/GerfexIntegratedV1/core/execution_manager.py:1:from android.android_bridge import queue_action
+android/app/src/main/python/GerfexIntegratedV1/core/execution_manager.py:2:from safety.safety_guard import check_action
+android/app/src/main/python/GerfexIntegratedV1/core/execution_manager.py:3:from runtime.execution_trace import add_stage
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:8:from observation.native_screen_observer import observe_native_text
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:9:from understanding.screen_understanding import understand_screen
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:10:from planner.action_planner import create_plan
+android/app/src/main/python/GerfexIntegratedV1/core/perception_cycle.py:35:    import sys
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:8:from core.perception_cycle import run_perception_cycle
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:9:from planner.action_builder import build_actions
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_execute.py:10:from core.execution_manager import execute
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:3:import time
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:4:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:9:from context.context_manager import prepare_context
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:10:from observation.native_screen_observer import observe_native_text
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:11:from understanding.screen_understanding import understand_screen
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:12:from planner.action_planner import create_plan
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:13:from planner.action_builder import build_actions
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:14:from planner.target_resolver import resolve_targets
+android/app/src/main/python/GerfexIntegratedV1/core/cognitive_search_execute.py:15:from android.android_bridge import queue_action
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:3:import time
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:4:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:9:from core.perception_cycle import run_perception_cycle
+android/app/src/main/python/GerfexIntegratedV1/core/autonomous_cognitive_loop_v1.py:10:from core.execution_manager import execute
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider_source.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider_source.py:2:import time
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider_source.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider_source.py:6:    from queen_intelligence import queen_answer
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_intelligence.py:1:import subprocess
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_intelligence.py:2:import re
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_intelligence.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_intelligence.py:90:    import sys
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:1:from urllib.parse import quote_plus
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py:89:        from urllib.parse import quote_plus
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:1:from urllib.parse import quote_plus
+android/app/src/main/python/GerfexIntegratedV1/brain/providers/queen_provider.py.before_reason_label_fix_v1:89:        from urllib.parse import quote_plus
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py:3:from gerfex_android_paths import app_path
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py:20:        from brain.providers.queen_provider import ask_queen
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py.before_decide_fix_v1:1:import json
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py.before_decide_fix_v1:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py.before_decide_fix_v1:3:from gerfex_android_paths import app_path
+android/app/src/main/python/GerfexIntegratedV1/brain/brain_manager.py.before_decide_fix_v1:20:        from brain.providers.queen_provider import ask_queen
+android/app/src/main/python/GerfexIntegratedV1/planner/action_planner.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/planner/action_planner.py:2:from cognitive.action_selector import select_action
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/planner/action_builder.py:2:from urllib.parse import quote_plus
+android/app/src/main/python/GerfexIntegratedV1/planner/target_resolver.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:1:import json, urllib.parse, urllib.request, xml.etree.ElementTree as ET
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:2:from research.source_filter import filter_results
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:3:from datetime import datetime, timezone
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:4:from email.utils import parsedate_to_datetime
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:5:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/research/news_pipeline.py:66:    import sys
+android/app/src/main/python/GerfexIntegratedV1/research/article_summarizer.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/research/article_summarizer.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/research/direct_article_reader.py:1:import json, re, html, urllib.request
+android/app/src/main/python/GerfexIntegratedV1/research/direct_article_reader.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/research/direct_article_reader.py:50:    import sys
+android/app/src/main/python/GerfexIntegratedV1/research/direct_url_reader.py:1:import json, re, html, urllib.request
+android/app/src/main/python/GerfexIntegratedV1/research/direct_url_reader.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/research/direct_url_reader.py:47:    import sys
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:1:import json, re
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:3:from urllib.parse import urlparse
+android/app/src/main/python/GerfexIntegratedV1/research/source_filter.py:131:    import sys
+android/app/src/main/python/GerfexIntegratedV1/observation/native_screen_observer.py:1:import sys
+android/app/src/main/python/GerfexIntegratedV1/observation/native_screen_observer.py:2:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/observation/native_screen_observer.py:8:from gerfex_android_paths import app_path
+android/app/src/main/python/GerfexIntegratedV1/observation/native_screen_observer.py:51:    import json
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:3:import time
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:4:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:9:from android.android_bridge import queue_action
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_verifier.py:10:from observation.native_screen_observer import observe_native_text
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:3:import time
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:4:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:9:from android.android_bridge import queue_action
+android/app/src/main/python/GerfexIntegratedV1/verification/navigation_recovery.py:10:from observation.native_screen_observer import observe_native_text
+android/app/src/main/python/GerfexIntegratedV1/vision/vision_action_planner.py:1:from vision.target_finder import find_target
+android/app/src/main/python/GerfexIntegratedV1/vision/vision_action_planner.py:48:    import sys, json
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:2:from vision.chrome_search_planner import plan_chrome_search
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:3:from safety.safety_guard import check_action
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:4:from android.android_bridge import queue_action
+android/app/src/main/python/GerfexIntegratedV1/vision/chrome_search_executor.py:46:    import sys
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/screen_reader.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/screen_reader.py:2:import xml.etree.ElementTree as ET
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/screen_reader.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/tools/search/perception/search_reader.py:2:from perception.screen_reader import read_screen
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_screen_reader_v5.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_screen_reader_v5.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_screen_reader_v5.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_screen_reader_v5.py:8:from perception.screen_reader import read_screen
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_search_reader_v6.py:1:import json
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_search_reader_v6.py:2:import sys
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_search_reader_v6.py:3:from pathlib import Path
+android/app/src/main/python/GerfexIntegratedV1/tools/search/test_search_reader_v6.py:8:from perception.search_reader import extract_search_results
