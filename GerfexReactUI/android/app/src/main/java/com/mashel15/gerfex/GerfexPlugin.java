@@ -406,10 +406,26 @@ public class GerfexPlugin extends Plugin {
 
                 int nativeCount = executeFromResult(result);
 
+                try { Thread.sleep(1500L); } catch(Exception ignored) {}
+
+                String screenTextAfterExecution = GerfexAccessibilityService.dumpText();
+                String screenTextAfterPath = saveNativeScreenText(screenTextAfterExecution);
+
+                boolean screenReadyAfterExecution = GerfexAccessibilityService.isReady();
+                int screenTextAfterLength = screenTextAfterExecution == null ? 0 : screenTextAfterExecution.length();
+
+                JSObject verification = new JSObject();
+                verification.put("ok", screenReadyAfterExecution);
+                verification.put("native_executed_count", nativeCount);
+                verification.put("screen_text_length", screenTextAfterLength);
+                verification.put("screen_text_saved_path", screenTextAfterPath);
+                verification.put("note", "Verified Execution Loop V1: post-execution screen captured only.");
+
                 ret.put("ok", true);
                 ret.put("result", result);
                 ret.put("native_executed_count", nativeCount);
                 ret.put("screen_text_saved_path", screenTextPath);
+                ret.put("post_execution_verification", verification);
 
                 call.resolve(ret);
 

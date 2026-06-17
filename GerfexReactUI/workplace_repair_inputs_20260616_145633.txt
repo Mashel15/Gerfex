@@ -1,0 +1,748 @@
+===== GIT STATUS =====
+On branch main
+Your branch is ahead of 'origin/main' by 42 commits.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	workplace_final_audit_20260616_125537.txt
+	workplace_functional_audit_20260616_132410.txt
+	workplace_repair_inputs_20260616_145633.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+===== APP WORKSHOP FUNCTIONS =====
+794:        <button style={st.danger} onClick={adminClearTrace}>🧹 تنظيف سجل التتبع</button>
+905:  async function workshopExecuteGoal() {
+931:  async function adminBridgeCall(action, extra = {}) {
+970:  async function adminInitKey() {
+971:    await adminBridgeCall("init_key");
+974:  async function adminListFiles(path = workshopPath || "") {
+975:    const data = await adminBridgeCall("list_files", { path });
+982:  async function adminReadFile(path = workshopFile) {
+984:    const data = await adminBridgeCall("read_file", { path });
+991:  async function adminWriteFile() {
+993:    await adminBridgeCall("write_file", { path: workshopFile, content: workshopContent });
+996:  async function adminReadTrace() {
+997:    await adminBridgeCall("read_trace", {});
+1000:  async function adminClearTrace() {
+1001:    await adminBridgeCall("clear_trace", {});
+1006:  async function adminRunTest() {
+1012:    await adminBridgeCall("run_test", { path });
+1015:  async function adminCreateSnapshot() {
+1017:    await adminBridgeCall("create_snapshot", { path });
+1020:  async function adminListSnapshots() {
+1021:    const r = await adminBridgeCall("list_snapshots", {});
+1026:  async function adminRestoreSnapshot() {
+1032:    await adminBridgeCall("restore_snapshot", { snapshot });
+1033:    await adminListFiles(workshopPath || "");
+1036:  async function adminDeleteFile() {
+1042:    await adminBridgeCall("delete_file", { path });
+1043:    await adminListFiles(workshopPath || "");
+1046:  function renderWorkshopDoor() {
+1055:          <button style={st.save} disabled={!!adminBusy} onClick={adminInitKey}>تفعيل / اختبار المفتاح</button>
+1078:          <button style={st.save} onClick={workshopExecuteGoal}>▶️ تنفيذ هدف عبر Gerfex Core</button>
+1084:            <button style={st.save} disabled={!!adminBusy} onClick={() => adminListFiles("")}>فتح الجذر</button>
+1085:            <button style={st.save} onClick={() => adminListFiles(parentWorkshopPath(workshopPath))}>⬆️ رجوع</button>
+1091:            <button style={st.save} disabled={!!adminBusy} onClick={() => adminReadFile()}>قراءة</button>
+1092:            <button style={st.save} disabled={!!adminBusy} onClick={adminWriteFile}>حفظ</button>
+1093:            <button style={st.danger} disabled={!!adminBusy} onClick={adminDeleteFile}>حذف الملف المحدد</button>
+1097:            <button key={x.path} style={st.item} onClick={() => x.type === "dir" ? adminListFiles(x.path) : adminReadFile(x.path)}>
+1112:          <button style={st.save} disabled={!!adminBusy} onClick={adminReadTrace}>قراءة Trace</button>
+1113:          <button style={st.danger} disabled={!!adminBusy} onClick={adminClearTrace}>تنظيف Trace</button>
+1120:          <button style={st.save} disabled={!!adminBusy} onClick={adminRunTest}>تشغيل اختبار</button>
+1125:          <button style={st.save} disabled={!!adminBusy} onClick={adminCreateSnapshot}>إنشاء Snapshot للمسار الحالي</button>
+1126:          <button style={st.save} disabled={!!adminBusy} onClick={adminListSnapshots}>عرض قائمة Snapshots</button>
+1130:          <button style={st.danger} disabled={!!adminBusy} onClick={adminRestoreSnapshot}>استرجاع Snapshot من مساره</button>
+
+===== APP WORKSHOP SECTION =====
+1046:  function renderWorkshopDoor() {
+1047-    return (
+1048-      <section style={st.panel}>
+1049-        <h3>🛠️ Gerfex Workplace</h3>
+1050-        <p style={st.note}>مكان عمل المساعد داخل Gerfex: قراءة، تعديل، اختبار، تتبع، ولقطات عبر Admin Bridge.</p>
+1051-
+1052-        <div style={st.card}>
+1053-          <b>🔑 Admin Bridge</b>
+1054-          <input style={st.input} value={adminKey} onChange={(e) => setAdminKey(e.target.value)} placeholder="API Key" />
+1055-          <button style={st.save} disabled={!!adminBusy} onClick={adminInitKey}>تفعيل / اختبار المفتاح</button>
+1056-        </div>
+1057-
+1058-        <div style={st.card}>
+1059-          <b>📡 حالة آخر أمر</b>
+1060-          <div style={st.traceLine}>آخر أمر: {adminLastAction || "-"}</div>
+1061-          <div style={st.traceLine}>الحالة: {adminBusy ? "⏳ يعمل الآن: " + adminBusy : (workshopStatus || "جاهز")}</div>
+1062-        </div>
+1063-
+1064-        {workshopResult && (
+1065-          <pre style={{ whiteSpace: "pre-wrap", direction: "ltr", background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", borderRadius: 14, padding: 10, overflowX: "auto", maxHeight: 220 }}>
+1066-            {workshopResult}
+1067-          </pre>
+1068-        )}
+1069-
+1070-        <div style={st.card}>
+1071-          <b>🎯 مهمة المساعد</b>
+1072-          <textarea
+1073-            value={workshopCommand}
+1074-            onChange={(e) => setWorkshopCommand(e.target.value)}
+1075-            style={{ width: "100%", minHeight: 85, borderRadius: 14, padding: 12, background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", fontFamily: "inherit" }}
+1076-            placeholder="مثال: أصلح مشكلة الصوت not-allowed"
+1077-          />
+1078-          <button style={st.save} onClick={workshopExecuteGoal}>▶️ تنفيذ هدف عبر Gerfex Core</button>
+1079-        </div>
+1080-
+1081-        <div style={st.card}>
+1082-          <b>📂 ملفات Gerfex</b>
+1083-          <div style={st.two}>
+1084-            <button style={st.save} disabled={!!adminBusy} onClick={() => adminListFiles("")}>فتح الجذر</button>
+1085-            <button style={st.save} onClick={() => adminListFiles(parentWorkshopPath(workshopPath))}>⬆️ رجوع</button>
+1086-          </div>
+1087-
+1088-          <input style={st.input} value={workshopFile} onChange={(e) => setWorkshopFile(e.target.value)} placeholder="core/identity.json أو tests/test_brain.py" />
+1089-
+1090-          <div style={st.two}>
+1091-            <button style={st.save} disabled={!!adminBusy} onClick={() => adminReadFile()}>قراءة</button>
+1092-            <button style={st.save} disabled={!!adminBusy} onClick={adminWriteFile}>حفظ</button>
+1093-            <button style={st.danger} disabled={!!adminBusy} onClick={adminDeleteFile}>حذف الملف المحدد</button>
+1094-          </div>
+1095-
+1096-          {workshopItems.map((x) => (
+1097-            <button key={x.path} style={st.item} onClick={() => x.type === "dir" ? adminListFiles(x.path) : adminReadFile(x.path)}>
+1098-              {x.type === "dir" ? "📁" : "📄"} {x.path}
+1099-            </button>
+1100-          ))}
+1101-
+1102-          <textarea
+1103-            value={workshopContent}
+1104-            onChange={(e) => setWorkshopContent(e.target.value)}
+1105-            style={{ width: "100%", minHeight: 180, borderRadius: 14, padding: 12, background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", fontFamily: "monospace", direction: "ltr" }}
+1106-            placeholder="محتوى الملف / أو مسار snapshot للاسترجاع"
+1107-          />
+1108-        </div>
+1109-
+1110-        <div style={st.card}>
+1111-          <b>📍 السجلات والتتبع</b>
+1112-          <button style={st.save} disabled={!!adminBusy} onClick={adminReadTrace}>قراءة Trace</button>
+1113-          <button style={st.danger} disabled={!!adminBusy} onClick={adminClearTrace}>تنظيف Trace</button>
+1114-        </div>
+1115-
+1116-        <div style={st.card}>
+1117-          <b>🧪 الاختبارات</b>
+1118-          <p style={st.note}>اكتب مسار ملف الاختبار هنا.</p>
+1119-          <input style={st.input} value={adminTestPath} onChange={(e) => setAdminTestPath(e.target.value)} placeholder="tests/test_brain.py" />
+1120-          <button style={st.save} disabled={!!adminBusy} onClick={adminRunTest}>تشغيل اختبار</button>
+1121-        </div>
+1122-
+1123-        <div style={st.card}>
+1124-          <b>🔖 اللقطات</b>
+1125-          <button style={st.save} disabled={!!adminBusy} onClick={adminCreateSnapshot}>إنشاء Snapshot للمسار الحالي</button>
+1126-          <button style={st.save} disabled={!!adminBusy} onClick={adminListSnapshots}>عرض قائمة Snapshots</button>
+1127-          {adminSnapshots.map((x) => (
+1128-            <button key={x.path} style={st.item} onClick={() => setWorkshopContent(x.path)}>📦 {x.name}</button>
+1129-          ))}
+1130-          <button style={st.danger} disabled={!!adminBusy} onClick={adminRestoreSnapshot}>استرجاع Snapshot من مساره</button>
+1131-        </div>
+1132-
+1133-
+1134-      </section>
+1135-    );
+1136-  }
+1137-
+1138-  function renderDev() {
+1139-    if (devDoor === "trace") return renderTraceDoor();
+1140-    if (devDoor === "workshop") return renderWorkshopDoor();
+1141-
+1142-    return ["📍 التتبع", "🛠️ الورشة"].map((x) => (
+1143-      <button
+1144-        key={x}
+1145-        style={st.item}
+1146-        onClick={() => {
+1147-          if (x.includes("التتبع")) {
+1148-            setDevDoor("trace");
+1149-            loadExecutionTrace();
+1150-          }
+1151-          if (x.includes("الورشة")) setDevDoor("workshop");
+1152-        }}
+1153-      >
+1154-        {x}
+1155-      </button>
+1156-    ));
+1157-  }
+1158-
+1159-  function body() {
+1160-    if (section === "sessions") return renderSessions();
+1161-    if (section === "models") return renderModels();
+1162-    if (section === "learning") return renderLearning();
+1163-    return renderDev();
+1164-  }
+1165-
+1166-  const activeModels = models.filter((m) => m.connected);
+1167-
+1168-  return (
+1169-    <div style={st.app}>
+1170-      <header style={st.header}>
+1171-        <button style={st.icon} onClick={() => setMenu(!menu)}>☰</button>
+1172-        <div style={{ textAlign: "center" }}>
+1173-          <div style={st.title}>Gerfex</div>
+1174-          <div style={st.ok}>● workplace-stable-v1</div>
+1175-        </div>
+1176-        <button style={st.icon} onClick={() => setQuick(!quick)}>🤖</button>
+1177-      </header>
+1178-
+1179-      {menu && (
+1180-        <aside style={st.drawer}>
+1181-          <div style={st.tabs}>
+1182-            {sections.map(([k, i, t]) => (
+1183-              <button key={k} style={{ ...st.tab, background: section === k ? "#1e293b" : "transparent" }} onClick={() => { setSection(k); if (k === "dev") setDevDoor(null); }}>
+1184-                {i} {t}
+1185-              </button>
+1186-            ))}
+1187-          </div>
+1188-          <div style={st.drawerBody}>{body()}</div>
+1189-        </aside>
+1190-      )}
+1191-
+1192-      {quick && (
+1193-        <aside style={st.quick}>
+1194-          <b>🤖 النماذج النشطة</b>
+1195-          {activeModels.length === 0 && <p style={st.note}>لا يوجد نموذج متصل.</p>}
+1196-          {activeModels.map((m) => (
+1197-            <div style={{ ...st.quickRow, gridTemplateColumns: "1fr 42px 42px" }} key={m.id}>
+1198-              <span>
+1199-                {m.name}
+1200-                <small style={{ display: "block", color: "#94a3b8" }}>
+1201-                  {m.mute ? "صامت" : "مسموح بالمراقبة"} / {m.hold ? "معلّق" : "نشط"}
+1202-                </small>
+1203-              </span>
+1204-              <button
+1205-                style={{ ...st.symbol, background: m.mute ? "#7f1d1d" : "#1f2937" }}
+1206-                onClick={() => updateModel(m.id, { mute: !m.mute })}
+1207-              >
+1208-                {m.mute ? "🔕" : "🔇"}
+1209-              </button>
+1210-              <button
+1211-                style={{ ...st.symbol, background: m.hold ? "#854d0e" : "#1f2937" }}
+1212-                onClick={() => updateModel(m.id, { hold: !m.hold })}
+1213-              >
+1214-                {m.hold ? "⏸" : "✋"}
+1215-              </button>
+1216-            </div>
+1217-          ))}
+1218-        </aside>
+1219-      )}
+1220-
+1221-      <main style={st.messages}>
+1222-        {(learningSession ? learningSession.messages : messages).map((m, i) => (
+1223-          <div style={st.msg} key={i}>
+1224-            <b>{m.speaker}</b>
+1225-            <div style={st.text}>{m.content}</div>
+1226-          </div>
+1227-        ))}
+1228-        <div ref={bottom} />
+1229-      </main>
+1230-
+1231-      <footer style={st.footer}>
+1232-        <div style={st.composer}>
+1233-          <input
+1234-            ref={fileRef}
+1235-            type="file"
+1236-            style={{ display: "none" }}
+1237-            onChange={handleAttach}
+1238-          />
+1239-          <button style={st.round} type="button" onClick={() => fileRef.current && fileRef.current.click()}>📎</button>
+1240-          <button style={{ ...st.round, background: listening ? "#dc2626" : "#202123" }} onClick={startVoice}>
+1241-            {listening ? "●" : "❋"}
+1242-          </button>
+1243-          <textarea
+1244-            ref={textRef}
+1245-            rows={1}
+1246-            value={input}
+1247-            placeholder="اكتب رسالة..."
+1248-            style={st.textarea}
+1249-            onChange={(e) => { setInput(e.target.value); setVoiceInput(false); }}
+1250-            onKeyDown={(e) => {
+1251-              if (e.key === "Enter" && !e.shiftKey) {
+1252-                e.preventDefault();
+1253-                send();
+1254-              }
+1255-            }}
+1256-          />
+1257-          <button style={st.send} onClick={send}>↑</button>
+1258-        </div>
+1259-      </footer>
+1260-    </div>
+1261-  );
+1262-}
+1263-
+1264-const st = {
+1265-  app: { height: "100dvh", background: "#0b0f14", color: "#f8fafc", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", overflow: "hidden" },
+1266-  header: { height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", borderBottom: "1px solid #1f2937", background: "#0b0f14", flexShrink: 0 },
+1267-  icon: { width: 42, height: 42, borderRadius: 12, border: "none", background: "#111827", color: "white", fontSize: 22 },
+1268-  title: { fontWeight: 800, fontSize: 18 },
+1269-  ok: { color: "#22c55e", fontSize: 11 },
+1270-  drawer: { position: "absolute", top: 60, left: 8, right: "auto", width: 335, maxWidth: "94vw", maxHeight: "82dvh", overflowY: "auto", background: "#111827", border: "1px solid #273449", borderRadius: 18, padding: 10, zIndex: 20 },
+1271-  tabs: { display: "grid", gridTemplateColumns: "1fr", gap: 8 },
+1272-  tab: { color: "white", border: "none", borderRadius: 12, padding: 12, fontSize: 14, textAlign: "left" },
+1273-  drawerBody: { marginTop: 10, borderTop: "1px solid #273449", paddingTop: 10 },
+1274-  item: { width: "100%", background: "transparent", color: "white", border: "none", borderRadius: 10, padding: 12, textAlign: "right", fontSize: 15 },
+1275-  h: { margin: "14px 4px 8px", color: "#cbd5e1" },
+1276-  note: { color: "#94a3b8", padding: 8, fontSize: 13 },
+1277-  row: { display: "grid", gridTemplateColumns: "1fr 42px", gap: 6, marginBottom: 6 },
+1278-  mainBtn: { background: "#0f172a", color: "white", border: "1px solid #263244", borderRadius: 12, padding: 10, textAlign: "right" },
+1279-  danger: { background: "#7f1d1d", color: "white", border: "none", borderRadius: 12 },
+1280-  form: { display: "grid", gap: 8, background: "#0f172a", borderRadius: 14, padding: 10 },
+1281-  input: { background: "#0b0f14", color: "white", border: "1px solid #374151", borderRadius: 12, padding: 10 },
+1282-  inputWrap: { display: "grid", gridTemplateColumns: "1fr 52px", alignItems: "center", background: "#0b0f14", border: "1px solid #374151", borderRadius: 12, overflow: "hidden" },
+1283-  inputWithUnit: { width: "100%", background: "transparent", color: "white", border: "none", outline: "none", padding: "10px 8px", fontSize: 16 },
+1284-  unitLabel: { color: "#94a3b8", fontSize: 14, whiteSpace: "nowrap", textAlign: "center", paddingInlineEnd: 8 },
+1285-  unitRow: { display: "grid", gridTemplateColumns: "44px 1fr", alignItems: "center", gap: 8 },
+1286-  save: { background: "#2563eb", color: "white", border: "none", borderRadius: 12, padding: "10px 6px", fontSize: 14 },
+1287-  modelRow: { display: "grid", gridTemplateColumns: "1fr 112px", gap: 8, background: "#0f172a", border: "1px solid #263244", borderRadius: 14, padding: 10, marginBottom: 8 },
+1288-  status: { background: "#1f2937", color: "white", border: "none", borderRadius: 12, fontSize: 13, minHeight: 34 },
+1289-  modelActions: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 },
+1290-  detailsBox: { marginTop: 10, display: "grid", gap: 6, background: "#111827", border: "1px solid #263244", borderRadius: 12, padding: 10, color: "#cbd5e1" },
+1291-  two: { display: "grid", gridTemplateColumns: "minmax(0, 1fr) 78px", gap: 8 },
+1292-  card: { background: "#0f172a", border: "1px solid #263244", borderRadius: 14, padding: 10, marginBottom: 8, display: "grid", gap: 6 },
+1293-  cardBtns: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 5 },
+1294-  quick: { position: "absolute", top: 60, right: 8, width: 270, maxWidth: "92vw", background: "#111827", border: "1px solid #273449", borderRadius: 18, padding: 12, zIndex: 30 },
+1295-  quickRow: { display: "grid", gridTemplateColumns: "1fr 28px 38px 38px", gap: 6, alignItems: "center", padding: "8px 0" },
+1296-  symbol: { background: "#1f2937", color: "white", border: "none", borderRadius: 10, height: 34 },
+1297-  messages: { flex: 1, overflowY: "auto", padding: "12px 16px 4px", scrollPaddingBottom: 8 },
+1298-  msg: { maxWidth: 780, margin: "0 auto 22px", lineHeight: 1.75 },
+1299-  text: { whiteSpace: "pre-wrap", fontSize: 16, marginTop: 5 },
+1300-  footer: { flexShrink: 0, padding: "8px 10px calc(8px + env(safe-area-inset-bottom))", background: "#0b0f14" },
+1301-  composer: { maxWidth: 780, margin: "0 auto", display: "flex", alignItems: "flex-end", gap: 8, background: "#202123", border: "1px solid #374151", borderRadius: 24, padding: 8 },
+1302-  round: { width: 38, height: 38, borderRadius: 19, border: "none", background: "#2b2c2f", color: "white", fontSize: 18, flexShrink: 0 },
+1303-  textarea: { flex: 1, resize: "none", overflowY: "auto", maxHeight: 150, minHeight: 38, border: "none", outline: "none", background: "transparent", color: "white", fontSize: 16, lineHeight: "24px", padding: "7px 2px", fontFamily: "inherit" },
+1304-  send: { width: 38, height: 38, borderRadius: 19, border: "none", background: "#f8fafc", color: "#111827", fontSize: 20, fontWeight: 800, flexShrink: 0 }
+1305-};
+
+===== TRACE SCREEN SECTION =====
+788:  function renderTraceDoor() {
+789-    return (
+790-      <section style={st.panel}>
+791-        <h3>📍 التتبع</h3>
+792-        <p style={st.note}>آخر 10 أوامر داخل Gerfex.</p>
+793-        <button style={st.save} onClick={loadExecutionTrace}>🔄 تحديث سجل التتبع</button>
+794-        <button style={st.danger} onClick={adminClearTrace}>🧹 تنظيف سجل التتبع</button>
+795-        {traceStatus && <p style={st.note}>{traceStatus}</p>}
+796-        <div style={st.list}>
+797-          {traceItems.length === 0 && <p style={st.note}>لا توجد سجلات معروضة بعد.</p>}
+798-          {traceItems.map((t, i) => (
+799-            <div key={t.trace_id || i} style={st.traceCard}>
+800-              <b>{t.goal || "أمر غير معروف"}</b>
+801-              <div style={st.note}>trace_id: {t.trace_id || "-"}</div>
+802-              {(t.stages || []).map((x, j) => (
+803-                <div key={j} style={st.traceLine}>
+804-                  {x.stage} · {x.source || "-"} {x.action ? `· ${x.action}` : ""} {x.ok !== undefined ? `· ok=${x.ok}` : ""}
+805-                </div>
+806-              ))}
+807-            </div>
+808-          ))}
+809-        </div>
+810-      </section>
+811-    );
+812-  }
+813-
+814-  async function workshopList(path = workshopPath) {
+815-    setWorkshopStatus("جاري قراءة الورشة...");
+816-    try {
+817-      const r = await GerfexNative.workshopList({ path });
+818-      setWorkshopItems(r?.items || []);
+819-      setWorkshopPath(path || "");
+820-      setWorkshopStatus(r?.ok ? "" : (r?.error || "فشل قراءة الورشة"));
+821-    } catch (e) {
+822-      setWorkshopStatus("فشل الاتصال بالورشة: " + e);
+823-    }
+824-  }
+825-
+826-  async function workshopOpen(path) {
+827-    setWorkshopStatus("جاري فتح الملف...");
+828-    try {
+829-      const r = await GerfexNative.workshopRead({ path });
+830-      setWorkshopFile(path);
+831-      setWorkshopContent(r?.content || "");
+832-      setWorkshopStatus(r?.ok ? "" : (r?.error || "فشل فتح الملف"));
+833-    } catch (e) {
+834-      setWorkshopStatus("فشل فتح الملف: " + e);
+835-    }
+836-  }
+837-
+838-  async function workshopCreateFolder() {
+839-    const name = prompt("اسم المجلد الجديد:");
+840-    if (!name || !name.trim()) return;
+841-    const path = workshopPath ? workshopPath + "/" + name.trim() + "/.keep" : name.trim() + "/.keep";
+842-    const r = await GerfexNative.workshopWrite({ path, content: "" });
+843-    setWorkshopStatus(r?.ok ? "تم إنشاء المجلد." : (r?.error || "فشل إنشاء المجلد"));
+844-    workshopList(workshopPath);
+845-  }
+846-
+847-  async function workshopSave() {
+848-    if (!workshopFile) return setWorkshopStatus("اختر ملفاً أولاً.");
+849-    setWorkshopStatus("جاري الحفظ...");
+850-    const r = await GerfexNative.workshopWrite({ path: workshopFile, content: workshopContent });
+851-    setWorkshopStatus(r?.ok ? "تم الحفظ." : (r?.error || "فشل الحفظ"));
+852-    workshopList(workshopPath);
+853-  }
+854-
+855-  async function workshopDeleteFile(path = workshopFile) {
+856-    if (!path) return setWorkshopStatus("لا يوجد ملف للحذف.");
+857-    if (!confirm("حذف: " + path + " ؟")) return;
+858-    const r = await GerfexNative.workshopDelete({ path });
+859-    setWorkshopStatus(r?.ok ? "تم الحذف." : (r?.error || "فشل الحذف"));
+860-    setWorkshopFile("");
+861-    setWorkshopContent("");
+862-    workshopList(workshopPath);
+863-  }
+864-
+865-  async function workshopSearch() {
+866-    const r = await GerfexNative.workshopSearch({ query: workshopQuery });
+867-    setWorkshopResults(r?.results || []);
+868-    setWorkshopStatus(r?.ok ? "" : (r?.error || "فشل البحث"));
+869-  }
+870-
+871-  async function loadSnapshots() {
+872-    const r = await GerfexNative.snapshotList();
+873-    setSnapshots(r?.items || []);
+874-    setWorkshopStatus(r?.ok ? "" : (r?.error || "فشل قراءة اللقطات"));
+875-  }
+876-
+877-  async function createSnapshot() {
+878-    const r = await GerfexNative.snapshotCreate();
+879-    await loadSnapshots();
+880-    setWorkshopStatus(r?.ok ? "تم إنشاء لقطة: " + r.name : (r?.error || "فشل إنشاء لقطة"));
+881-  }
+882-
+883-  async function restoreSnapshot(name) {
+884-    if (!confirm("استرجاع اللقطة: " + name + " ؟")) return;
+885-    const r = await GerfexNative.snapshotRestore({ name });
+886-    await loadSnapshots();
+887-    setWorkshopStatus(r?.ok ? "تم الاسترجاع. لقطة أمان: " + r.safety : (r?.error || "فشل الاسترجاع"));
+888-    workshopList("");
+889-  }
+890-
+891-  async function deleteSnapshot(name) {
+892-    if (!confirm("حذف اللقطة: " + name + " ؟")) return;
+893-    const r = await GerfexNative.snapshotDelete({ name });
+894-    await loadSnapshots();
+895-    setWorkshopStatus(r?.ok ? "تم حذف اللقطة." : (r?.error || "فشل حذف اللقطة"));
+896-  }
+897-
+898-  function parentWorkshopPath(path) {
+899-    if (!path) return "";
+900-    const parts = path.split("/").filter(Boolean);
+901-    parts.pop();
+902-    return parts.join("/");
+903-  }
+904-
+905-  async function workshopExecuteGoal() {
+906-    const command = workshopCommand.trim();
+907-    if (!command) return setWorkshopStatus("اكتب هدفاً أو أمراً أولاً.");
+908-    setWorkshopStatus("جاري تنفيذ الهدف داخل Gerfex Core...");
+
+===== ADMIN BRIDGE FULL =====
+import json, os, shutil, runpy, io, contextlib
+from pathlib import Path
+from datetime import datetime
+
+PY_ROOT = Path(__file__).resolve().parent
+GERFEX_ROOT = PY_ROOT / "GerfexIntegratedV1"
+APP_HOME = Path(os.environ.get(
+    "GERFEX_APP_HOME",
+    "/data/data/com.mashel15.gerfex/files/gerfex_runtime_data"
+))
+
+ADMIN_DIR = APP_HOME / "_admin"
+SNAP_DIR = APP_HOME / "_snapshots"
+KEY_FILE = ADMIN_DIR / "admin_key.txt"
+AUDIT = ADMIN_DIR / "admin_audit.log"
+
+for d in [ADMIN_DIR, SNAP_DIR]:
+    d.mkdir(parents=True, exist_ok=True)
+
+def now():
+    return datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+
+def trim_file_lines(path, keep=500):
+    if not path.exists():
+        return
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    if len(lines) > keep:
+        path.write_text("\n".join(lines[-keep:]) + "\n", encoding="utf-8")
+
+def audit(action, path="", ok=True, note=""):
+    with AUDIT.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({
+            "time": datetime.utcnow().isoformat() + "Z",
+            "action": action,
+            "path": path,
+            "ok": ok,
+            "note": note
+        }, ensure_ascii=False) + "\n")
+    trim_file_lines(AUDIT, 500)
+
+def check_key(req):
+    key = req.get("api_key", "")
+    if not KEY_FILE.exists():
+        if req.get("action") == "init_key" and key:
+            KEY_FILE.write_text(key, encoding="utf-8")
+            audit("init_key", ok=True)
+            return True, None
+        return False, {"ok": False, "error": "admin_key_not_initialized"}
+    stored = KEY_FILE.read_text(encoding="utf-8").strip()
+    if key != stored:
+        audit(req.get("action", "unknown"), ok=False, note="bad_api_key")
+        return False, {"ok": False, "error": "bad_api_key"}
+    return True, None
+
+def safe_path(rel):
+    rel = (rel or "").strip().lstrip("/")
+    base = GERFEX_ROOT
+    p = (base / rel).resolve()
+    if not str(p).startswith(str(base.resolve())):
+        raise Exception("unsafe_path")
+    return p
+
+def make_snapshot(path):
+    if not path.exists():
+        return ""
+    stamp = now()
+    rel = path.relative_to(GERFEX_ROOT)
+    target = SNAP_DIR / stamp / rel
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if path.is_dir():
+        shutil.copytree(path, target, dirs_exist_ok=True)
+    else:
+        shutil.copy2(path, target)
+    return str(target)
+
+def list_files(req):
+    p = safe_path(req.get("path", ""))
+    items = []
+    for x in sorted(p.iterdir(), key=lambda v: (not v.is_dir(), v.name.lower())):
+        items.append({
+            "name": x.name,
+            "path": str(x.relative_to(GERFEX_ROOT)),
+            "type": "dir" if x.is_dir() else "file",
+            "size": x.stat().st_size if x.is_file() else 0
+        })
+    return {"ok": True, "root": str(GERFEX_ROOT), "items": items}
+
+def read_file(req):
+    p = safe_path(req.get("path", ""))
+    return {"ok": True, "path": str(p.relative_to(GERFEX_ROOT)), "content": p.read_text(encoding="utf-8", errors="replace")}
+
+def write_file(req):
+    p = safe_path(req.get("path", ""))
+    snap = make_snapshot(p)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(req.get("content", ""), encoding="utf-8")
+    return {"ok": True, "path": str(p.relative_to(GERFEX_ROOT)), "snapshot": snap}
+
+def delete_file(req):
+    p = safe_path(req.get("path", ""))
+    if not p.exists():
+        return {"ok": False, "error": "file_not_found", "path": str(p)}
+    snap = make_snapshot(p)
+    if p.is_dir():
+        shutil.rmtree(p)
+    else:
+        p.unlink()
+    return {"ok": True, "deleted": str(p.relative_to(GERFEX_ROOT)), "snapshot": snap}
+
+
+def create_snapshot(req):
+    p = safe_path(req.get("path", ""))
+    if not p.exists():
+        return {"ok": False, "error": "file_not_found", "path": str(p)}
+    snap = make_snapshot(p)
+    return {"ok": True, "snapshot": snap}
+
+def list_snapshots(req):
+    items = []
+    if SNAP_DIR.exists():
+        for x in sorted(SNAP_DIR.rglob("*"), reverse=True):
+            if x.is_file():
+                items.append({"name": x.name, "path": str(x), "type": "file"})
+            elif x.is_dir() and x != SNAP_DIR:
+                items.append({"name": x.name, "path": str(x), "type": "dir"})
+    return {"ok": True, "items": items[:50]}
+
+def restore_snapshot(req):
+    src = Path(req.get("snapshot", "")).resolve()
+    if not str(src).startswith(str(SNAP_DIR.resolve())):
+        raise Exception("unsafe_snapshot")
+    rel = src.relative_to(SNAP_DIR)
+    parts = rel.parts[1:]
+    dst = (GERFEX_ROOT / Path(*parts)).resolve()
+    make_snapshot(dst)
+    if dst.exists():
+        if dst.is_dir(): shutil.rmtree(dst)
+        else: dst.unlink()
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    if src.is_dir():
+        shutil.copytree(src, dst)
+    else:
+        shutil.copy2(src, dst)
+    return {"ok": True, "restored_to": str(dst)}
+
+def add_lesson(req):
+    p = safe_path("learning/pending_lessons.json")
+    p.parent.mkdir(parents=True, exist_ok=True)
+    data = []
+    if p.exists():
+        try: data = json.loads(p.read_text(encoding="utf-8"))
+        except Exception: data = []
+    snap = make_snapshot(p)
+    lesson = req.get("lesson", {})
+    lesson["time"] = datetime.utcnow().isoformat() + "Z"
+    data.append(lesson)
+    p.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    return {"ok": True, "snapshot": snap, "count": len(data)}
+
+def clear_trace(req):
+    for p in [
+        AUDIT,
+        APP_HOME / "runtime" / "execution_trace.jsonl",
+        APP_HOME / "runtime" / "execution_trace.json",
+        safe_path("runtime/execution_trace.jsonl"),
+        safe_path("runtime/execution_trace.json"),
+    ]:
+        try:
+            if p.exists():
+                p.write_text("", encoding="utf-8")
+        except Exception:
+            pass
+    return {"ok": True, "message": "trace_cleared"}
+
+def read_trace(req):
+    candidates = [
+        APP_HOME / "runtime" / "execution_trace.jsonl",
+        APP_HOME / "runtime" / "execution_trace.json",
+        safe_path("runtime/execution_trace.jsonl"),
+        safe_path("runtime/execution_trace.json"),
+    ]
+    for p in candidates:
+        if p.exists():
+            return {"ok": True, "path": str(p), "content": p.read_text(encoding="utf-8", errors="replace")[-20000:]}
+    if AUDIT.exists():
+        return {"ok": True, "path": str(AUDIT), "content": AUDIT.read_text(encoding="utf-8", errors="replace")[-20000:]}
+    return {"ok": True, "content": "no_trace_found"}
+
+def run_test(req):
+    p = safe_path(req.get("path", ""))
+    buf_out, buf_err = io.StringIO(), io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf_out), contextlib.redirect_stderr(buf_err):
+            runpy.run_path(str(p), run_name="__main__")
+        return {"ok": True, "stdout": buf_out.getvalue(), "stderr": buf_err.getvalue()}
+    except Exception as e:
+        return {"ok": False, "stdout": buf_out.getvalue(), "stderr": buf_err.getvalue(), "error": str(e)}
+
+def handle(payload):
+    try:
+        req = json.loads(payload) if isinstance(payload, str) else payload
+        allowed, err = check_key(req)
+        if not allowed:
+            return json.dumps(err, ensure_ascii=False)
+
+        action = req.get("action")
+        funcs = {
+            "init_key": lambda r: {"ok": True, "message": "key_ready"},
+            "list_files": list_files,
+            "read_file": read_file,
+            "write_file": write_file,
+            "delete_file": delete_file,
+            "add_lesson": add_lesson,
+            "run_test": run_test,
+            "read_trace": read_trace,
+            "clear_trace": clear_trace,
+            "create_snapshot": create_snapshot,
+            "list_snapshots": list_snapshots,
+            "restore_snapshot": restore_snapshot,
+        }
+        if action not in funcs:
+            raise Exception("unknown_action: " + str(action))
+
+        res = funcs[action](req)
+        audit(action, req.get("path", ""), res.get("ok", True))
+        return json.dumps(res, ensure_ascii=False)
+
+    except Exception as e:
+        audit("exception", ok=False, note=str(e))
+        return json.dumps({"ok": False, "error": str(e)}, ensure_ascii=False)
+
+===== NATIVE PLUGIN ADMIN CALL =====
+598-        ret.put("ready", GerfexAccessibilityService.isReady());
+599-        ret.put("screen_text", screenText);
+600-        ret.put("screen_text_saved_path", savedPath);
+601-        call.resolve(ret);
+602-    }
+603-
+604-    @PluginMethod
+605-    public void think(PluginCall call) {
+606-        String message = call.getString("message", "");
+607-
+608-        new Thread(() -> {
+609-            JSObject ret = new JSObject();
+610-
+611-            try {
+612-                if (!Python.isStarted()) {
+613:                    Python.start(new AndroidPlatform(getContext()));
+614-                }
+615-
+616-                String screenTextBeforeThink = GerfexAccessibilityService.dumpText();
+617-                String screenTextPath = saveNativeScreenText(screenTextBeforeThink);
+618-
+619-                Python py = Python.getInstance();
+620-                PyObject entry = py.getModule("gerfex_entry");
+621-                String result = entry.callAttr("think", message).toString();
+622-
+623-                int nativeCount = executeFromResult(result);
+624-
+625-                ret.put("ok", true);
+626-                ret.put("result", result);
+627-                ret.put("native_executed_count", nativeCount);
+628-                ret.put("screen_text_saved_path", screenTextPath);
+629-
+630-                call.resolve(ret);
+631-
+632-            } catch (Exception e) {
+633-                ret.put("ok", false);
+634-                ret.put("error", e.toString());
+635-                call.resolve(ret);
+636-            }
+637-        }).start();
+638-    }
+639-
+640-    @PluginMethod
+641:    public void adminCall(PluginCall call) {
+642-        String payload = call.getString("payload", "{}");
+643-
+644-        new Thread(() -> {
+645-            JSObject ret = new JSObject();
+646-            try {
+647-                if (!Python.isStarted()) {
+648:                    Python.start(new AndroidPlatform(getContext()));
+649-                }
+650-
+651-                Python py = Python.getInstance();
+652:                PyObject bridge = py.getModule("admin_bridge");
+653-                String result = bridge.callAttr("handle", payload).toString();
+654-
+655-                ret.put("ok", true);
+656-                ret.put("result", result);
+657-                call.resolve(ret);
+658-            } catch (Exception e) {
+659-                ret.put("ok", false);
+660-                ret.put("error", e.toString());
+661-                call.resolve(ret);
+662-            }
+663-        }).start();
+664-    }
+665-
+666-}
+
+===== PYTHON COMPILE =====
+OK
+

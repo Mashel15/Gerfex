@@ -1,0 +1,7 @@
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_workplace_cleanup
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_native_voice_v1
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_voice_integration_phase_v1
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_viewer_v1
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_trace_compact_v1
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_execution_path_v1
+android/app/src/main/java/com/mashel15/gerfex/GerfexPlugin.java.before_verified_execution_loop_v1

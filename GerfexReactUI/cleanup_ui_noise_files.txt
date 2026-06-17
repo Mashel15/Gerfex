@@ -1,0 +1,11 @@
+src/App.jsx.before_workplace_stable_v1
+src/App.jsx.before_workplace_cleanup
+src/App.jsx.before_core_workshop_v1
+src/App.jsx.before_native_voice_v1
+src/App.jsx.before_voice_integration_phase_v1
+src/App.jsx.before_trace_viewer_v1
+src/App.jsx.before_trace_compact_v1
+src/App.jsx.before_trace_dev_menu_only_v1
+src/App.jsx.before_dev_trace_only_v1
+src/App.jsx.before_remove_chat_trace_command_v1
+src/App.jsx.before_execution_path_v1

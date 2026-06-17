@@ -1,0 +1,361 @@
+===== GIT STATUS =====
+On branch main
+Your branch is ahead of 'origin/main' by 41 commits.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	workplace_final_audit_20260616_125537.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+===== LAST COMMITS =====
+f88fed3 Fix admin bridge writable snapshot storage
+c3feaff Fix workplace snapshots list and test path input
+fdcd661 Fix workplace trace test snapshot delete wiring
+b8ba38a Add workplace delete and fix admin action buttons
+eda6953 Reset workplace buttons and normalize trace button
+a38fc6c Keep last workplace button visually active
+9d1247c Simplify workplace buttons to dark press state
+ac3d40f Add workplace button execution feedback
+10ef1be Fix admin bridge app storage path
+1335d6b Show admin bridge native errors
+105b14b Move workplace feedback to top
+bbb65ac Connect workplace UI to admin bridge
+0faa585 Add internal admin bridge
+8a5c510 Refactor workshop into control center v1
+81e1038 Add workshop goal execution engine
+dc7f2ba Convert workshop to control gateway v2
+6f4d868 Fix actual developer tab reset
+04041c9 Fix developer navigation and clean workshop UI
+c42512f Change voice button icon to live AI symbol
+8239517 Clean developer panel navigation
+
+===== CURRENT WORKPLACE VERSION =====
+1159:          <div style={st.ok}>● workplace-admin-v12</div>
+
+===== ADMIN BRIDGE PATHS =====
+5:PY_ROOT = Path(__file__).resolve().parent
+6:GERFEX_ROOT = PY_ROOT / "GerfexIntegratedV1"
+7:APP_HOME = Path(os.environ.get(
+8:    "GERFEX_APP_HOME",
+12:ADMIN_DIR = APP_HOME / "_admin"
+13:SNAP_DIR = APP_HOME / "_snapshots"
+14:KEY_FILE = ADMIN_DIR / "admin_key.txt"
+15:AUDIT = ADMIN_DIR / "admin_audit.log"
+17:for d in [ADMIN_DIR, SNAP_DIR]:
+49:    base = GERFEX_ROOT
+59:    rel = path.relative_to(GERFEX_ROOT)
+60:    target = SNAP_DIR / stamp / rel
+74:            "path": str(x.relative_to(GERFEX_ROOT)),
+78:    return {"ok": True, "root": str(GERFEX_ROOT), "items": items}
+82:    return {"ok": True, "path": str(p.relative_to(GERFEX_ROOT)), "content": p.read_text(encoding="utf-8", errors="replace")}
+89:    return {"ok": True, "path": str(p.relative_to(GERFEX_ROOT)), "snapshot": snap}
+100:    return {"ok": True, "deleted": str(p.relative_to(GERFEX_ROOT)), "snapshot": snap}
+110:    if SNAP_DIR.exists():
+111:        for x in sorted(SNAP_DIR.rglob("*"), reverse=True):
+114:            elif x.is_dir() and x != SNAP_DIR:
+120:    if not str(src).startswith(str(SNAP_DIR.resolve())):
+122:    rel = src.relative_to(SNAP_DIR)
+124:    dst = (GERFEX_ROOT / Path(*parts)).resolve()
+152:        APP_HOME / "runtime" / "execution_trace.jsonl",
+153:        APP_HOME / "runtime" / "execution_trace.json",
+
+===== ADMIN BRIDGE FUNCTIONS =====
+33:def check_key(req):
+68:def list_files(req):
+80:def read_file(req):
+84:def write_file(req):
+91:def delete_file(req):
+103:def create_snapshot(req):
+108:def list_snapshots(req):
+118:def restore_snapshot(req):
+150:def read_trace(req):
+164:def run_test(req):
+174:def handle(payload):
+
+===== ADMIN BRIDGE ACTION MAP =====
+36:        if req.get("action") == "init_key" and key:
+38:            audit("init_key", ok=True)
+183:            "init_key": lambda r: {"ok": True, "message": "key_ready"},
+184:            "list_files": list_files,
+185:            "read_file": read_file,
+186:            "write_file": write_file,
+187:            "delete_file": delete_file,
+189:            "run_test": run_test,
+190:            "read_trace": read_trace,
+191:            "create_snapshot": create_snapshot,
+192:            "list_snapshots": list_snapshots,
+193:            "restore_snapshot": restore_snapshot,
+
+===== APP WORKPLACE STATE/FUNCTIONS =====
+84:  const [adminKey, setAdminKey] = useState("SUPER_SECRET_KEY");
+85:  const [adminBusy, setAdminBusy] = useState("");
+86:  const [adminLastAction, setAdminLastAction] = useState("");
+87:  const [adminTestPath, setAdminTestPath] = useState("");
+88:  const [adminSnapshots, setAdminSnapshots] = useState([]);
+930:  async function adminBridgeCall(action, extra = {}) {
+939:          api_key: adminKey.trim(),
+969:  async function adminInitKey() {
+970:    await adminBridgeCall("init_key");
+973:  async function adminListFiles(path = workshopPath || "") {
+974:    const data = await adminBridgeCall("list_files", { path });
+981:  async function adminReadFile(path = workshopFile) {
+983:    const data = await adminBridgeCall("read_file", { path });
+990:  async function adminWriteFile() {
+992:    await adminBridgeCall("write_file", { path: workshopFile, content: workshopContent });
+995:  async function adminReadTrace() {
+996:    await adminBridgeCall("read_trace", {});
+999:  async function adminRunTest() {
+1005:    await adminBridgeCall("run_test", { path });
+1008:  async function adminCreateSnapshot() {
+1010:    await adminBridgeCall("create_snapshot", { path });
+1013:  async function adminRestoreSnapshot() {
+1019:    await adminBridgeCall("restore_snapshot", { snapshot });
+1020:    await adminListFiles(workshopPath || "");
+1023:  async function adminDeleteFile() {
+1029:    await adminBridgeCall("delete_file", { path });
+1030:    await adminListFiles(workshopPath || "");
+1041:          <input style={st.input} value={adminKey} onChange={(e) => setAdminKey(e.target.value)} placeholder="API Key" />
+1042:          <button style={st.save} data-old={{ filter: adminBusy === "init_key" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "init_key" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={adminInitKey}>تفعيل / اختبار المفتاح</button>
+1047:          <div style={st.traceLine}>آخر أمر: {adminLastAction || "-"}</div>
+1048:          <div style={st.traceLine}>الحالة: {adminBusy ? "⏳ يعمل الآن: " + adminBusy : (workshopStatus || "جاهز")}</div>
+1071:            <button style={st.save} data-old={{ filter: adminBusy === "list_files" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "list_files" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={() => adminListFiles("")}>فتح الجذر</button>
+1072:            <button style={st.save} onClick={() => adminListFiles(parentWorkshopPath(workshopPath))}>⬆️ رجوع</button>
+1078:            <button style={st.save} data-old={{ filter: adminBusy === "read_file" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "read_file" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={() => adminReadFile()}>قراءة</button>
+1079:            <button style={st.save} data-old={{ filter: adminBusy === "write_file" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "write_file" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={adminWriteFile}>حفظ</button>
+1080:            <button style={st.danger} disabled={!!adminBusy} onClick={adminDeleteFile}>حذف الملف المحدد</button>
+1084:            <button key={x.path} style={st.item} onClick={() => x.type === "dir" ? adminListFiles(x.path) : adminReadFile(x.path)}>
+1099:          <button style={st.save} disabled={!!adminBusy} onClick={adminReadTrace}>قراءة Trace</button>
+1105:          <button style={st.save} disabled={!!adminBusy} onClick={adminRunTest}>تشغيل اختبار</button>
+1110:          <button style={st.save} disabled={!!adminBusy} onClick={adminCreateSnapshot}>إنشاء Snapshot للمسار الحالي</button>
+1111:          <button style={st.save} disabled={!!adminBusy} onClick={adminListSnapshots}>عرض قائمة Snapshots</button>
+1112:          {adminSnapshots.map((x) => (
+1115:          <button style={st.danger} disabled={!!adminBusy} onClick={adminRestoreSnapshot}>استرجاع Snapshot من مساره</button>
+
+===== WORKSHOP UI SECTION =====
+1033:  function renderWorkshopDoor() {
+1034-    return (
+1035-      <section style={st.panel}>
+1036-        <h3>🛠️ Gerfex Workplace</h3>
+1037-        <p style={st.note}>مكان عمل المساعد داخل Gerfex: قراءة، تعديل، اختبار، تتبع، ولقطات عبر Admin Bridge.</p>
+1038-
+1039-        <div style={st.card}>
+1040-          <b>🔑 Admin Bridge</b>
+1041-          <input style={st.input} value={adminKey} onChange={(e) => setAdminKey(e.target.value)} placeholder="API Key" />
+1042-          <button style={st.save} data-old={{ filter: adminBusy === "init_key" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "init_key" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={adminInitKey}>تفعيل / اختبار المفتاح</button>
+1043-        </div>
+1044-
+1045-        <div style={st.card}>
+1046-          <b>📡 حالة آخر أمر</b>
+1047-          <div style={st.traceLine}>آخر أمر: {adminLastAction || "-"}</div>
+1048-          <div style={st.traceLine}>الحالة: {adminBusy ? "⏳ يعمل الآن: " + adminBusy : (workshopStatus || "جاهز")}</div>
+1049-        </div>
+1050-
+1051-        {workshopResult && (
+1052-          <pre style={{ whiteSpace: "pre-wrap", direction: "ltr", background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", borderRadius: 14, padding: 10, overflowX: "auto", maxHeight: 220 }}>
+1053-            {workshopResult}
+1054-          </pre>
+1055-        )}
+1056-
+1057-        <div style={st.card}>
+1058-          <b>🎯 مهمة المساعد</b>
+1059-          <textarea
+1060-            value={workshopCommand}
+1061-            onChange={(e) => setWorkshopCommand(e.target.value)}
+1062-            style={{ width: "100%", minHeight: 85, borderRadius: 14, padding: 12, background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", fontFamily: "inherit" }}
+1063-            placeholder="مثال: أصلح مشكلة الصوت not-allowed"
+1064-          />
+1065-          <button style={st.save} onClick={workshopExecuteGoal}>▶️ تنفيذ هدف عبر Gerfex Core</button>
+1066-        </div>
+1067-
+1068-        <div style={st.card}>
+1069-          <b>📂 ملفات Gerfex</b>
+1070-          <div style={st.two}>
+1071-            <button style={st.save} data-old={{ filter: adminBusy === "list_files" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "list_files" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={() => adminListFiles("")}>فتح الجذر</button>
+1072-            <button style={st.save} onClick={() => adminListFiles(parentWorkshopPath(workshopPath))}>⬆️ رجوع</button>
+1073-          </div>
+1074-
+1075-          <input style={st.input} value={workshopFile} onChange={(e) => setWorkshopFile(e.target.value)} placeholder="core/identity.json أو tests/test_brain.py" />
+1076-
+1077-          <div style={st.two}>
+1078-            <button style={st.save} data-old={{ filter: adminBusy === "read_file" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "read_file" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={() => adminReadFile()}>قراءة</button>
+1079-            <button style={st.save} data-old={{ filter: adminBusy === "write_file" ? "brightness(0.55)" : "brightness(1)", transform: adminBusy === "write_file" ? "scale(0.98)" : "scale(1)", transition: "filter 120ms ease, transform 120ms ease" }} disabled={!!adminBusy} onClick={adminWriteFile}>حفظ</button>
+1080-            <button style={st.danger} disabled={!!adminBusy} onClick={adminDeleteFile}>حذف الملف المحدد</button>
+1081-          </div>
+1082-
+1083-          {workshopItems.map((x) => (
+1084-            <button key={x.path} style={st.item} onClick={() => x.type === "dir" ? adminListFiles(x.path) : adminReadFile(x.path)}>
+1085-              {x.type === "dir" ? "📁" : "📄"} {x.path}
+1086-            </button>
+1087-          ))}
+1088-
+1089-          <textarea
+1090-            value={workshopContent}
+1091-            onChange={(e) => setWorkshopContent(e.target.value)}
+1092-            style={{ width: "100%", minHeight: 180, borderRadius: 14, padding: 12, background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", fontFamily: "monospace", direction: "ltr" }}
+1093-            placeholder="محتوى الملف / أو مسار snapshot للاسترجاع"
+1094-          />
+1095-        </div>
+1096-
+1097-        <div style={st.card}>
+1098-          <b>📍 السجلات والتتبع</b>
+1099-          <button style={st.save} disabled={!!adminBusy} onClick={adminReadTrace}>قراءة Trace</button>
+1100-        </div>
+1101-
+1102-        <div style={st.card}>
+1103-          <b>🧪 الاختبارات</b>
+1104-          <p style={st.note}>اكتب مسار ملف اختبار في خانة الملف ثم اضغط تشغيل.</p>
+1105-          <button style={st.save} disabled={!!adminBusy} onClick={adminRunTest}>تشغيل اختبار</button>
+1106-        </div>
+1107-
+1108-        <div style={st.card}>
+1109-          <b>🔖 اللقطات</b>
+1110-          <button style={st.save} disabled={!!adminBusy} onClick={adminCreateSnapshot}>إنشاء Snapshot للمسار الحالي</button>
+1111-          <button style={st.save} disabled={!!adminBusy} onClick={adminListSnapshots}>عرض قائمة Snapshots</button>
+1112-          {adminSnapshots.map((x) => (
+1113-            <button key={x.path} style={st.item} onClick={() => setWorkshopContent(x.path)}>📦 {x.name}</button>
+1114-          ))}
+1115-          <button style={st.danger} disabled={!!adminBusy} onClick={adminRestoreSnapshot}>استرجاع Snapshot من مساره</button>
+1116-        </div>
+1117-
+1118-
+1119-      </section>
+1120-    );
+1121-  }
+1122-
+1123-  function renderDev() {
+1124-    if (devDoor === "trace") return renderTraceDoor();
+1125-    if (devDoor === "workshop") return renderWorkshopDoor();
+1126-
+1127-    return ["📍 التتبع", "🛠️ الورشة"].map((x) => (
+1128-      <button
+1129-        key={x}
+1130-        style={st.item}
+1131-        onClick={() => {
+1132-          if (x.includes("التتبع")) {
+1133-            setDevDoor("trace");
+1134-            loadExecutionTrace();
+1135-          }
+1136-          if (x.includes("الورشة")) setDevDoor("workshop");
+1137-        }}
+1138-      >
+1139-        {x}
+1140-      </button>
+1141-    ));
+1142-  }
+1143-
+1144-  function body() {
+1145-    if (section === "sessions") return renderSessions();
+1146-    if (section === "models") return renderModels();
+1147-    if (section === "learning") return renderLearning();
+1148-    return renderDev();
+1149-  }
+1150-
+1151-  const activeModels = models.filter((m) => m.connected);
+1152-
+1153-  return (
+1154-    <div style={st.app}>
+1155-      <header style={st.header}>
+1156-        <button style={st.icon} onClick={() => setMenu(!menu)}>☰</button>
+1157-        <div style={{ textAlign: "center" }}>
+1158-          <div style={st.title}>Gerfex</div>
+1159-          <div style={st.ok}>● workplace-admin-v12</div>
+1160-        </div>
+1161-        <button style={st.icon} onClick={() => setQuick(!quick)}>🤖</button>
+1162-      </header>
+1163-
+1164-      {menu && (
+1165-        <aside style={st.drawer}>
+1166-          <div style={st.tabs}>
+1167-            {sections.map(([k, i, t]) => (
+1168-              <button key={k} style={{ ...st.tab, background: section === k ? "#1e293b" : "transparent" }} onClick={() => { setSection(k); if (k === "dev") setDevDoor(null); }}>
+1169-                {i} {t}
+1170-              </button>
+1171-            ))}
+1172-          </div>
+1173-          <div style={st.drawerBody}>{body()}</div>
+1174-        </aside>
+1175-      )}
+1176-
+1177-      {quick && (
+1178-        <aside style={st.quick}>
+1179-          <b>🤖 النماذج النشطة</b>
+1180-          {activeModels.length === 0 && <p style={st.note}>لا يوجد نموذج متصل.</p>}
+1181-          {activeModels.map((m) => (
+1182-            <div style={{ ...st.quickRow, gridTemplateColumns: "1fr 42px 42px" }} key={m.id}>
+1183-              <span>
+1184-                {m.name}
+1185-                <small style={{ display: "block", color: "#94a3b8" }}>
+1186-                  {m.mute ? "صامت" : "مسموح بالمراقبة"} / {m.hold ? "معلّق" : "نشط"}
+1187-                </small>
+1188-              </span>
+1189-              <button
+1190-                style={{ ...st.symbol, background: m.mute ? "#7f1d1d" : "#1f2937" }}
+1191-                onClick={() => updateModel(m.id, { mute: !m.mute })}
+1192-              >
+1193-                {m.mute ? "🔕" : "🔇"}
+1194-              </button>
+1195-              <button
+1196-                style={{ ...st.symbol, background: m.hold ? "#854d0e" : "#1f2937" }}
+1197-                onClick={() => updateModel(m.id, { hold: !m.hold })}
+1198-              >
+1199-                {m.hold ? "⏸" : "✋"}
+1200-              </button>
+1201-            </div>
+1202-          ))}
+1203-        </aside>
+1204-      )}
+1205-
+1206-      <main style={st.messages}>
+1207-        {(learningSession ? learningSession.messages : messages).map((m, i) => (
+1208-          <div style={st.msg} key={i}>
+1209-            <b>{m.speaker}</b>
+1210-            <div style={st.text}>{m.content}</div>
+1211-          </div>
+1212-        ))}
+1213-        <div ref={bottom} />
+1214-      </main>
+1215-
+1216-      <footer style={st.footer}>
+1217-        <div style={st.composer}>
+1218-          <input
+1219-            ref={fileRef}
+1220-            type="file"
+1221-            style={{ display: "none" }}
+1222-            onChange={handleAttach}
+1223-          />
+1224-          <button style={st.round} type="button" onClick={() => fileRef.current && fileRef.current.click()}>📎</button>
+1225-          <button style={{ ...st.round, background: listening ? "#dc2626" : "#202123" }} onClick={startVoice}>
+1226-            {listening ? "●" : "❋"}
+1227-          </button>
+1228-          <textarea
+1229-            ref={textRef}
+1230-            rows={1}
+1231-            value={input}
+1232-            placeholder="اكتب رسالة..."
+1233-            style={st.textarea}
+1234-            onChange={(e) => { setInput(e.target.value); setVoiceInput(false); }}
+1235-            onKeyDown={(e) => {
+1236-              if (e.key === "Enter" && !e.shiftKey) {
+1237-                e.preventDefault();
+1238-                send();
+1239-              }
+1240-            }}
+1241-          />
+1242-          <button style={st.send} onClick={send}>↑</button>
+1243-        </div>
+1244-      </footer>
+1245-    </div>
+1246-  );
+1247-}
+1248-
+1249-const st = {
+1250-  app: { height: "100dvh", background: "#0b0f14", color: "#f8fafc", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", overflow: "hidden" },
+1251-  header: { height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", borderBottom: "1px solid #1f2937", background: "#0b0f14", flexShrink: 0 },
+1252-  icon: { width: 42, height: 42, borderRadius: 12, border: "none", background: "#111827", color: "white", fontSize: 22 },
+1253-  title: { fontWeight: 800, fontSize: 18 },
+
+===== PYTHON COMPILE CHECK =====
+admin_bridge.py OK
+
