@@ -827,6 +827,28 @@ export default function App() {
     }
   }
 
+  async function showExecutionPath() {
+    try {
+      const nativeRes = await GerfexNative.readExecutionPath();
+      const lines = (nativeRes?.content || "").split("\n").filter(Boolean).slice(-10);
+
+      const pretty = lines.map((line, i) => {
+        try {
+          const o = JSON.parse(line);
+          const path = Array.isArray(o.path) ? o.path : [];
+
+          return `${i + 1}) ${o.goal || "-"}\nالمسار: ${o.route || "-"}\nالقرار: ${(o.decision?.intent || "-")} / ${(o.decision?.target || "-")}\nالتنفيذ: ${o.execution?.ok ? "نجح" : "فشل"}\n\nخط السير:\n- ${path.join("\n- ")}`;
+        } catch {
+          return `${i + 1}) ${line}`;
+        }
+      }).join("\n\n");
+
+      setDevStatus(pretty || "لا يوجد خط سير بعد.");
+    } catch (err) {
+      setDevStatus("فشل عرض خط السير: " + (err?.message || err));
+    }
+  }
+
   function renderDev() {
     return (
       <section style={st.panel}>
@@ -835,6 +857,10 @@ export default function App() {
 
         <button style={st.item} onClick={showExecutionTrace}>
           🧾 عرض آخر 10 أوامر
+        </button>
+
+        <button style={st.item} onClick={showExecutionPath}>
+          🛣️ عرض خط السير
         </button>
 
         {devStatus && (

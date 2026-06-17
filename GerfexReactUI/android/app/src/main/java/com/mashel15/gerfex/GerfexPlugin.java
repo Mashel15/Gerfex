@@ -169,6 +169,12 @@ public class GerfexPlugin extends Plugin {
         return new File(runtimeDir, "execution_trace.jsonl");
     }
 
+    private File executionPathFile() {
+        File runtimeDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
+        runtimeDir.mkdirs();
+        return new File(runtimeDir, "execution_path.jsonl");
+    }
+
     private void appendPluginTrace(String traceId, JSONObject action, String stageName, boolean ok) {
         try {
             if (traceId == null || traceId.length() == 0) return;
@@ -294,6 +300,75 @@ public class GerfexPlugin extends Plugin {
             return out.getAbsolutePath();
         } catch (Exception e) {
             return "";
+        }
+    }
+
+
+    @PluginMethod
+    public void readExecutionTrace(PluginCall call) {
+        JSObject ret = new JSObject();
+        try {
+            File file = executionTraceFile();
+            if (!file.exists()) {
+                ret.put("ok", true);
+                ret.put("content", "");
+                call.resolve(ret);
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)
+            );
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            br.close();
+
+            ret.put("ok", true);
+            ret.put("content", sb.toString());
+            ret.put("path", file.getAbsolutePath());
+            call.resolve(ret);
+        } catch (Exception e) {
+            ret.put("ok", false);
+            ret.put("error", e.toString());
+            call.resolve(ret);
+        }
+    }
+
+    @PluginMethod
+    public void readExecutionPath(PluginCall call) {
+        JSObject ret = new JSObject();
+        try {
+            File file = executionPathFile();
+            if (!file.exists()) {
+                ret.put("ok", true);
+                ret.put("content", "");
+                call.resolve(ret);
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)
+            );
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            br.close();
+
+            ret.put("ok", true);
+            ret.put("content", sb.toString());
+            ret.put("path", file.getAbsolutePath());
+            call.resolve(ret);
+        } catch (Exception e) {
+            ret.put("ok", false);
+            ret.put("error", e.toString());
+            call.resolve(ret);
         }
     }
 
