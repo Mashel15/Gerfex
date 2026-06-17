@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from core.perception_cycle import run_perception_cycle
-from planner.action_builder import build_actions
+from search_bundle.core.action_builder import build_actions
 from core.execution_manager import execute
 
 def build_execution_bundle(goal):

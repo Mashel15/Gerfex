@@ -1,5 +1,5 @@
 import json, urllib.parse, urllib.request, xml.etree.ElementTree as ET
-from research.source_filter import filter_results
+from search_bundle.core.source_filter import filter_results
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path

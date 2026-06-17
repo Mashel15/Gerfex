@@ -6,8 +6,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from observation.native_screen_observer import observe_native_text
-from understanding.screen_understanding import understand_screen
-from planner.action_planner import create_plan
+from search_bundle.core.screen_understanding import understand_screen
+from search_bundle.core.action_builder import build_actions as create_plan
 
 def run_perception_cycle(goal):
     observation = observe_native_text()

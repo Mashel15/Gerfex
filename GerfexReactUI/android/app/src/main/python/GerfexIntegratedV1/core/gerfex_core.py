@@ -72,7 +72,7 @@ def run_goal(goal, trace=None):
 
     elif routing.get("route") == "research":
         try:
-            from research.news_pipeline import run as run_news_pipeline
+            from search_bundle.core.news_pipeline import run as run_news_pipeline
 
             query = text
             for w in ["تابع", "آخر", "اخر", "أخبار", "اخبار", "خبر", "news"]:
@@ -101,7 +101,7 @@ def run_goal(goal, trace=None):
             "intent": "news_research_pipeline",
             "target": "research",
             "route": routing,
-            "reason": "Brain Router وجّه الطلب إلى research/news_pipeline.py"
+            "reason": "Brain Router وجّه الطلب إلى search_bundle/core/news_pipeline.py"
         }
         learning = {"ok": True, "mode": "router_research"}
     elif routing.get("route") == "cognitive":

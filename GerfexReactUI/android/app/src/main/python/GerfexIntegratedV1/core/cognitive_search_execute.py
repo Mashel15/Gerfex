@@ -8,10 +8,10 @@ sys.path.insert(0, str(ROOT))
 
 from context.context_manager import prepare_context
 from observation.native_screen_observer import observe_native_text
-from understanding.screen_understanding import understand_screen
-from planner.action_planner import create_plan
-from planner.action_builder import build_actions
-from planner.target_resolver import resolve_targets
+from search_bundle.core.screen_understanding import understand_screen
+from search_bundle.core.action_builder import build_actions as create_plan
+from search_bundle.core.action_builder import build_actions
+from search_bundle.core.target_resolver import resolve_targets
 from android.android_bridge import queue_action
 
 SUPPORTED_ACTIONS = {
