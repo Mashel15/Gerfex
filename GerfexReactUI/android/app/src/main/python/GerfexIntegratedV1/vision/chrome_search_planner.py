@@ -1,5 +1,5 @@
 import json
-from legacy_vision.ui_parser_legacy import parse_ui
+from vision.ui_parser import parse_ui
 
 def find_chrome_url_bar():
     items = parse_ui().get("items", [])
