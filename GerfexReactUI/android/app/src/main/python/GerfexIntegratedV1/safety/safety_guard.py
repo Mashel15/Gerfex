@@ -8,7 +8,9 @@ SAFE_ACTIONS = {
     "press_home",
     "press_recent",
     "wait",
-    "observe_screen"
+    "observe_screen",
+    "dump_ui",
+    "press_enter"
 }
 
 HIGH_RISK_ACTIONS = {
