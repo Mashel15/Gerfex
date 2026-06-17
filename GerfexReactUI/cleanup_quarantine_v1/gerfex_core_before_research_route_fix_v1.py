@@ -71,37 +71,16 @@ def run_goal(goal, trace=None):
         learning = learn(goal, decision, execution)
 
     elif routing.get("route") == "research":
-        try:
-            from research.news_pipeline import run as run_news_pipeline
-
-            query = text
-            for w in ["تابع", "آخر", "اخر", "أخبار", "اخبار", "خبر", "news"]:
-                query = query.replace(w, " ")
-            query = " ".join(query.split()) or goal
-
-            news_result = run_news_pipeline(query)
-            execution = {
-                "ok": bool(news_result.get("ok")),
-                "mode": "research_news_pipeline",
-                "query": query,
-                "result": news_result,
-                "reply": "تم تشغيل مسار الأخبار الداخلي." if news_result.get("ok") else "فشل مسار الأخبار الداخلي."
-            }
-        except Exception as e:
-            execution = {
-                "ok": False,
-                "mode": "research_news_pipeline",
-                "reason": "research_pipeline_error",
-                "error": str(e)
-            }
-
+        clear_queue()
+        from autonomous.autonomous_loop import run_autonomous_goal
+        execution = run_autonomous_goal(goal)
         decision = {
-            "ok": execution.get("ok", False),
+            "ok": True,
             "brain": "BrainRouter",
             "intent": "news_research_pipeline",
             "target": "research",
             "route": routing,
-            "reason": "Brain Router وجّه الطلب إلى research/news_pipeline.py"
+            "reason": "Brain Router وجّه الطلب إلى مسار الأخبار الجاهز"
         }
         learning = {"ok": True, "mode": "router_research"}
     elif routing.get("route") == "cognitive":
