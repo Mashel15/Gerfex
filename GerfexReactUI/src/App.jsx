@@ -796,25 +796,64 @@ export default function App() {
     );
   }
 
-  function renderDev() {
-    if (devDoor === "code") return renderCodeDoor();
-    if (devDoor === "files") return renderFileDoor();
+  async function showExecutionTrace() {
+    try {
+      const nativeRes = await GerfexNative.readExecutionTrace();
+      const lines = (nativeRes?.content || "").split("\n").filter(Boolean).slice(-10);
 
-    return ["💻 محرر الكود", "📁 مستكشف الملفات"].map((x) => (
-      <button
-        key={x}
-        style={st.item}
-        onClick={() => {
-          if (x.includes("محرر الكود")) setDevDoor("code");
-          if (x.includes("مستكشف الملفات")) {
-            setDevDoor("files");
-            loadDevList("system", "");
-          }
-        }}
-      >
-        {x}
-      </button>
-    ));
+      const pretty = lines.map((line, i) => {
+        try {
+          const o = JSON.parse(line);
+          const stages = Array.isArray(o.stages) ? o.stages : [];
+          const route = [...stages].reverse().find(x => x.stage === "brain_router")?.route || "-";
+          const decision = [...stages].reverse().find(x => x.stage === "provider_response") || {};
+          const execution = [...stages].reverse().find(x =>
+            x.stage === "execution_observed" ||
+            x.stage === "execution_manager_end" ||
+            x.stage === "execution_manager_stop"
+          ) || {};
+
+          const ok = (execution.execution_ok ?? execution.ok) ? "نجح" : "فشل";
+
+          return `${i + 1}) ${o.goal || "-"}\nالمسار: ${route}\nالقرار: ${decision.intent || "-"} / ${decision.target || "-"}\nالتنفيذ: ${ok}\nالسبب: ${decision.reason || execution.reason || "-"}`;
+        } catch {
+          return `${i + 1}) ${line}`;
+        }
+      }).join("\n\n");
+
+      setDevStatus(pretty || "لا يوجد تتبع بعد.");
+    } catch (err) {
+      setDevStatus("فشل عرض التتبع: " + (err?.message || err));
+    }
+  }
+
+  function renderDev() {
+    return (
+      <section style={st.panel}>
+        <h3>🧾 تتبع تنفيذ Gerfex</h3>
+        <p style={st.note}>يعرض آخر 10 أوامر فقط من ملف التتبع الداخلي.</p>
+
+        <button style={st.item} onClick={showExecutionTrace}>
+          🧾 عرض آخر 10 أوامر
+        </button>
+
+        {devStatus && (
+          <pre style={{
+            whiteSpace: "pre-wrap",
+            background: "#020617",
+            color: "#e5e7eb",
+            border: "1px solid #1f2937",
+            borderRadius: 14,
+            padding: 12,
+            maxHeight: 420,
+            overflow: "auto",
+            direction: "rtl"
+          }}>
+            {devStatus}
+          </pre>
+        )}
+      </section>
+    );
   }
 
   function body() {

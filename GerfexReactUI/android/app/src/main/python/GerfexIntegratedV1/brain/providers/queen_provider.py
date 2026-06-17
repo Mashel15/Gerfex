@@ -24,7 +24,7 @@ def ask_queen(goal):
                 {"action": "wait", "args": {"seconds": 3}},
                 {"action": "observe_screen", "args": {}}
             ],
-            "reason": f"Queen قررت فتح كروم والبحث عن: {q}"
+            "reason": f"Gerfex قرر فتح كروم والبحث عن: {q}"
         }
 
     apps = {
@@ -39,22 +39,22 @@ def ask_queen(goal):
                 "intent": "open_app",
                 "target": package,
                 "action": {"action": "open_app", "args": {"package": package}},
-                "reason": f"Queen قررت فتح {package}"
+                "reason": f"Gerfex قرر فتح {package}"
             }
 
     if "الرئيسية" in text or "home" in text:
-        return {"intent":"press_home","target":"android","action":{"action":"press_home","args":{}},"reason":"Queen قررت الرجوع للرئيسية"}
+        return {"intent":"press_home","target":"android","action":{"action":"press_home","args":{}},"reason":"Gerfex قرر الرجوع للرئيسية"}
 
     if "ارجع" in text or "back" in text:
-        return {"intent":"press_back","target":"android","action":{"action":"press_back","args":{}},"reason":"Queen قررت الرجوع للخلف"}
+        return {"intent":"press_back","target":"android","action":{"action":"press_back","args":{}},"reason":"Gerfex قرر الرجوع للخلف"}
 
     if "انتظر" in text or "wait" in text:
-        return {"intent":"wait","target":"android","action":{"action":"wait","args":{"seconds":2}},"reason":"Queen قررت الانتظار"}
+        return {"intent":"wait","target":"android","action":{"action":"wait","args":{"seconds":2}},"reason":"Gerfex قرر الانتظار"}
 
     if "صورة الشاشة" in text or "تفريغ الشاشة" in text or "dump" in text:
-        return {"intent":"observe_screen","target":"android","action":{"action":"observe_screen","args":{}},"reason":"Queen قررت حفظ تفريغ الشاشة"}
+        return {"intent":"observe_screen","target":"android","action":{"action":"observe_screen","args":{}},"reason":"Gerfex قرر حفظ تفريغ الشاشة"}
 
-    return {"intent":"unknown","target":None,"action":None,"reason":"Queen لم تجد قرار تنفيذي آمن"}
+    return {"intent":"unknown","target":None,"action":None,"reason":"Gerfex لم يجد قرار تنفيذي آمن"}
 
 
 def build_search_actions(query):
@@ -105,7 +105,7 @@ def decide(goal, model_state=None):
                 {"action": "wait", "args": {"seconds": 4}},
                 {"action": "observe_screen", "args": {}},
             ],
-            "reason": f"Queen قررت البحث عن {q}"
+            "reason": f"Gerfex قرر البحث عن {q}"
         }
 
     if "يوتيوب" in text:
@@ -122,5 +122,5 @@ def decide(goal, model_state=None):
         "target": target,
         "action": {"action": "open_app", "args": {"package": target}},
         "actions": None,
-        "reason": f"Queen قررت فتح {target}"
+        "reason": f"Gerfex قرر فتح {target}"
     }
