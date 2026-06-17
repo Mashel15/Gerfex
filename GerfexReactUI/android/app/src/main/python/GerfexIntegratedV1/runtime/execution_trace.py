@@ -3,8 +3,8 @@ import time
 import uuid
 from gerfex_android_paths import app_path
 
-TRACE_FILE = app_path("runtime", "execution_trace.jsonl")
-PATH_FILE = app_path("runtime", "execution_path.jsonl")
+TRACE_FILE = app_path("development", "trace", "execution_trace.jsonl")
+PATH_FILE = app_path("development", "trace", "execution_path.jsonl")
 MAX_TRACE_ITEMS = 10
 
 def _iso():
@@ -52,9 +52,13 @@ def _read_jsonl(path):
 
 def _write_jsonl(path, items):
     path.parent.mkdir(parents=True, exist_ok=True)
-    items = items[-MAX_TRACE_ITEMS:]
+
+    # Keep only the last 10 records, but store newest first.
+    latest = items[-MAX_TRACE_ITEMS:]
+    latest = list(reversed(latest))
+
     path.write_text(
-        "\n".join(json.dumps(x, ensure_ascii=False) for x in items) + ("\n" if items else ""),
+        "\n".join(json.dumps(x, ensure_ascii=False) for x in latest) + ("\n" if latest else ""),
         encoding="utf-8"
     )
 
