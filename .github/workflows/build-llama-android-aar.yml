@@ -56,6 +56,27 @@ jobs:
           print("Patched llama.android lib for Gerfex")
           PATCH
 
+
+      - name: Repair llama.android logging.h for minSdk 24
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          h = Path("llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h")
+          text = h.read_text()
+          text = re.sub(
+              r'return\s+__android_log_is_loggable\s*\(\s*prio\s*,\s*LOG_TAG\s*,\s*LOG_MIN_LEVEL\s*\)\s*;',
+              '#if defined(__ANDROID_API__) && __ANDROID_API__ >= 30\n    return __android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL);\n#else\n    return prio >= LOG_MIN_LEVEL;\n#endif',
+              text
+          )
+          # repair if previous patch inserted broken conditional text
+          text = text.replace('#if defined(__ANDROID_API__) && __ANDROID_API__ >= 30\\n', '#if defined(__ANDROID_API__) && __ANDROID_API__ >= 30\n')
+          text = text.replace('\\n#else\\n', '\n#else\n')
+          text = text.replace('\\n#endif', '\n#endif')
+          h.write_text(text)
+          print("logging.h repaired for minSdk 24")
+          PY
+
       - name: Build llama.android lib AAR
         working-directory: llama.cpp/examples/llama.android
         run: |
