@@ -3,6 +3,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.chaquo.python'
 
 android {
+    kotlinOptions {
+        jvmTarget = '17'
+    }
     namespace = "com.mashel15.gerfex"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -59,8 +62,4 @@ try {
     }
 } catch(Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
-}
-
-kotlinOptions {
-    jvmTarget = '17'
 }
