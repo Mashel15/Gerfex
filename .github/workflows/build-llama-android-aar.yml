@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ggml-org/llama.cpp
-          ref: ضع_الهاش_هنا
+          ref: b9780
           path: llama.cpp
 
       - name: Set up JDK 21
