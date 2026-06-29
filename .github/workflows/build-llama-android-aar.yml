@@ -2,7 +2,10 @@ name: Build llama.android AAR
 
 on:
   workflow_dispatch:
-
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/build-llama-android-aar.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
