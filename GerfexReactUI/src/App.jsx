@@ -4,6 +4,17 @@ import { registerPlugin } from "@capacitor/core";
 const GerfexNative = registerPlugin("Gerfex");
 
 async function askGerfexNative(prompt, modelState = {}) {
+  if (modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
+    const nativeGma = await GerfexNative.gmaNativeChat({ message: prompt, predictLength: 256 });
+    return {
+      ok: !!nativeGma?.ok,
+      reply: nativeGma?.reply || nativeGma?.error || "لا يوجد رد من GMA.",
+      speaker: "GMA",
+      replies: [{ speaker: "GMA", content: nativeGma?.reply || nativeGma?.error || "لا يوجد رد من GMA." }],
+      raw: nativeGma
+    };
+  }
+
   const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
 
   if (!nativeRes || nativeRes.ok === false) {
