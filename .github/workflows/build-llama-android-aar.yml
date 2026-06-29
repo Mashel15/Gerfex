@@ -25,7 +25,21 @@ jobs:
 
       - name: Install Android packages
         run: |
-          sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;29.0.13113456" "cmake;3.31.6"
+          sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;29.0.13113456" "cmake;3.31.6"
+
+      - name: Patch llama.android lib for Gerfex APK
+        working-directory: llama.cpp/examples/llama.android
+        run: |
+          python3 - <<'PATCH'
+          from pathlib import Path
+          p = Path("lib/build.gradle.kts")
+          s = p.read_text()
+          s = s.replace("compileSdk = 36", "compileSdk = 34")
+          s = s.replace("minSdk = 33", "minSdk = 24")
+          s = s.replace("minCompileSdk = 35", "minCompileSdk = 34")
+          p.write_text(s)
+          print("Patched llama.android lib for Gerfex")
+          PATCH
 
       - name: Build llama.android lib AAR
         working-directory: llama.cpp/examples/llama.android
