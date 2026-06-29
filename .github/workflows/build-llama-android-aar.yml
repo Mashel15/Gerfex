@@ -44,6 +44,14 @@ jobs:
           vs = vs.replace("core-ktx = \"1.17.0\"", "core-ktx = \"1.13.1\"")
           v.write_text(vs)
           p.write_text(s)
+          lh = Path("lib/src/main/cpp/logging.h")
+          ls = lh.read_text()
+          ls = ls.replace(
+              "return __android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL);",
+              "#if __ANDROID_API__ >= 30\\n    return __android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL);\\n#else\\n    return true;\\n#endif"
+          )
+          lh.write_text(ls)
+          print("Patched llama.android logging for minSdk 24")
           print("Patched llama.android lib for Gerfex")
           PATCH
 
