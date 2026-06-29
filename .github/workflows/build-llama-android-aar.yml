@@ -59,25 +59,20 @@ jobs:
 
       - name: Repair llama.android logging.h for minSdk 24
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          h = Path("llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h")
-          text = h.read_text()
+          cat > llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h <<'EOF'
+#pragma once
 
-          text = re.sub(
-              r'(static\s+bool\s+is_loggable\s*\([^)]*\)\s*\{).*?(\n\})',
-              r'\1\n    return prio >= LOG_MIN_LEVEL;\2',
-              text,
-              flags=re.S
-          )
+#include <android/log.h>
 
-          text = text.replace("__android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL)", "prio >= LOG_MIN_LEVEL")
-          h.write_text(text)
+#define LOG_TAG "llama.android"
+#define LOG_MIN_LEVEL ANDROID_LOG_DEBUG
 
-          print("---- logging.h check ----")
-          print("\n".join(h.read_text().splitlines()[20:38]))
-          PY
+static inline bool is_loggable(int prio) {
+    return prio >= LOG_MIN_LEVEL;
+}
+EOF
+          echo "logging.h overwritten with minSdk24-safe version"
+          sed -n '1,80p' llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h
 
       - name: Build llama.android lib AAR
         working-directory: llama.cpp/examples/llama.android
