@@ -53,15 +53,24 @@ jobs:
           h = Path("lib/src/main/cpp/logging.h")
           h.write_text("""#pragma once
 
-          #include <android/log.h>
+#include <android/log.h>
 
-          #define LOG_TAG "llama.android"
-          #define LOG_MIN_LEVEL ANDROID_LOG_DEBUG
+#define LOG_TAG "llama.android"
+#define LOG_MIN_LEVEL ANDROID_LOG_DEBUG
 
-          static inline bool is_loggable(int prio) {
-              return prio >= LOG_MIN_LEVEL;
-          }
-          """)
+static inline bool is_loggable(int prio) {
+    return prio >= LOG_MIN_LEVEL;
+}
+
+static inline void aichat_android_log_callback(int prio, const char * tag, const char * text) {
+    __android_log_write(prio, tag ? tag : LOG_TAG, text ? text : "");
+}
+
+#define LOGd(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGi(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
+#define LOGw(...) __android_log_print(ANDROID_LOG_WARN,  LOG_TAG, __VA_ARGS__)
+#define LOGe(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+""")
           print("Patched llama.android lib for Gerfex")
           PY
 
