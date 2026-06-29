@@ -37,6 +37,7 @@ jobs:
           s = s.replace("compileSdk = 36", "compileSdk = 34")
           s = s.replace("minSdk = 33", "minSdk = 24")
           s = s.replace("minCompileSdk = 35", "minCompileSdk = 34")
+          s = s.replace("androidx-core = \"1.17.0\"", "androidx-core = \"1.16.0\"")
           p.write_text(s)
           print("Patched llama.android lib for Gerfex")
           PATCH
