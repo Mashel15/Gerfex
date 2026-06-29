@@ -6,6 +6,7 @@ on:
     branches: [ main ]
     paths:
       - '.github/workflows/build-llama-android-aar.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,53 +35,34 @@ jobs:
       - name: Patch llama.android lib for Gerfex APK
         working-directory: llama.cpp/examples/llama.android
         run: |
-          python3 - <<'PATCH'
+          python3 - <<'PY'
           from pathlib import Path
           p = Path("lib/build.gradle.kts")
           s = p.read_text()
           s = s.replace("compileSdk = 36", "compileSdk = 34")
           s = s.replace("minSdk = 33", "minSdk = 24")
           s = s.replace("minCompileSdk = 35", "minCompileSdk = 34")
-          s = s.replace("androidx-core = \"1.17.0\"", "androidx-core = \"1.13.1\"")
-          v = Path("gradle/libs.versions.toml")
-          vs = v.read_text()
-          vs = vs.replace("androidx-core = \"1.17.0\"", "androidx-core = \"1.13.1\"")
-          vs = vs.replace("core-ktx = \"1.17.0\"", "core-ktx = \"1.13.1\"")
-          v.write_text(vs)
           p.write_text(s)
-          lh = Path("lib/src/main/cpp/logging.h")
-          ls = lh.read_text()
-          ls = ls.replace(
-              "return __android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL);",
-              "#if __ANDROID_API__ >= 30\\n    return __android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL);\\n#else\\n    return true;\\n#endif"
-          )
-          lh.write_text(ls)
-          print("Patched llama.android logging for minSdk 24")
+
+          h = Path("lib/src/main/cpp/logging.h")
+          h.write_text("""#pragma once
+
+          #include <android/log.h>
+
+          #define LOG_TAG "llama.android"
+          #define LOG_MIN_LEVEL ANDROID_LOG_DEBUG
+
+          static inline bool is_loggable(int prio) {
+              return prio >= LOG_MIN_LEVEL;
+          }
+          """)
           print("Patched llama.android lib for Gerfex")
-          PATCH
-
-
-      - name: Repair llama.android logging.h for minSdk 24
-        run: |
-          cat > llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h <<'EOF'
-#pragma once
-
-#include <android/log.h>
-
-#define LOG_TAG "llama.android"
-#define LOG_MIN_LEVEL ANDROID_LOG_DEBUG
-
-static inline bool is_loggable(int prio) {
-    return prio >= LOG_MIN_LEVEL;
-}
-EOF
-          echo "logging.h overwritten with minSdk24-safe version"
-          sed -n '1,80p' llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h
+          PY
 
       - name: Build llama.android lib AAR
         working-directory: llama.cpp/examples/llama.android
         run: |
-          ./gradlew :lib:assembleRelease
+          ./gradlew :lib:assembleRelease --stacktrace
 
       - name: Upload AAR
         uses: actions/upload-artifact@v4
