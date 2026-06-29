@@ -64,19 +64,19 @@ jobs:
           import re
           h = Path("llama.cpp/examples/llama.android/lib/src/main/cpp/logging.h")
           text = h.read_text()
+
           text = re.sub(
-              r'return\s+__android_log_is_loggable\s*\(\s*prio\s*,\s*LOG_TAG\s*,\s*LOG_MIN_LEVEL\s*\)\s*;',
-              'return prio >= LOG_MIN_LEVEL;',
-              text
-          )
-          text = re.sub(
-              r'#if\s+defined\(__ANDROID_API__\)\s*&&\s*__ANDROID_API__\s*>=\s*30\s*\n\s*return\s+__android_log_is_loggable\(prio,\s*LOG_TAG,\s*LOG_MIN_LEVEL\);\s*\n\s*#else\s*\n\s*return\s+prio\s*>=\s*LOG_MIN_LEVEL;\s*\n\s*#endif',
-              'return prio >= LOG_MIN_LEVEL;',
+              r'(static\s+bool\s+is_loggable\s*\([^)]*\)\s*\{).*?(\n\})',
+              r'\1\n    return prio >= LOG_MIN_LEVEL;\2',
               text,
-              flags=re.M
+              flags=re.S
           )
+
+          text = text.replace("__android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL)", "prio >= LOG_MIN_LEVEL")
           h.write_text(text)
-          print("logging.h forced to minSdk24-safe return")
+
+          print("---- logging.h check ----")
+          print("\n".join(h.read_text().splitlines()[20:38]))
           PY
 
       - name: Build llama.android lib AAR
