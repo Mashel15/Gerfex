@@ -1,0 +1,53 @@
+import json
+import importlib
+from pathlib import Path
+
+BASE = Path(__file__).resolve().parents[1]
+REGISTRY_PATH = BASE / "runtime" / "provider_registry.json"
+
+ACTIVE_PROVIDER_NAME = None
+
+def _load_registry():
+    if not REGISTRY_PATH.exists():
+        return {
+            "active_provider": "gma",
+            "providers": {}
+        }
+    try:
+        return json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {
+            "active_provider": "gma",
+            "providers": {}
+        }
+
+def set_active_provider_name(name):
+    global ACTIVE_PROVIDER_NAME
+    ACTIVE_PROVIDER_NAME = name
+
+def get_active_provider_name():
+    if ACTIVE_PROVIDER_NAME:
+        return ACTIVE_PROVIDER_NAME
+    return _load_registry().get("active_provider", "gma")
+
+def load_provider(name=None):
+    registry = _load_registry()
+    provider_name = name or get_active_provider_name()
+    providers = registry.get("providers", {})
+
+    spec = providers.get(provider_name)
+    if not spec:
+        return None
+
+    if spec.get("enabled") is False:
+        return None
+
+    module_name = spec.get("module")
+    class_name = spec.get("class")
+
+    if not module_name or not class_name:
+        return None
+
+    module = importlib.import_module(module_name)
+    provider_class = getattr(module, class_name)
+    return provider_class()

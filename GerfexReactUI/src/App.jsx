@@ -11,19 +11,62 @@ async function askGerfexNative(prompt, modelState = {}) {
       ok: false,
       reply: "خطأ Gerfex Native: " + (nativeRes?.error || "لا يوجد تفاصيل"),
       speaker: "Gerfex",
+      replies: [{ speaker: "Gerfex", content: "خطأ Gerfex Native: " + (nativeRes?.error || "لا يوجد تفاصيل") }],
       raw: nativeRes
     };
   }
 
   const parsed = JSON.parse(nativeRes.result || "{}");
+  const external = parsed.external_models || {};
+  const advisors = Array.isArray(external.advisors) ? external.advisors : [];
+
+  const providerState = {};
+  (modelState.models || []).forEach((m) => {
+    providerState[m.name] = {
+      mute: !!m.mute,
+      hold: !!m.hold,
+      connected: !!m.connected
+    };
+  });
+
+  const visibleExternalReplies = advisors
+    .filter((a) => {
+      const st = providerState[a.provider] || {};
+      return !st.hold && !st.mute;
+    })
+    .map((a) => ({
+      speaker: a.provider || "External AI",
+      content: a.reply || a.error || "لا يوجد رد."
+    }));
+
+  const replies = [];
+
+  if (modelState.connected && !modelState.hold && !modelState.mute) {
+    replies.push({
+      speaker: parsed.speaker || "Gerfex",
+      content: parsed.reply || parsed.error || "لا يوجد رد."
+    });
+  }
+
+  replies.push(...visibleExternalReplies);
+
+  if (!modelState.connected || modelState.hold) {
+    if (visibleExternalReplies.length === 0 && (parsed.reply || parsed.error)) {
+      replies.push({
+        speaker: "Gerfex",
+        content: parsed.reply || parsed.error || "لا يوجد رد."
+      });
+    }
+  }
+
   return {
     ok: parsed.ok,
-    reply: parsed.reply || parsed.error || "لا يوجد رد.",
-    speaker: "Gerfex",
+    reply: replies[0]?.content || parsed.reply || parsed.error || "لا يوجد رد.",
+    speaker: replies[0]?.speaker || parsed.speaker || "Gerfex",
+    replies,
     raw: parsed.raw || parsed
   };
 }
-
 
 async function getNativePerceptionStatus() {
   const nativeRes = await GerfexNative.accessibilityStatus();
@@ -47,10 +90,49 @@ const sections = [
 ];
 
 const defaultModels = [
-  { id: 1, name: "Queen", type: "Local", model: "queen-core", connected: false, mute: false, hold: false },
+  { id: 1, name: "GMA", type: "Local", model: "gma-core", connected: false, mute: false, hold: false },
   { id: 2, name: "ChatGPT", type: "API", model: "gpt", connected: false, mute: false, hold: false },
   { id: 3, name: "DeepSeek", type: "API/Local", model: "deepseek", connected: false, mute: false, hold: false }
 ];
+
+
+function buildExternalModelsRegistry(models) {
+  const external = (models || []).filter((m) => m.name !== "GMA");
+
+  return {
+    version: "EXTERNAL_MODELS_REGISTRY_V1",
+    mode: "advisor_only",
+    active: external
+      .filter((m) => !!m.connected && !m.hold)
+      .map((m) => m.name),
+    providers: external.map((m) => ({
+      id: m.id,
+      name: m.name,
+      type: "openai_compatible",
+      ui_type: m.type || "",
+      model: m.model || "",
+      base_url: m.baseUrl || "",
+      api_key: m.apiKey || "",
+      path: m.path || "",
+      connected: !!m.connected,
+      mute: !!m.mute,
+      hold: !!m.hold
+    }))
+  };
+}
+
+async function syncExternalModelsToNative(models) {
+  try {
+    if (!GerfexNative?.saveExternalModels) return false;
+    const registry = buildExternalModelsRegistry(models);
+    const res = await GerfexNative.saveExternalModels({ registry: JSON.stringify(registry) });
+    return !!res?.ok;
+  } catch (err) {
+    console.log("syncExternalModelsToNative failed", err);
+    return false;
+  }
+}
+
 
 function load(key, fallback) {
   try {
@@ -72,6 +154,7 @@ export default function App() {
   const [devContent, setDevContent] = useState("");
   const [devStatus, setDevStatus] = useState("");
   const [input, setInput] = useState("");
+  const [typingFocus, setTypingFocus] = useState(false);
   const [listening, setListening] = useState(false);
   const [voiceInput, setVoiceInput] = useState(false);
 
@@ -80,13 +163,16 @@ export default function App() {
   );
   const [currentSession, setCurrentSession] = useState(() => load("g_current_session", "main"));
 
-  const [models, setModels] = useState(() => load("g_models", defaultModels));
+  const [models, setModels] = useState(() => load("g_models_internal_v1", defaultModels));
+  const [modelTestStatus, setModelTestStatus] = useState({});
   const [sessions, setSessions] = useState(() => load("g_sessions", []));
   const [savedSessions, setSavedSessions] = useState(() => load("g_saved_sessions", []));
   const [projects, setProjects] = useState(() => load("g_projects", []));
   const [learning, setLearning] = useState(() =>
     load("g_learning", { queue: [], done: [] })
   );
+  const [nativeLearning, setNativeLearning] = useState(null);
+  const [nativeLearningStatus, setNativeLearningStatus] = useState("");
   const [learningSession, setLearningSession] = useState(null);
 
   const [showAddModel, setShowAddModel] = useState(false);
@@ -114,7 +200,10 @@ export default function App() {
     }
   }, [messages, currentSession]);
   useEffect(() => localStorage.setItem("g_current_session", JSON.stringify(currentSession)), [currentSession]);
-  useEffect(() => localStorage.setItem("g_models", JSON.stringify(models)), [models]);
+  useEffect(() => {
+    localStorage.setItem("g_models_internal_v1", JSON.stringify(models));
+    syncExternalModelsToNative(models);
+  }, [models]);
   useEffect(() => localStorage.setItem("g_sessions", JSON.stringify(sessions)), [sessions]);
   useEffect(() => localStorage.setItem("g_saved_sessions", JSON.stringify(savedSessions)), [savedSessions]);
   useEffect(() => localStorage.setItem("g_projects", JSON.stringify(projects)), [projects]);
@@ -208,24 +297,53 @@ export default function App() {
     const text = input.trim();
     if (!text) return;
 
-    const shouldSpeak = voiceInput;
+    if (learningSession) {
+      const userMsg = { speaker: "Mashel", content: text };
+      const baseMessages = [...(learningSession?.messages || []), userMsg];
 
-    const queenModel = models.find((m) => m.name === "Queen") || {};
-    const modelState = {
-      name: "Queen",
-      connected: !!queenModel.connected,
-      mute: !!queenModel.mute,
-      hold: !!queenModel.hold
-    };
+      setLearningSession((x) => ({ ...x, messages: baseMessages }));
+      persistLearningSessionMessages(learningSession, baseMessages);
+      setInput("");
+      setVoiceInput(false);
 
-    if (!modelState.connected) {
-      // Gerfex Core remains available even if Queen provider toggle is off.
-      // Queen is only a replaceable provider inside GerfexIntegratedV1.
-    }
+      try {
+        const gmaState = {
+          name: "GMA",
+          connected: true,
+          mute: false,
+          hold: false,
+          learning_session: true,
+          models: models
+        };
 
-    if (modelState.hold) {
+        const data = await askGerfexNative("[LEARNING_SESSION]\\n" + text, gmaState);
+        const replyText = data.reply || data.raw?.reply || data.raw?.error || "لم أستطع توليد رد تعلّم الآن.";
+        const replyMsg = { speaker: "GMA", content: replyText };
+
+        const finalMessages = [...baseMessages, replyMsg];
+        setLearningSession((x) => ({ ...x, messages: finalMessages }));
+        persistLearningSessionMessages(learningSession, finalMessages);
+      } catch (err) {
+        const errorMsg = { speaker: "Gerfex", content: "فشل اتصال صفحة التعلم بـ GMA: " + (err?.message || err) };
+        const finalMessages = [...baseMessages, errorMsg];
+        setLearningSession((x) => ({ ...x, messages: finalMessages }));
+        persistLearningSessionMessages(learningSession, finalMessages);
+      }
+
+      setTimeout(() => bottom.current?.scrollIntoView({ behavior: "smooth" }), 50);
       return;
     }
+
+    const shouldSpeak = voiceInput;
+
+    const gmaModel = models.find((m) => m.name === "GMA") || {};
+    const modelState = {
+      name: "GMA",
+      connected: !!gmaModel.connected && !gmaModel.hold && !gmaModel.mute,
+      mute: !!gmaModel.mute,
+      hold: !!gmaModel.hold,
+      models: models
+    };
 
     if (text === "حالة الإدراك" || text === "حالة الادراك") {
       setMessages((m) => [...m, { speaker: "Mashel", content: text }]);
@@ -243,70 +361,17 @@ export default function App() {
       return;
     }
 
-    if (learningSession) {
-      if (text === "اعتمد" || text === "اعتماد" || text === "اعتمد الجلسة") {
-        const mashelMessages = (learningSession.messages || [])
-          .filter((m) => (m.speaker || "") === "Mashel")
-          .map((m) => (m.content || "").trim())
-          .filter(Boolean);
-
-        const learnText = mashelMessages[mashelMessages.length - 1] || "";
-
-        try {
-          const data = await askGerfexNative(`[LEARNING_SESSION]\n${learnText}\nاعتمد الجلسة`, { ...modelState, learning_session: true });
-          setInput("");
-          setVoiceInput(false);
-          const approvalMsg = { speaker: data.speaker || "Queen", content: data.reply || "تم اعتماد جلسة التعلم." };
-          const approvedMessages = [...(learningSession.messages || []), approvalMsg];
-          setLearningSession((x) => ({ ...x, messages: approvedMessages }));
-          persistLearningSessionMessages(learningSession, approvedMessages);
-        } catch {
-          alert("فشل اعتماد جلسة التعلم.");
-        }
-        return;
-      }
-
-      if (text === "لا تعتمد" || text === "لا تعتمد الجلسة") {
-        setInput("");
-        setVoiceInput(false);
-        const noApprovalMsg = { speaker: "Gerfex", content: "لم يتم اعتماد الجلسة. بقيت محفوظة كما هي." };
-        const noApprovalMessages = [...(learningSession.messages || []), noApprovalMsg];
-        setLearningSession((x) => ({ ...x, messages: noApprovalMessages }));
-        persistLearningSessionMessages(learningSession, noApprovalMessages);
-        return;
-      }
-
-      const userMsg = { speaker: "Mashel", content: text };
-      const nextMessages = [...(learningSession.messages || []), userMsg];
-      setLearningSession((x) => ({ ...x, messages: nextMessages }));
-      persistLearningSessionMessages(learningSession, nextMessages);
-      setInput("");
-      setVoiceInput(false);
-
-      try {
-        const data = await askGerfexNative(text, { ...modelState, learning_session: true });
-
-        if (!modelState.mute) {
-          const withReply = [...nextMessages, { speaker: data.speaker || "Queen", content: data.reply || "لا يوجد رد." }];
-          setLearningSession((x) => ({ ...x, messages: withReply }));
-          persistLearningSessionMessages(learningSession, withReply);
-        }
-      } catch {
-        setLearningSession((x) => ({ ...x, messages: [...nextMessages, { speaker: "Gerfex", content: "خطأ في Gerfex الداخلي" }] }));
-      }
-      return;
-    }
-
     setMessages((m) => [...m, { speaker: "Mashel", content: text }]);
     setInput("");
     setVoiceInput(false);
 
     try {
       const data = await askGerfexNative(text, modelState);
+      const replies = Array.isArray(data.replies) ? data.replies : [];
 
-      if (!modelState.mute) {
-        addReply(data.reply || "لا يوجد رد.", data.speaker || "Gerfex", shouldSpeak);
-      }
+      replies.forEach((r, idx) => {
+        addReply(r.content || "لا يوجد رد.", r.speaker || "Gerfex", shouldSpeak && idx === 0);
+      });
     } catch (err) {
       addReply(`خطأ في Gerfex الداخلي: ${err?.message || err}`);
     }
@@ -431,8 +496,8 @@ export default function App() {
     const model = models.find((x) => x.id === id);
     if (!model) return;
 
-    if (model.name === "Queen") {
-      const answer = prompt("Queen هو العقل الأساسي. اكتب DELETE QUEEN للتأكيد:");
+    if (model.name === "GMA") {
+      const answer = prompt("GMA هو العقل الأساسي. اكتب DELETE QUEEN للتأكيد:");
       if (answer !== "DELETE QUEEN") return;
     } else {
       const ok = confirm("هل تريد حذف النموذج: " + model.name + "؟");
@@ -561,6 +626,60 @@ export default function App() {
     );
   }
 
+
+  async function testModelConnection(m) {
+    if (!m || !m.name) return;
+
+    setModelTestStatus((x) => ({
+      ...x,
+      [m.id]: { status: "testing", text: "⏳ جاري اختبار الاتصال..." }
+    }));
+
+    try {
+      await syncExternalModelsToNative(models);
+
+      if (!GerfexNative?.testExternalModel) {
+        setModelTestStatus((x) => ({
+          ...x,
+          [m.id]: { status: "error", text: "🔴 دالة اختبار الاتصال غير موجودة في Native." }
+        }));
+        return;
+      }
+
+      const res = await GerfexNative.testExternalModel({ name: m.name });
+      const data = JSON.parse(res.result || "{}");
+      const ok = !!data.ok;
+
+      const javaDebug = {
+        registry_exists: res.registry_exists,
+        registry_length: res.registry_length,
+        registry_path: res.registry_path,
+        result: data
+      };
+
+      const debugText = JSON.stringify({
+        native_response: res,
+        parsed_result: data
+      }, null, 2);
+
+      const rawReply = data.reply || data.raw?.reply || data.raw?.error || data.error || debugText;
+      const reason = rawReply ? " — " + String(rawReply).slice(0, 2500) : "";
+
+      setModelTestStatus((x) => ({
+        ...x,
+        [m.id]: {
+          status: ok ? "ok" : "error",
+          text: (ok ? "🟢 متصل فعلياً" : "🔴 فشل الاتصال") + reason
+        }
+      }));
+    } catch (err) {
+      setModelTestStatus((x) => ({
+        ...x,
+        [m.id]: { status: "error", text: "🔴 خطأ الاختبار: " + (err?.message || err) }
+      }));
+    }
+  }
+
   function renderModels() {
     return (
       <>
@@ -594,16 +713,34 @@ export default function App() {
               </small>
 
               {expandedModel === m.id && (
-                <div style={st.detailsBox}>
-                  <small>الاسم: {m.name || "-"}</small>
-                  <small>النوع: {m.type || "-"}</small>
-                  <small>الموديل: {m.model || "-"}</small>
-                  <small>Base URL: {m.baseUrl || "-"}</small>
-                  <small>API Key: {m.apiKey ? "موجود" : "-"}</small>
-                  <small>Path: {m.path || "-"}</small>
-                  <button style={st.save} onClick={(e) => { e.stopPropagation(); editModel(m.id); }}>
-                    تعديل التفاصيل
+                <div style={st.detailsBox} onClick={(e) => e.stopPropagation()}>
+                  <input style={st.input} placeholder="اسم النموذج" value={m.name || ""} onChange={(e) => updateModel(m.id, { name: e.target.value })} />
+                  <select style={st.input} value={m.type || "API"} onChange={(e) => updateModel(m.id, { type: e.target.value })}>
+                    <option>API</option>
+                    <option>Local</option>
+                    <option>URL</option>
+                  </select>
+                  <input style={st.input} placeholder="Model Name" value={m.model || ""} onChange={(e) => updateModel(m.id, { model: e.target.value })} />
+                  <input style={st.input} placeholder="Base URL" value={m.baseUrl || ""} onChange={(e) => updateModel(m.id, { baseUrl: e.target.value })} />
+                  <input style={st.input} placeholder="API Key اختياري" value={m.apiKey || ""} onChange={(e) => updateModel(m.id, { apiKey: e.target.value })} />
+                  <input style={st.input} placeholder="Path / Local Server اختياري" value={m.path || ""} onChange={(e) => updateModel(m.id, { path: e.target.value })} />
+                  <button style={st.save} onClick={async () => {
+                    const ok = await syncExternalModelsToNative(models);
+                    alert(ok ? "تم حفظ بيانات النماذج" : "فشل حفظ بيانات النماذج");
+                    if (ok) setExpandedModel(null);
+                  }}>
+                    حفظ البيانات
                   </button>
+                  {m.name !== "GMA" && (
+                    <>
+                      <button style={st.save} onClick={() => testModelConnection(m)}>
+                        اختبار الاتصال
+                      </button>
+                      <small style={{ color: "#cbd5e1" }}>
+                        الحالة: {(modelTestStatus[m.id] && modelTestStatus[m.id].text) || "لم يتم اختبار الاتصال"}
+                      </small>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -661,11 +798,91 @@ export default function App() {
     );
   }
 
+  async function refreshNativeLearning() {
+    try {
+      setNativeLearningStatus("جاري تحديث تعلم Gerfex الداخلي...");
+      if (!GerfexNative?.learningStatus) {
+        setNativeLearningStatus("دالة learningStatus غير موجودة في Native.");
+        return;
+      }
+
+      const res = await GerfexNative.learningStatus();
+      const data = JSON.parse(res.result || "{}");
+      setNativeLearning(data);
+      setNativeLearningStatus(data.ok ? "تم تحديث حالة التعلم الداخلي." : ("فشل التحديث: " + (data.error || "unknown")));
+    } catch (err) {
+      setNativeLearningStatus("خطأ في تحديث التعلم الداخلي: " + (err?.message || err));
+    }
+  }
+
+  async function approveNativeLesson() {
+    try {
+      setNativeLearningStatus("جاري اعتماد آخر درس...");
+      const res = await GerfexNative.approveLatestLesson();
+      const data = JSON.parse(res.result || "{}");
+      setNativeLearningStatus(data.ok ? "تم اعتماد آخر درس." : ("لم يتم الاعتماد: " + (data.reason || data.error || "unknown")));
+      await refreshNativeLearning();
+    } catch (err) {
+      setNativeLearningStatus("خطأ اعتماد الدرس: " + (err?.message || err));
+    }
+  }
+
+  async function approveNativeImprovement() {
+    try {
+      setNativeLearningStatus("جاري اعتماد آخر تطوير...");
+      const res = await GerfexNative.approveLatestImprovement();
+      const data = JSON.parse(res.result || "{}");
+      setNativeLearningStatus(data.ok ? "تم اعتماد آخر تطوير." : ("لم يتم الاعتماد: " + (data.reason || data.error || "unknown")));
+      await refreshNativeLearning();
+    } catch (err) {
+      setNativeLearningStatus("خطأ اعتماد التطوير: " + (err?.message || err));
+    }
+  }
+
+  function NativeLearningList({ title, items }) {
+    const data = Array.isArray(items) ? items : [];
+    return (
+      <>
+        <h4 style={st.h}>{title} ({data.length})</h4>
+        {data.length === 0 && <p style={st.note}>فارغ.</p>}
+        {data.map((x) => (
+          <div style={st.card} key={x.id || x.text}>
+            <b>{x.kind || "item"}</b>
+            <small style={{ color: "#cbd5e1" }}>{x.status || ""}</small>
+            <p style={{ margin: "6px 0 0", whiteSpace: "pre-wrap" }}>{x.text || JSON.stringify(x)}</p>
+          </div>
+        ))}
+      </>
+    );
+  }
+
   function renderLearning() {
     const totalPages = Math.max(1, Math.ceil(messages.length / 12));
 
     return (
       <>
+        <h4 style={st.h}>🧠 تعلم Gerfex الداخلي</h4>
+
+        <div style={st.two}>
+          <button style={st.save} onClick={refreshNativeLearning}>تحديث حالة التعلم</button>
+          <button style={st.save} onClick={approveNativeLesson}>اعتماد آخر درس</button>
+        </div>
+
+        <button style={{ ...st.item, background: "#0f172a", marginTop: 8 }} onClick={approveNativeImprovement}>
+          اعتماد آخر تطوير
+        </button>
+
+        {nativeLearningStatus && <p style={st.note}>{nativeLearningStatus}</p>}
+
+        {nativeLearning && (
+          <>
+            <NativeLearningList title="⏳ الدروس المعلقة" items={nativeLearning.pending_lessons} />
+            <NativeLearningList title="⏳ التطويرات المعلقة" items={nativeLearning.pending_improvements} />
+            <NativeLearningList title="✅ المعرفة المعتمدة" items={nativeLearning.approved_knowledge} />
+            <NativeLearningList title="✅ التطويرات المعتمدة" items={nativeLearning.approved_improvements} />
+          </>
+        )}
+
         <h4 style={st.h}>📚 إضافة جلسة للتعلم</h4>
         <div style={st.two}>
           <div style={st.inputWrap}>
@@ -972,6 +1189,8 @@ export default function App() {
             value={input}
             placeholder="اكتب رسالة..."
             style={st.textarea}
+            onFocus={() => setTypingFocus(true)}
+            onBlur={() => setTypingFocus(false)}
             onChange={(e) => { setInput(e.target.value); setVoiceInput(false); }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
@@ -1023,8 +1242,8 @@ const st = {
   messages: { flex: 1, overflowY: "auto", padding: "12px 16px 4px", scrollPaddingBottom: 8 },
   msg: { maxWidth: 780, margin: "0 auto 22px", lineHeight: 1.75 },
   text: { whiteSpace: "pre-wrap", fontSize: 16, marginTop: 5 },
-  footer: { flexShrink: 0, padding: "8px 10px calc(8px + env(safe-area-inset-bottom))", background: "#0b0f14" },
-  composer: { maxWidth: 780, margin: "0 auto", display: "flex", alignItems: "flex-end", gap: 8, background: "#202123", border: "1px solid #374151", borderRadius: 24, padding: 8 },
+  footer: { flexShrink: 0, padding: "2px 2px calc(2px + env(safe-area-inset-bottom))", background: "#0b0f14" },
+  composer: { width: "100%", maxWidth: "100%", margin: 0, display: "flex", alignItems: "center", gap: 8, background: "#202123", border: "1px solid #374151", borderRadius: 18, padding: "4px 8px" },
   round: { width: 38, height: 38, borderRadius: 19, border: "none", background: "#2b2c2f", color: "white", fontSize: 18, flexShrink: 0 },
   textarea: { flex: 1, resize: "none", overflowY: "auto", maxHeight: 150, minHeight: 38, border: "none", outline: "none", background: "transparent", color: "white", fontSize: 16, lineHeight: "24px", padding: "7px 2px", fontFamily: "inherit" },
   send: { width: 38, height: 38, borderRadius: 19, border: "none", background: "#f8fafc", color: "#111827", fontSize: 20, fontWeight: 800, flexShrink: 0 }

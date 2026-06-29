@@ -1,0 +1,404 @@
+[
+  {
+    "goal": "حالة جيرفكس",
+    "routing": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "decision": {
+      "ok": false,
+      "brain": "GerfexCore",
+      "intent": "unknown",
+      "target": null,
+      "action": null,
+      "actions": null,
+      "reason": "Gerfex لم يجد قرار تنفيذي آمن",
+      "route": {
+        "ok": false,
+        "route": null,
+        "reason": "no_route_found"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": false
+  },
+  {
+    "goal": "حالة جيرفكس",
+    "routing": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "decision": {
+      "ok": false,
+      "brain": "GerfexCore",
+      "intent": "unknown",
+      "target": null,
+      "action": null,
+      "actions": null,
+      "reason": "Gerfex لم يجد قرار تنفيذي آمن",
+      "route": {
+        "ok": false,
+        "route": null,
+        "reason": "no_route_found"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": false
+  },
+  {
+    "goal": "حالة جيرفكس",
+    "routing": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "decision": {
+      "ok": false,
+      "brain": "GerfexCore",
+      "intent": "unknown",
+      "target": null,
+      "action": null,
+      "actions": null,
+      "reason": "Gerfex لم يجد قرار تنفيذي آمن",
+      "route": {
+        "ok": false,
+        "route": null,
+        "reason": "no_route_found"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": false
+  },
+  {
+    "goal": "افتح كروم",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "chrome",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "chrome"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح chrome",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": "android",
+        "target": "chrome",
+        "confidence": 1.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": true,
+      "experience_route": "android"
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "افتح الإعدادات",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "settings",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "settings"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح settings",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "افتح كروم",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "chrome",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "chrome"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح chrome",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": "android",
+        "target": "chrome",
+        "confidence": 1.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": true,
+      "experience_route": "android"
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "اختبار البرج فقط",
+    "routing": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "decision": {
+      "ok": false,
+      "brain": "GerfexCore",
+      "intent": "unknown",
+      "target": null,
+      "action": null,
+      "actions": null,
+      "reason": "Gerfex لم يجد قرار تنفيذي آمن",
+      "route": {
+        "ok": false,
+        "route": null,
+        "reason": "no_route_found"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": false
+  },
+  {
+    "goal": "افتح يوتيوب",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "youtube",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "youtube"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح youtube",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "افتح يوتيوب",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "youtube",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "youtube"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح youtube",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0.0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "افتح كروم",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "chrome",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "chrome"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح chrome",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "افتح كروم",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "chrome",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "chrome"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح chrome",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": true
+  },
+  {
+    "goal": "افتح كروم",
+    "routing": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "decision": {
+      "ok": true,
+      "brain": "GerfexCore",
+      "intent": "open_app",
+      "target": "chrome",
+      "action": {
+        "action": "open_app",
+        "args": {
+          "package": "chrome"
+        }
+      },
+      "actions": null,
+      "reason": "Gerfex قرر فتح chrome",
+      "route": {
+        "ok": true,
+        "route": "android",
+        "reason": "android control goal"
+      },
+      "experience_advice": {
+        "route": null,
+        "target": null,
+        "confidence": 0,
+        "note": "Experience Decision استخدم خبرة Gerfex السابقة قبل التنفيذ"
+      },
+      "experience_used": false
+    },
+    "execution_ok": true
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "time": "2026-06-21T17:38:50.813625Z",
+    "goal": "حالة جيرفكس",
+    "decision_ok": false,
+    "intent": "unknown",
+    "target": null,
+    "execution_ok": false,
+    "reason": "Gerfex لم يجد قرار تنفيذي آمن"
+  },
+  {
+    "time": "2026-06-21T17:44:34.848937Z",
+    "goal": "حالة جيرفكس",
+    "decision_ok": false,
+    "intent": "unknown",
+    "target": null,
+    "execution_ok": false,
+    "reason": "Gerfex لم يجد قرار تنفيذي آمن"
+  },
+  {
+    "time": "2026-06-21T17:48:45.241960Z",
+    "goal": "حالة جيرفكس",
+    "decision_ok": false,
+    "intent": "unknown",
+    "target": null,
+    "execution_ok": false,
+    "reason": "Gerfex لم يجد قرار تنفيذي آمن"
+  },
+  {
+    "time": "2026-06-21T17:50:13.015727Z",
+    "goal": "افتح كروم",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "chrome",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح chrome"
+  },
+  {
+    "time": "2026-06-21T18:39:28.910413Z",
+    "goal": "افتح الإعدادات",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "settings",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح settings"
+  },
+  {
+    "time": "2026-06-21T19:09:54.279908Z",
+    "goal": "افتح كروم",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "chrome",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح chrome"
+  },
+  {
+    "time": "2026-06-21T19:28:31.243964Z",
+    "goal": "اختبار البرج فقط",
+    "decision_ok": false,
+    "intent": "unknown",
+    "target": null,
+    "execution_ok": false,
+    "reason": "Gerfex لم يجد قرار تنفيذي آمن"
+  },
+  {
+    "time": "2026-06-21T19:29:44.002301Z",
+    "goal": "افتح يوتيوب",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "youtube",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح youtube"
+  },
+  {
+    "time": "2026-06-21T19:45:05.132204Z",
+    "goal": "افتح يوتيوب",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "youtube",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح youtube"
+  },
+  {
+    "time": "2026-06-22T10:33:21.114911Z",
+    "goal": "افتح كروم",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "chrome",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح chrome"
+  },
+  {
+    "time": "2026-06-22T11:11:10.634913Z",
+    "goal": "افتح كروم",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "chrome",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح chrome"
+  },
+  {
+    "time": "2026-06-22T15:29:00.556527Z",
+    "goal": "افتح كروم",
+    "decision_ok": true,
+    "intent": "open_app",
+    "target": "chrome",
+    "execution_ok": true,
+    "reason": "Gerfex قرر فتح chrome"
+  }
+]

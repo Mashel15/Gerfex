@@ -309,7 +309,7 @@
     "route": {
       "ok": true,
       "route": "android",
-      "reason": "multi_step_priority_to_queen"
+      "reason": "multi_step_priority_to_brain"
     },
     "intent": "web_search",
     "target": "chrome",

@@ -16,3 +16,5 @@ memory/brain_memory.json
 .env
 *.key
 *.pem
+GerfexReactUI/android/app/src/main/assets/GerfexModels/*.gguf
+GerfexReactUI/android/app/src/main/assets/GerfexModels/

@@ -1,0 +1,103 @@
+from .provider_contract import InternalIntelligenceProvider
+from internal_intelligence.learning.learning_manager import (
+    pending_lessons,
+    approved_knowledge,
+    learned_skills,
+    propose_lesson,
+    propose_improvement,
+)
+from internal_intelligence.learning.thinking_manager import think_about_learning, think_about_conversation
+
+
+class GMAProvider(InternalIntelligenceProvider):
+
+    def provider_name(self):
+        return "gma"
+
+    def provider_status(self):
+        return {
+            "provider": "gma",
+            "enabled": True,
+            "learning_connected": True,
+            "thinking_connected": True
+        }
+
+    def think(self, prompt, context=None):
+        context = context or {}
+        mode = context.get("mode", "conversation")
+
+        if mode == "learning":
+            thought = think_about_learning(
+                prompt,
+                approved_knowledge=self.get_approved_knowledge(),
+                learned_skills=self.get_learned_skills()
+            )
+        else:
+            thought = think_about_conversation(
+                prompt,
+                approved_knowledge=self.get_approved_knowledge(),
+                learned_skills=self.get_learned_skills()
+            )
+
+        return {
+            "ok": thought.get("ok", False),
+            "provider": "gma",
+            "mode": mode,
+            "thought": thought,
+            "approved_knowledge_count": len(self.get_approved_knowledge()),
+            "learned_skills_count": len(self.get_learned_skills())
+        }
+
+    def learn(self, lesson):
+        return {
+            "ok": False,
+            "reason": "direct_learning_requires_mashel_approval"
+        }
+
+    def propose_learning(self, lesson):
+        thought = self.think(lesson).get("thought", {})
+        kind = thought.get("kind")
+
+        if kind == "question":
+            return {
+                "ok": True,
+                "type": "question",
+                "saved": False,
+                "reason": "question_not_saved_as_learning",
+                "thought": thought
+            }
+
+        if kind == "improvement":
+            item = propose_improvement(thought.get("proposal") or lesson)
+            return {
+                "ok": True,
+                "type": "improvement",
+                "pending": item,
+                "thought": thought
+            }
+
+        if kind == "lesson":
+            item = propose_lesson(thought.get("proposal") or lesson)
+            return {
+                "ok": True,
+                "type": "lesson",
+                "pending": item,
+                "thought": thought
+            }
+
+        return {
+            "ok": True,
+            "type": "unknown",
+            "saved": False,
+            "reason": "unknown_learning_kind_not_saved",
+            "thought": thought
+        }
+
+    def get_pending_lessons(self):
+        return pending_lessons()
+
+    def get_approved_knowledge(self):
+        return approved_knowledge()
+
+    def get_learned_skills(self):
+        return learned_skills()

@@ -1,8 +1,27 @@
 import json
 from urllib.parse import quote_plus
-from gerfex_android_paths import app_path
+from GerfexIntegratedV1.gerfex_android_paths import app_path
+from internal_intelligence.provider.provider_loader import load_provider
 
 MEMORY = app_path("memory", "brain_memory.json")
+
+def _internal_intelligence_reply(prompt, mode="conversation"):
+    provider = load_provider()
+    if provider is None:
+        return "GMA غير متصل بمزود الذكاء الداخلي."
+
+    result = provider.think(prompt, context={"mode": mode})
+    thought = result.get("thought", {}) if isinstance(result, dict) else {}
+
+    for key in ("reply", "answer", "response", "summary", "proposal", "message"):
+        value = thought.get(key)
+        if value:
+            return str(value)
+
+    if thought:
+        return str(thought)
+
+    return "GMA استدعى مزود الذكاء الداخلي، لكن لم ينتج ردًا نصيًا واضحًا."
 
 
 def remember(event):
@@ -55,6 +74,7 @@ def decide(goal):
         "chrome": ["كروم", "chrome", "المتصفح"],
         "youtube": ["يوتيوب", "youtube"],
         "settings": ["الإعدادات", "اعدادات", "settings"],
+        "calculator": ["الآلة الحاسبة", "اله حاسبة", "الحاسبة", "calculator"],
     }
 
     for package, words in apps.items():
@@ -113,12 +133,26 @@ def decide(goal):
             "reason": "Gerfex قرر حفظ تفريغ الشاشة"
         }
 
+    if text.startswith("[learning_session]") or "learning_session" in text:
+        clean = text.replace("[learning_session]", "").replace("\\n", "\n").strip()
+        return {
+            "ok": True,
+            "brain": "GMA",
+            "intent": "gma_learning_chat",
+            "target": "learning",
+            "action": None,
+            "actions": None,
+            "reply": _internal_intelligence_reply(clean, mode="learning"),
+            "reason": "gma_learning_chat"
+        }
+
     return {
-        "ok": False,
-        "brain": "GerfexCore",
-        "intent": "unknown",
-        "target": None,
+        "ok": True,
+        "brain": "GMA",
+        "intent": "gma_chat",
+        "target": "conversation",
         "action": None,
         "actions": None,
-        "reason": "Gerfex لم يجد قرار تنفيذي آمن"
+        "reply": _internal_intelligence_reply(text, mode="conversation"),
+        "reason": "gma_chat_response"
     }

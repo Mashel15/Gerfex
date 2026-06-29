@@ -1,5 +1,5 @@
 import shutil
-from gerfex_android_paths import app_path
+from GerfexIntegratedV1.gerfex_android_paths import app_path
 
 ROOT = app_path("development", "workshop", "workspace", ".keep").parent
 
@@ -20,7 +20,7 @@ def delete_item(relative_path, line_number=None, recursive=False):
         if not p.exists():
             return {"ok": False, "reason": "not_found", "path": str(p)}
 
-        if line_number is not None:
+        if line_number is not None and int(line_number) > 0:
             if not p.is_file():
                 return {"ok": False, "reason": "line_delete_requires_file"}
             lines = p.read_text(encoding="utf-8", errors="replace").splitlines()

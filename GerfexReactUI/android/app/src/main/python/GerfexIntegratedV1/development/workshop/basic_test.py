@@ -1,5 +1,5 @@
-from development.workshop.save_item import save_item
-from development.workshop.open_item import open_item
+from GerfexIntegratedV1.development.workshop.save_item import save_item
+from GerfexIntegratedV1.development.workshop.open_item import open_item
 
 def run_basic_test():
     test_path = "__tests__/basic_test.txt"

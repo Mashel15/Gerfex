@@ -29,6 +29,12 @@ def execute(decision, trace=None):
         target=decision.get("target")
     )
 
+    intent = decision.get("intent")
+    if intent in ("gma_chat", "gma_learning_chat", "conversation"):
+        reply = decision.get("reply") or decision.get("message") or decision.get("response") or decision.get("text") or "GMA جاهز."
+        add_stage(trace, "execution_manager_end", source="execution_manager", ok=True, reason="gma_passthrough")
+        return {"ok": True, "intent": intent, "target": decision.get("target", "conversation"), "reply": reply, "message": reply, "reason": "gma_passthrough", "decision": decision}
+
     if not decision.get("ok"):
         add_stage(
             trace,

@@ -649,7 +649,7 @@
       "route": {
         "ok": true,
         "route": "android",
-        "reason": "multi_step_priority_to_queen"
+        "reason": "multi_step_priority_to_brain"
       },
       "intent": "web_search",
       "target": "chrome",
@@ -1106,8 +1106,8 @@
     "prompt": "افتح كروم",
     "intent": "android_action_request",
     "mode": "execution_review",
-    "selected_provider": "queen",
-    "reply": "Queen Intent: فهمت الطلب كـ android_action_request. الثقة: 0.82"
+    "selected_provider": "gerfex_brain",
+    "reply": "Brain Intent: فهمت الطلب كـ android_action_request. الثقة: 0.82"
   },
   "updated_at": 1781205479.0069509,
   "status": "running",
@@ -1116,7 +1116,7 @@
   "current_route": {
     "ok": true,
     "route": "android",
-    "reason": "multi_step_priority_to_queen"
+    "reason": "multi_step_priority_to_brain"
   },
   "current_intent": "web_search",
   "current_target": "chrome",

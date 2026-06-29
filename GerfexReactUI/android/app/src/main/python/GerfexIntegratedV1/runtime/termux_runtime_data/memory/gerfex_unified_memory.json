@@ -1,0 +1,170 @@
+[
+  {
+    "type": "goal_learning",
+    "goal": "حالة جيرفكس",
+    "route": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "intent": "unknown",
+    "target": null,
+    "ok": false,
+    "summary": null,
+    "time": "2026-06-21T17:38:50.815356Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "حالة جيرفكس",
+    "route": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "intent": "unknown",
+    "target": null,
+    "ok": false,
+    "summary": null,
+    "time": "2026-06-21T17:44:34.851061Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "حالة جيرفكس",
+    "route": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "intent": "unknown",
+    "target": null,
+    "ok": false,
+    "summary": null,
+    "time": "2026-06-21T17:48:45.244188Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح كروم",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "chrome",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-21T17:50:13.018310Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح الإعدادات",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "settings",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-21T18:39:28.921495Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح كروم",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "chrome",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-21T19:09:54.283934Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "اختبار البرج فقط",
+    "route": {
+      "ok": false,
+      "route": null,
+      "reason": "no_route_found"
+    },
+    "intent": "unknown",
+    "target": null,
+    "ok": false,
+    "summary": null,
+    "time": "2026-06-21T19:28:31.254008Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح يوتيوب",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "youtube",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-21T19:29:44.007219Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح يوتيوب",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "youtube",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-21T19:45:05.163980Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح كروم",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "chrome",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-22T10:33:21.117069Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح كروم",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "chrome",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-22T11:11:10.639876Z"
+  },
+  {
+    "type": "goal_learning",
+    "goal": "افتح كروم",
+    "route": {
+      "ok": true,
+      "route": "android",
+      "reason": "android control goal"
+    },
+    "intent": "open_app",
+    "target": "chrome",
+    "ok": true,
+    "summary": null,
+    "time": "2026-06-22T15:29:00.566312Z"
+  }
+]

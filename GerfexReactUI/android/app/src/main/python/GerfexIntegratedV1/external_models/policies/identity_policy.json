@@ -1,0 +1,9 @@
+{
+  "version": "EXTERNAL_IDENTITY_POLICY_V1",
+  "rules": {
+    "external_model_must_use_own_name": true,
+    "external_model_must_not_claim_gerfex": true,
+    "external_model_must_not_claim_internal_brain": true,
+    "internal_brain_off_external_direct": true
+  }
+}

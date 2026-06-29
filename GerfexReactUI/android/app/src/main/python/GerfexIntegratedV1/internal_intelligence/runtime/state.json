@@ -1,0 +1,12 @@
+{
+  "active_provider": "gma",
+  "status": "runtime_adapter_ready_native_pending",
+  "internal_intelligence": {
+    "active_provider": "gma",
+    "model_engine": "gguf",
+    "model_name": "google_gemma-3-4b-it-Q2_K",
+    "model_asset": "GerfexModels/google_gemma-3-4b-it-Q2_K.gguf",
+    "runtime": "llama.cpp",
+    "runtime_status": "adapter_ready_native_binding_pending"
+  }
+}

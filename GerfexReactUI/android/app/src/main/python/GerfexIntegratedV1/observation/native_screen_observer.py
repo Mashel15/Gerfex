@@ -5,7 +5,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from gerfex_android_paths import app_path
+from GerfexIntegratedV1.gerfex_android_paths import app_path
 
 SCREEN_TEXT_FILE = app_path("runtime", "native_screen_text.txt")
 

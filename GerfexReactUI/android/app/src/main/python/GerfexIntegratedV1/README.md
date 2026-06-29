@@ -5,7 +5,7 @@ Clean integrated Gerfex build.
 Principle:
 Gerfex is the system.
 The brain is replaceable.
-Queen is the current temporary brain provider.
+Gerfex brain provider will be rebuilt cleanly.
 The brain suggests and understands.
 Gerfex decides.
 Safety checks.

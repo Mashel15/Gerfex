@@ -1,0 +1,149 @@
+import json
+from urllib.parse import quote_plus
+from GerfexIntegratedV1.gerfex_android_paths import app_path
+
+MEMORY = app_path("memory", "brain_memory.json")
+
+def _gma_reply(text):
+    t = (text or "").strip().lower()
+    if "عاصمة الدنمارك" in t or "capital of denmark" in t:
+        return "عاصمة الدنمارك هي كوبنهاغن."
+    if "من انت" in t or "من أنت" in t:
+        return "أنا GMA، الذكاء الداخلي داخل Gerfex."
+    if "مرحبا" in t or "السلام" in t:
+        return "مرحبا Mashel، أنا GMA. جاهز أساعدك."
+    return "أنا GMA داخل Gerfex. فهمت رسالتك: " + (text or "").strip()
+
+
+def remember(event):
+    MEMORY.parent.mkdir(parents=True, exist_ok=True)
+    data = []
+    if MEMORY.exists():
+        try:
+            data = json.loads(MEMORY.read_text(encoding="utf-8"))
+        except Exception:
+            data = []
+    data.append(event)
+    MEMORY.write_text(
+        json.dumps(data[-200:], ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+
+def _search_query(text):
+    for marker in ["ابحث عن", "بحث عن", "ابحث", "بحث", "search for", "search"]:
+        if marker in text:
+            q = text.split(marker, 1)[1].strip()
+            q = q.replace("في كروم", "").replace("على كروم", "").strip()
+            return q
+    return ""
+
+
+def decide(goal):
+    text = (goal or "").strip().lower()
+
+    q = _search_query(text)
+    if q:
+        url = "https://www.google.com/search?q=" + quote_plus(q)
+        return {
+            "ok": True,
+            "brain": "GerfexCore",
+            "intent": "web_search",
+            "target": "chrome",
+            "action": None,
+            "actions": [
+                {"action": "open_app", "args": {"package": "chrome"}},
+                {"action": "wait", "args": {"seconds": 2}},
+                {"action": "open_url", "args": {"url": url}},
+                {"action": "wait", "args": {"seconds": 3}},
+                {"action": "observe_screen", "args": {}}
+            ],
+            "reason": f"Gerfex قرر فتح كروم والبحث عن: {q}"
+        }
+
+    apps = {
+        "chrome": ["كروم", "chrome", "المتصفح"],
+        "youtube": ["يوتيوب", "youtube"],
+        "settings": ["الإعدادات", "اعدادات", "settings"],
+        "calculator": ["الآلة الحاسبة", "اله حاسبة", "الحاسبة", "calculator"],
+    }
+
+    for package, words in apps.items():
+        if any(w in text for w in words):
+            return {
+                "ok": True,
+                "brain": "GerfexCore",
+                "intent": "open_app",
+                "target": package,
+                "action": {"action": "open_app", "args": {"package": package}},
+                "actions": None,
+                "reason": f"Gerfex قرر فتح {package}"
+            }
+
+    if "الرئيسية" in text or "home" in text:
+        return {
+            "ok": True,
+            "brain": "GerfexCore",
+            "intent": "press_home",
+            "target": "android",
+            "action": {"action": "press_home", "args": {}},
+            "actions": None,
+            "reason": "Gerfex قرر الرجوع للرئيسية"
+        }
+
+    if "ارجع" in text or "back" in text:
+        return {
+            "ok": True,
+            "brain": "GerfexCore",
+            "intent": "press_back",
+            "target": "android",
+            "action": {"action": "press_back", "args": {}},
+            "actions": None,
+            "reason": "Gerfex قرر الرجوع للخلف"
+        }
+
+    if "انتظر" in text or "wait" in text:
+        return {
+            "ok": True,
+            "brain": "GerfexCore",
+            "intent": "wait",
+            "target": "android",
+            "action": {"action": "wait", "args": {"seconds": 2}},
+            "actions": None,
+            "reason": "Gerfex قرر الانتظار"
+        }
+
+    if "صورة الشاشة" in text or "تفريغ الشاشة" in text or "dump" in text:
+        return {
+            "ok": True,
+            "brain": "GerfexCore",
+            "intent": "observe_screen",
+            "target": "android",
+            "action": {"action": "observe_screen", "args": {}},
+            "actions": None,
+            "reason": "Gerfex قرر حفظ تفريغ الشاشة"
+        }
+
+    if text.startswith("[learning_session]") or "learning_session" in text:
+        clean = text.replace("[learning_session]", "").replace("\\n", "\n").strip()
+        return {
+            "ok": True,
+            "brain": "GMA",
+            "intent": "gma_learning_chat",
+            "target": "learning",
+            "action": None,
+            "actions": None,
+            "reply": _gma_reply(clean),
+            "reason": "gma_learning_chat"
+        }
+
+    return {
+        "ok": True,
+        "brain": "GMA",
+        "intent": "gma_chat",
+        "target": "conversation",
+        "action": None,
+        "actions": None,
+        "reply": _gma_reply(text),
+        "reason": "gma_chat_response"
+    }

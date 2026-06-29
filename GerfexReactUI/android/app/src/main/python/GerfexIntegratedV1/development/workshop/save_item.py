@@ -1,5 +1,5 @@
 from pathlib import Path
-from gerfex_android_paths import app_path
+from GerfexIntegratedV1.gerfex_android_paths import app_path
 
 ROOT = app_path("development", "workshop", "workspace", ".keep").parent
 

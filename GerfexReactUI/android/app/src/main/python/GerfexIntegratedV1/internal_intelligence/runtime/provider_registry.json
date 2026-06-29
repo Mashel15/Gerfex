@@ -1,0 +1,15 @@
+{
+  "active_provider": "gma",
+  "providers": {
+    "gma": {
+      "module": "internal_intelligence.provider.gma_provider",
+      "class": "GMAProvider",
+      "enabled": true,
+      "model_engine": "gguf",
+      "model_name": "google_gemma-3-4b-it-Q2_K",
+      "model_path": "/data/data/com.termux/files/home/storage/2202-1B1E/GerfexModels/google_gemma-3-4b-it-Q2_K.gguf",
+      "model_asset": "GerfexModels/google_gemma-3-4b-it-Q2_K.gguf",
+      "model_packaged_inside_apk": true
+    }
+  }
+}

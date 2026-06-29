@@ -1,5 +1,4 @@
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -7,30 +6,65 @@ SRC_ROOT = Path(__file__).resolve().parent / "GerfexIntegratedV1"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-APP_HOME = Path(os.environ.get("HOME", str(Path.cwd()))) / "gerfex_runtime_data"
-APP_HOME.mkdir(parents=True, exist_ok=True)
-os.environ["GERFEX_APP_HOME"] = str(APP_HOME)
-
-for name in ["learning", "memory", "runtime", "logs", "queue"]:
-    (APP_HOME / name).mkdir(parents=True, exist_ok=True)
-
-os.chdir(str(APP_HOME))
-
+from GerfexIntegratedV1.gerfex_android_paths import ensure_dirs
 from core.gerfex_core import run_goal
+from GerfexIntegratedV1.external_models.model_gateway import ask_external_models
 from runtime.execution_trace import new_trace, add_stage, save_trace
 
-def think(message):
+APP_HOME = ensure_dirs()
+
+def think(message, model_state_json=None):
     trace = new_trace(message)
     add_stage(trace, "goal_received", source="gerfex_entry", goal=message)
 
     try:
+        try:
+            model_state = json.loads(model_state_json or "{}") if isinstance(model_state_json, str) else (model_state_json or {})
+        except Exception:
+            model_state = {}
+
+        internal_brain_connected = bool(model_state.get("connected", True))
+
+        external_advice = {"ok": True, "mode": "advisor_only", "advisors": [], "reply": "external_skipped_internal_brain_on"}
+
+        if not internal_brain_connected:
+            external_advice = ask_external_models(message, context={"mode": "advisor_only"})
+            advisors = external_advice.get("advisors", []) if isinstance(external_advice, dict) else []
+            first = advisors[0] if advisors else {}
+            reply = (
+                first.get("reply")
+                or external_advice.get("reply")
+                or "Gerfex متوقف لأن العقل الداخلي غير مفعل، ولا يوجد رد من الذكاء الخارجي."
+            )
+
+            add_stage(trace, "internal_brain_off_external_direct", source="gerfex_entry", advisors=len(advisors))
+            save_trace(trace)
+
+            return json.dumps({
+                "ok": bool(first.get("ok", external_advice.get("ok", False))),
+                "speaker": first.get("provider", "External AI"),
+                "reply": reply,
+                "mode": "internal_brain_off_external_direct",
+                "external_models": external_advice,
+                "storage": str(APP_HOME),
+                "trace_id": trace.get("trace_id")
+            }, ensure_ascii=False)
+        add_stage(
+            trace,
+            "external_models_advice",
+            source="external_models",
+            ok=external_advice.get("ok"),
+            mode=external_advice.get("mode"),
+            advisors=len(external_advice.get("advisors", []))
+        )
+
         add_stage(trace, "run_goal_start", source="gerfex_entry")
         result = run_goal(message, trace=trace)
         add_stage(trace, "run_goal_end", source="gerfex_core", result_type=type(result).__name__)
 
         if isinstance(result, dict):
-            execution = result.get("execution", {})
-            decision = result.get("decision", {})
+            execution = result.get("execution", {}) or {}
+            decision = result.get("decision", {}) or {}
 
             add_stage(
                 trace,
@@ -58,36 +92,76 @@ def think(message):
                 or "تم تنفيذ الطلب داخل Gerfex."
             )
 
-            trace_path = save_trace(trace)
+            save_trace(trace)
 
             return json.dumps({
                 "ok": result.get("ok", True),
                 "reply": reply,
                 "storage": str(APP_HOME),
                 "trace_id": trace.get("trace_id"),
-                "trace_path": trace_path,
+                "external_models": external_advice,
                 "raw": result
             }, ensure_ascii=False)
 
         add_stage(trace, "non_dict_result", source="gerfex_entry", value=str(result)[:300])
-        trace_path = save_trace(trace)
+        save_trace(trace)
 
         return json.dumps({
             "ok": True,
             "reply": str(result),
             "storage": str(APP_HOME),
-            "trace_id": trace.get("trace_id"),
-            "trace_path": trace_path
+            "trace_id": trace.get("trace_id")
         }, ensure_ascii=False)
 
     except Exception as e:
         add_stage(trace, "exception", source="gerfex_entry", error=str(e))
-        trace_path = save_trace(trace)
+        try:
+            save_trace(trace)
+        except Exception:
+            pass
 
         return json.dumps({
             "ok": False,
             "reply": "خطأ داخلي في Gerfex Standalone: " + str(e),
             "storage": str(APP_HOME),
-            "trace_id": trace.get("trace_id"),
-            "trace_path": trace_path
+            "trace_id": trace.get("trace_id")
         }, ensure_ascii=False)
+
+def learning_status():
+    try:
+        from GerfexIntegratedV1.internal_intelligence.learning.learning_manager import (
+            pending_lessons,
+            pending_improvements,
+            approved_knowledge,
+            approved_improvements,
+        )
+
+        return json.dumps({
+            "ok": True,
+            "pending_lessons": pending_lessons(),
+            "pending_improvements": pending_improvements(),
+            "approved_knowledge": approved_knowledge(),
+            "approved_improvements": approved_improvements(),
+        }, ensure_ascii=False)
+
+    except Exception as e:
+        return json.dumps({
+            "ok": False,
+            "error": str(e)
+        }, ensure_ascii=False)
+
+
+def approve_latest_lesson_entry():
+    try:
+        from GerfexIntegratedV1.internal_intelligence.learning.learning_manager import approve_latest_lesson
+        return json.dumps(approve_latest_lesson(), ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)}, ensure_ascii=False)
+
+
+def approve_latest_improvement_entry():
+    try:
+        from GerfexIntegratedV1.internal_intelligence.learning.learning_manager import approve_latest_improvement
+        return json.dumps(approve_latest_improvement(), ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)}, ensure_ascii=False)

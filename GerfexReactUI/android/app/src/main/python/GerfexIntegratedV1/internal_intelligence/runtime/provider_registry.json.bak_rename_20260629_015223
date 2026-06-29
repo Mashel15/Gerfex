@@ -1,0 +1,10 @@
+{
+  "active_provider": "gma",
+  "providers": {
+    "gma": {
+      "module": "internal_intelligence.provider.queen_provider",
+      "class": "GMAProvider",
+      "enabled": true
+    }
+  }
+}

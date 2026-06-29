@@ -24,6 +24,11 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.android.AndroidPlatform;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.io.FileOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -34,11 +39,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 @CapacitorPlugin(name = "Gerfex")
 public class GerfexPlugin extends Plugin {
-
-    private String mapPackage(String name) {
+private String mapPackage(String name) {
         if (name == null) return "";
         String p = name.toLowerCase();
         if (p.equals("chrome")) return "com.android.chrome";
@@ -164,15 +170,15 @@ public class GerfexPlugin extends Plugin {
     }
 
     private File executionTraceFile() {
-        File runtimeDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
-        runtimeDir.mkdirs();
-        return new File(runtimeDir, "execution_trace.jsonl");
+        File traceDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/development/trace");
+        traceDir.mkdirs();
+        return new File(traceDir, "execution_trace.jsonl");
     }
 
     private File executionPathFile() {
-        File runtimeDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
-        runtimeDir.mkdirs();
-        return new File(runtimeDir, "execution_path.jsonl");
+        File traceDir = new File(getContext().getFilesDir(), "gerfex_runtime_data/development/trace");
+        traceDir.mkdirs();
+        return new File(traceDir, "execution_path.jsonl");
     }
 
     private void appendPluginTrace(String traceId, JSONObject action, String stageName, boolean ok) {
@@ -388,6 +394,8 @@ public class GerfexPlugin extends Plugin {
     @PluginMethod
     public void think(PluginCall call) {
         String message = call.getString("message", "");
+        JSObject modelStateObj = call.getObject("model_state", new JSObject());
+        String modelStateJson = modelStateObj.toString();
 
         new Thread(() -> {
             JSObject ret = new JSObject();
@@ -402,7 +410,7 @@ public class GerfexPlugin extends Plugin {
 
                 Python py = Python.getInstance();
                 PyObject entry = py.getModule("gerfex_entry");
-                String result = entry.callAttr("think", message).toString();
+                String result = entry.callAttr("think", message, modelStateJson).toString();
 
                 int nativeCount = executeFromResult(result);
 
@@ -435,6 +443,283 @@ public class GerfexPlugin extends Plugin {
                 call.resolve(ret);
             }
         }).start();
+    }
+
+
+    @PluginMethod
+    public void saveExternalModels(PluginCall call) {
+        JSObject ret = new JSObject();
+        try {
+            String registryJson = call.getString("registry", "{\"version\":\"EXTERNAL_MODELS_REGISTRY_V1\",\"mode\":\"advisor_only\",\"active\":[],\"providers\":[]}");
+            File dir = new File(getContext().getFilesDir(), "gerfex_runtime_data/external_models");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            File file = new File(dir, "registry.json");
+            FileWriter writer = new FileWriter(file, false);
+            writer.write(registryJson);
+            writer.close();
+
+            ret.put("ok", true);
+            ret.put("path", file.getAbsolutePath());
+            call.resolve(ret);
+        } catch (Exception e) {
+            ret.put("ok", false);
+            ret.put("error", e.toString());
+            call.resolve(ret);
+        }
+    }
+
+
+    @PluginMethod
+    public void testExternalModel(PluginCall call) {
+        String name = call.getString("name", "");
+        new Thread(() -> {
+            JSObject ret = new JSObject();
+            try {
+                if (!Python.isStarted()) {
+                    Python.start(new AndroidPlatform(getContext()));
+                }
+
+                File file = new File(getContext().getFilesDir(), "gerfex_runtime_data/external_models/registry.json");
+                StringBuilder sb = new StringBuilder();
+
+                if (file.exists()) {
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+                    br.close();
+                }
+
+                Python py = Python.getInstance();
+                PyObject gateway = py.getModule("GerfexIntegratedV1.external_models.model_gateway");
+                String json = gateway.callAttr("test_model_connection_from_registry_json", name, sb.toString()).toString();
+
+                ret.put("ok", true);
+                ret.put("registry_path", file.getAbsolutePath());
+                ret.put("registry_exists", file.exists());
+                ret.put("registry_length", sb.length());
+                ret.put("result", json);
+                call.resolve(ret);
+            } catch (Exception e) {
+                ret.put("ok", false);
+                ret.put("error", e.toString());
+                call.resolve(ret);
+            }
+        }).start();
+    }
+
+    @PluginMethod
+    public void readExternalModels(PluginCall call) {
+        JSObject ret = new JSObject();
+        try {
+            File file = new File(getContext().getFilesDir(), "gerfex_runtime_data/external_models/registry.json");
+            if (!file.exists()) {
+                ret.put("ok", true);
+                ret.put("content", "{\"version\":\"EXTERNAL_MODELS_REGISTRY_V1\",\"mode\":\"advisor_only\",\"active\":[],\"providers\":[]}");
+                ret.put("path", file.getAbsolutePath());
+                call.resolve(ret);
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            br.close();
+
+            ret.put("ok", true);
+            ret.put("content", sb.toString());
+            ret.put("path", file.getAbsolutePath());
+            call.resolve(ret);
+        } catch (Exception e) {
+            ret.put("ok", false);
+            ret.put("error", e.toString());
+            call.resolve(ret);
+        }
+    }
+
+
+    private String callWorkshopJson(String moduleName, String functionName, Object... args) {
+        try {
+            if (!Python.isStarted()) {
+                Python.start(new AndroidPlatform(getContext()));
+            }
+
+            Python py = Python.getInstance();
+            PyObject mod = py.getModule(moduleName);
+            PyObject result = mod.callAttr(functionName, args);
+            return py.getModule("json").callAttr("dumps", result).toString();
+
+        } catch (Exception e) {
+            try {
+                JSONObject err = new JSONObject();
+                err.put("ok", false);
+                err.put("error", e.toString());
+                return err.toString();
+            } catch (Exception ignored) {
+                return "{\"ok\":false,\"error\":\"workshop_error\"}";
+            }
+        }
+    }
+
+    @PluginMethod
+    public void openWorkshopItem(PluginCall call) {
+        JSObject ret = new JSObject();
+        String path = call.getString("path", "");
+        String result = callWorkshopJson(
+            "GerfexIntegratedV1.development.workshop.open_item",
+            "open_item",
+            path
+        );
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void saveWorkshopItem(PluginCall call) {
+        JSObject ret = new JSObject();
+        String path = call.getString("path", "");
+        String content = call.getString("content", "");
+        String result = callWorkshopJson(
+            "GerfexIntegratedV1.development.workshop.save_item",
+            "save_item",
+            path,
+            content
+        );
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void deleteWorkshopItem(PluginCall call) {
+        JSObject ret = new JSObject();
+        String path = call.getString("path", "");
+        Integer lineNumber = call.getInt("line_number", -1);
+        Boolean recursive = call.getBoolean("recursive", true);
+
+        String result = callWorkshopJson(
+            "GerfexIntegratedV1.development.workshop.delete_item",
+            "delete_item",
+            path,
+            lineNumber,
+            recursive
+        );
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void runWorkshopTest(PluginCall call) {
+        JSObject ret = new JSObject();
+        String result = callWorkshopJson(
+            "GerfexIntegratedV1.development.workshop.basic_test",
+            "run_basic_test"
+        );
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
+    }
+
+
+
+    private String callGerfexEntryJson(String functionName) {
+        try {
+            if (!Python.isStarted()) {
+                Python.start(new AndroidPlatform(getContext()));
+            }
+
+            Python py = Python.getInstance();
+            PyObject entry = py.getModule("gerfex_entry");
+            return entry.callAttr(functionName).toString();
+
+        } catch (Exception e) {
+            try {
+                JSONObject err = new JSONObject();
+                err.put("ok", false);
+                err.put("error", e.toString());
+                return err.toString();
+            } catch (Exception ignored) {
+                return "{\"ok\":false,\"error\":\"gerfex_entry_call_failed\"}";
+            }
+        }
+    }
+
+
+    private File ensureGmaModelFile() throws Exception {
+        File dir = new File(getContext().getFilesDir(), "GerfexModels");
+        if (!dir.exists()) dir.mkdirs();
+
+        File out = new File(dir, "google_gemma-3-4b-it-Q2_K.gguf");
+        if (out.exists() && out.length() > 1000000L) return out;
+
+        InputStream in = getContext().getAssets().open("GerfexModels/google_gemma-3-4b-it-Q2_K.gguf");
+        OutputStream os = new FileOutputStream(out);
+        byte[] buf = new byte[1024 * 1024];
+        int n;
+        while ((n = in.read(buf)) > 0) os.write(buf, 0, n);
+        os.close();
+        in.close();
+        return out;
+    }
+
+    @PluginMethod
+    public void gmaNativeChat(PluginCall call) {
+        String message = call.getString("message", "");
+        int predictLength = call.getInt("predictLength", 256);
+
+        new Thread(() -> {
+            JSObject ret = new JSObject();
+            try {
+                File model = ensureGmaModelFile();
+                String reply = GmaNativeBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
+
+                ret.put("ok", true);
+                ret.put("engine", "llama.android");
+                ret.put("model_path", model.getAbsolutePath());
+                ret.put("reply", reply);
+                call.resolve(ret);
+            } catch (Exception e) {
+                ret.put("ok", false);
+                ret.put("error", e.toString());
+                call.resolve(ret);
+            }
+        }).start();
+    }
+
+    @PluginMethod
+    public void learningStatus(PluginCall call) {
+        JSObject ret = new JSObject();
+        String result = callGerfexEntryJson("learning_status");
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void approveLatestLesson(PluginCall call) {
+        JSObject ret = new JSObject();
+        String result = callGerfexEntryJson("approve_latest_lesson_entry");
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void approveLatestImprovement(PluginCall call) {
+        JSObject ret = new JSObject();
+        String result = callGerfexEntryJson("approve_latest_improvement_entry");
+        ret.put("ok", true);
+        ret.put("result", result);
+        call.resolve(ret);
     }
 
     @PluginMethod

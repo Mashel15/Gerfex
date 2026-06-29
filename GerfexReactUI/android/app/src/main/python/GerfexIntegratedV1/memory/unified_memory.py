@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from gerfex_android_paths import app_path
+from GerfexIntegratedV1.gerfex_android_paths import app_path
 from datetime import datetime
 
 MEM = app_path("memory", "gerfex_unified_memory.json")

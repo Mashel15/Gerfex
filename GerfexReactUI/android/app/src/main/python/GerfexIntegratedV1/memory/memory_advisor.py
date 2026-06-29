@@ -32,5 +32,5 @@ def advise(goal, memory_recall):
         "recommended_route": best_route,
         "recommended_target": best_target,
         "confidence": confidence,
-        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على Queen"
+        "note": "Memory Advisor لخص الخبرة السابقة بدون ضغط على الذكاء الداخلي"
     }

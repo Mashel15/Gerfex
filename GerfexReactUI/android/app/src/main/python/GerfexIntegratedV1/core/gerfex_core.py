@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from gerfex_android_paths import app_path
+from GerfexIntegratedV1.gerfex_android_paths import app_path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -17,7 +17,8 @@ from brain.brain_manager import decide, remember
 from brain.brain_router import route
 from core.execution_manager import execute
 from learning.learning_manager import learn
-from runtime.execution_trace import add_stage
+from runtime.execution_trace import add_stage, new_trace, save_trace
+from core.secondary_systems import run_secondary_system
 
 
 def clear_queue():
@@ -27,6 +28,9 @@ def clear_queue():
 
 
 def run_goal(goal, trace=None):
+    if trace is None:
+        trace = new_trace(goal)
+
     add_stage(trace, "core_start", source="gerfex_core", goal=goal)
 
     try:
@@ -46,7 +50,7 @@ def run_goal(goal, trace=None):
     routing = route(goal)
     add_stage(trace, "brain_router", source="brain_router", route=routing.get("route"), ok=routing.get("ok"))
 
-    # Multi-step commands must go to Queen first.
+    # Multi-step commands go through Internal Intelligence.
     # Example: "افتح كروم وابحث عن أخبار الذكاء الاصطناعي"
     text = (goal or "").strip()
     multi_step_request = (
@@ -56,10 +60,10 @@ def run_goal(goal, trace=None):
     )
 
     if multi_step_request:
-        routing = {"ok": True, "route": "android", "reason": "multi_step_priority_to_queen"}
-        add_stage(trace, "provider_request", source="gerfex_core", provider="queen", route=routing.get("route"))
+        routing = {"ok": True, "route": "android", "reason": "multi_step_priority_to_internal_intelligence"}
+        add_stage(trace, "provider_request", source="gerfex_core", provider="internal_intelligence", route=routing.get("route"))
         decision = decide(goal)
-        add_stage(trace, "provider_response", source="brain_manager", provider="queen", intent=decision.get("intent"), target=decision.get("target"), ok=decision.get("ok"), reason=decision.get("reason"))
+        add_stage(trace, "provider_response", source="brain_manager", provider="internal_intelligence", intent=decision.get("intent"), target=decision.get("target"), ok=decision.get("ok"), reason=decision.get("reason"))
         decision["route"] = routing
 
         try:
@@ -124,10 +128,24 @@ def run_goal(goal, trace=None):
             "reason": "Brain Router وجّه الطلب إلى التفكير/التخطيط"
         }
         learning = {"ok": True, "mode": "router_cognitive"}
+
+    elif routing.get("route") == "secondary":
+        system_name = routing.get("system") or routing.get("target") or "unknown"
+        execution = run_secondary_system(goal, system_name, trace=trace)
+        decision = {
+            "ok": execution.get("ok", False),
+            "brain": "BrainRouter",
+            "intent": "secondary_system",
+            "target": system_name,
+            "route": routing,
+            "reason": "Brain Router وجّه الطلب إلى نظام ثانوي"
+        }
+        learning = {"ok": True, "mode": "router_secondary"}
+
     else:
-        add_stage(trace, "provider_request", source="gerfex_core", provider="queen", route=routing.get("route"))
+        add_stage(trace, "provider_request", source="gerfex_core", provider="internal_intelligence", route=routing.get("route"))
         decision = decide(goal)
-        add_stage(trace, "provider_response", source="brain_manager", provider="queen", intent=decision.get("intent"), target=decision.get("target"), ok=decision.get("ok"), reason=decision.get("reason"))
+        add_stage(trace, "provider_response", source="brain_manager", provider="internal_intelligence", intent=decision.get("intent"), target=decision.get("target"), ok=decision.get("ok"), reason=decision.get("reason"))
         decision["route"] = routing
 
         try:
@@ -181,6 +199,13 @@ def run_goal(goal, trace=None):
         out["unified_learning"] = {"ok": False, "error": str(e)}
 
     add_stage(trace, "core_end", source="gerfex_core", ok=out.get("ok"))
+    try:
+        save_trace(trace)
+        out["trace_saved"] = True
+        out["trace_id"] = trace.get("trace_id")
+    except Exception as e:
+        out["trace_saved"] = False
+        out["trace_error"] = str(e)
     return out
 
 
