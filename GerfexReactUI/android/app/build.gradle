@@ -4,7 +4,7 @@ apply plugin: 'com.chaquo.python'
 
 android {
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '21'
     }
     namespace = "com.mashel15.gerfex"
     compileSdk = rootProject.ext.compileSdkVersion
