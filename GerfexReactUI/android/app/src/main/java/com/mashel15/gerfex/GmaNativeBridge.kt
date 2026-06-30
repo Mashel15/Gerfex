@@ -13,7 +13,7 @@ object GmaNativeBridge {
             engine.loadModel(modelPath)
             engine.setSystemPrompt("أنت GMA، الذكاء الداخلي الرسمي داخل Gerfex. أجب بالعربية وبشكل مختصر ومفيد.")
             val out = StringBuilder()
-            engine.sendUserPrompt(prompt, predictLength).collect { token ->
+            engine.sendUserPrompt(prompt, predictLength).collect { token: String ->
                 out.append(token)
             }
             out.toString()
