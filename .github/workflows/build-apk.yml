@@ -30,18 +30,7 @@ jobs:
           python3 -c "from pathlib import Path; p=Path('node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java'); s=p.read_text(); s=s.replace('Build.VERSION_CODES.VANILLA_ICE_CREAM','35'); p.write_text(s); print('Patched SystemBars')"
           npm run build
           npx cap sync android
-          python3 - <<'PY2'
-from pathlib import Path
-for f in [
-    Path("android/app/capacitor.build.gradle"),
-    Path("android/capacitor-cordova-android-plugins/build.gradle"),
-]:
-    if f.exists():
-        t = f.read_text()
-        t = t.replace("JavaVersion.VERSION_21", "JavaVersion.VERSION_17")
-        f.write_text(t)
-        print("Patched Java target:", f)
-PY2
+          python3 -c "from pathlib import Path; files=[Path('android/app/capacitor.build.gradle'), Path('android/capacitor-cordova-android-plugins/build.gradle')]; [f.write_text(f.read_text().replace('JavaVersion.VERSION_21','JavaVersion.VERSION_17')) for f in files if f.exists()]; print('Patched Capacitor Java target to 17')"
 
       - name: Build APK
         run: |
