@@ -30,6 +30,19 @@ jobs:
           python3 -c "from pathlib import Path; p=Path('node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java'); s=p.read_text(); s=s.replace('Build.VERSION_CODES.VANILLA_ICE_CREAM','35'); p.write_text(s); print('Patched SystemBars')"
           npm run build
           npx cap sync android
+
+      - name: Download GMA model asset
+        run: |
+          mkdir -p GerfexReactUI/android/app/src/main/assets/GerfexModels
+          gh release download gma-q2-model-v1 \
+            --repo Mashel15/Gerfex \
+            --pattern "google_gemma-3-4b-it-Q2_K.gguf" \
+            --dir GerfexReactUI/android/app/src/main/assets/GerfexModels
+          ls -lh GerfexReactUI/android/app/src/main/assets/GerfexModels
+
+      - name: Patch Capacitor Java target
+        run: |
+          cd GerfexReactUI
           python3 -c "from pathlib import Path; files=[Path('android/app/capacitor.build.gradle'), Path('android/capacitor-cordova-android-plugins/build.gradle')]; [f.write_text(f.read_text().replace('JavaVersion.VERSION_21','JavaVersion.VERSION_17')) for f in files if f.exists()]; print('Patched Capacitor Java target to 17')"
 
       - name: Build APK
