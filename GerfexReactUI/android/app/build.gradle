@@ -4,9 +4,13 @@ apply plugin: 'com.chaquo.python'
 
 android {
     kotlinOptions {
-        jvmTarget = '21'
+        jvmTarget = '17'
     }
     namespace = "com.mashel15.gerfex"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
         ndk {
