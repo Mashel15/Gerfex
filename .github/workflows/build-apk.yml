@@ -32,6 +32,8 @@ jobs:
           npx cap sync android
 
       - name: Download GMA model asset
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p GerfexReactUI/android/app/src/main/assets/GerfexModels
           gh release download gma-q2-model-v1 \
