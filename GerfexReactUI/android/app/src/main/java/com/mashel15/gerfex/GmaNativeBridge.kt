@@ -10,14 +10,9 @@ object GmaNativeBridge {
     @JvmStatic
     fun generateBlocking(context: Context, modelPath: String, prompt: String, predictLength: Int = 256): String {
         return runBlocking {
-            val modelFile = File(context.filesDir, modelPath)
+            val modelFile = File(modelPath)
             if (!modelFile.exists()) {
-                modelFile.parentFile?.mkdirs()
-                context.assets.open(modelPath).use { input ->
-                    modelFile.outputStream().use { output ->
-                        input.copyTo(output)
-                    }
-                }
+                throw java.io.FileNotFoundException(modelFile.absolutePath)
             }
 
             val engine = AiChat.getInferenceEngine(context)
