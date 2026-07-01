@@ -674,25 +674,61 @@ private String mapPackage(String name) {
     @PluginMethod
     public void gmaNativeChat(PluginCall call) {
         String message = call.getString("message", "");
-        int predictLength = call.getInt("predictLength", 256);
+        int predictLength = call.getInt("predictLength", 128);
 
-        new Thread(() -> {
+        final java.util.concurrent.atomic.AtomicBoolean finished = new java.util.concurrent.atomic.AtomicBoolean(false);
+        final String[] stage = new String[]{"chat_received"};
+
+        Thread worker = new Thread(() -> {
             JSObject ret = new JSObject();
             try {
+                stage[0] = "copy_check";
                 File model = ensureGmaModelFile();
+
+                stage[0] = "copy_done";
+                long modelSize = model.length();
+
+                stage[0] = "bridge_call_started";
                 String reply = GmaNativeBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
 
-                ret.put("ok", true);
-                ret.put("engine", "llama.android");
-                ret.put("model_path", model.getAbsolutePath());
-                ret.put("reply", reply);
-                call.resolve(ret);
+                if (finished.compareAndSet(false, true)) {
+                    ret.put("ok", true);
+                    ret.put("engine", "llama.android");
+                    ret.put("stage", "done");
+                    ret.put("bridge_stage", GmaNativeBridge.getLastStage());
+                    ret.put("model_path", model.getAbsolutePath());
+                    ret.put("model_size", modelSize);
+                    ret.put("reply", reply);
+                    call.resolve(ret);
+                }
             } catch (Exception e) {
-                ret.put("ok", false);
-                ret.put("error", e.toString());
-                call.resolve(ret);
+                if (finished.compareAndSet(false, true)) {
+                    ret.put("ok", false);
+                    ret.put("stage", stage[0]);
+                    ret.put("bridge_stage", GmaNativeBridge.getLastStage());
+                    ret.put("error", e.toString());
+                    call.resolve(ret);
+                }
             }
-        }).start();
+        });
+
+        Thread watchdog = new Thread(() -> {
+            try {
+                Thread.sleep(180000);
+                if (finished.compareAndSet(false, true)) {
+                    JSObject ret = new JSObject();
+                    ret.put("ok", false);
+                    ret.put("error", "GMA_TIMEOUT_180_SECONDS");
+                    ret.put("stage", stage[0]);
+                    ret.put("bridge_stage", GmaNativeBridge.getLastStage());
+                    ret.put("reply", "GMA_TIMEOUT_180_SECONDS | stage=" + stage[0] + " | bridge_stage=" + GmaNativeBridge.getLastStage());
+                    call.resolve(ret);
+                }
+            } catch (Exception ignored) {}
+        });
+
+        worker.start();
+        watchdog.start();
     }
 
     @PluginMethod
