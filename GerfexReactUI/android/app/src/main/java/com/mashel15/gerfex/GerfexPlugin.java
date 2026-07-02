@@ -692,14 +692,14 @@ private String mapPackage(String name) {
 
                 stage[0] = "bridge_call_started";
                 android.util.Log.i("GMA_DEBUG", "bridge_call_started model=" + model.getAbsolutePath() + " size=" + modelSize);
-                String reply = GmaNativeBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
+                String reply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
                 android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
 
                 if (finished.compareAndSet(false, true)) {
                     ret.put("ok", true);
                     ret.put("engine", "llama.android");
                     ret.put("stage", "done");
-                    ret.put("bridge_stage", GmaNativeBridge.getLastStage());
+                    ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
                     ret.put("model_path", model.getAbsolutePath());
                     ret.put("model_size", modelSize);
                     ret.put("reply", reply);
@@ -709,7 +709,7 @@ private String mapPackage(String name) {
                 if (finished.compareAndSet(false, true)) {
                     ret.put("ok", false);
                     ret.put("stage", stage[0]);
-                    ret.put("bridge_stage", GmaNativeBridge.getLastStage());
+                    ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
                     ret.put("error", e.toString());
                     ret.put("error_class", e.getClass().getName());
                     ret.put("error_message", e.getMessage());
@@ -723,7 +723,7 @@ private String mapPackage(String name) {
                     e.printStackTrace(pw);
                     pw.flush();
                     ret.put("stacktrace", sw.toString());
-                    android.util.Log.e("GMA_DEBUG", "gmaNativeChat failed stage=" + stage[0] + " bridge=" + GmaNativeBridge.getLastStage(), e);
+                    android.util.Log.e("GMA_DEBUG", "gmaNativeChat failed stage=" + stage[0] + " bridge=" + GmaLlamaBridge.getLastStage(), e);
 
                     call.resolve(ret);
                 }
@@ -738,8 +738,8 @@ private String mapPackage(String name) {
                     ret.put("ok", false);
                     ret.put("error", "GMA_TIMEOUT_180_SECONDS");
                     ret.put("stage", stage[0]);
-                    ret.put("bridge_stage", GmaNativeBridge.getLastStage());
-                    ret.put("reply", "GMA_TIMEOUT_180_SECONDS | stage=" + stage[0] + " | bridge_stage=" + GmaNativeBridge.getLastStage());
+                    ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
+                    ret.put("reply", "GMA_TIMEOUT_180_SECONDS | stage=" + stage[0] + " | bridge_stage=" + GmaLlamaBridge.getLastStage());
                     call.resolve(ret);
                 }
             } catch (Exception ignored) {}
