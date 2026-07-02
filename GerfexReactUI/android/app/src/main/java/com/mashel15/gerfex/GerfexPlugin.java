@@ -701,12 +701,13 @@ private String mapPackage(String name) {
                     ret.put("reply", reply);
                     call.resolve(ret);
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 if (finished.compareAndSet(false, true)) {
                     ret.put("ok", false);
                     ret.put("stage", stage[0]);
                     ret.put("bridge_stage", GmaNativeBridge.getLastStage());
                     ret.put("error", e.toString());
+                    ret.put("error_class", e.getClass().getName());
                     call.resolve(ret);
                 }
             }
