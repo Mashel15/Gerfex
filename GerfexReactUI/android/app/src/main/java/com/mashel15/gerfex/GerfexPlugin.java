@@ -681,15 +681,19 @@ private String mapPackage(String name) {
 
         Thread worker = new Thread(() -> {
             JSObject ret = new JSObject();
+            File model = null;
             try {
                 stage[0] = "copy_check";
-                File model = ensureGmaModelFile();
+                android.util.Log.i("GMA_DEBUG", "gmaNativeChat start message_len=" + message.length());
+                model = ensureGmaModelFile();
 
                 stage[0] = "copy_done";
                 long modelSize = model.length();
 
                 stage[0] = "bridge_call_started";
+                android.util.Log.i("GMA_DEBUG", "bridge_call_started model=" + model.getAbsolutePath() + " size=" + modelSize);
                 String reply = GmaNativeBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
+                android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
 
                 if (finished.compareAndSet(false, true)) {
                     ret.put("ok", true);
@@ -708,6 +712,19 @@ private String mapPackage(String name) {
                     ret.put("bridge_stage", GmaNativeBridge.getLastStage());
                     ret.put("error", e.toString());
                     ret.put("error_class", e.getClass().getName());
+                    ret.put("error_message", e.getMessage());
+                    ret.put("abi", android.os.Build.SUPPORTED_ABIS != null ? java.util.Arrays.toString(android.os.Build.SUPPORTED_ABIS) : "null");
+                    ret.put("cpu_abi", android.os.Build.CPU_ABI);
+                    ret.put("model_path", model != null ? model.getAbsolutePath() : "null");
+                    ret.put("model_size", model != null ? model.length() : -1);
+
+                    java.io.StringWriter sw = new java.io.StringWriter();
+                    java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+                    e.printStackTrace(pw);
+                    pw.flush();
+                    ret.put("stacktrace", sw.toString());
+                    android.util.Log.e("GMA_DEBUG", "gmaNativeChat failed stage=" + stage[0] + " bridge=" + GmaNativeBridge.getLastStage(), e);
+
                     call.resolve(ret);
                 }
             }
