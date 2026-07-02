@@ -10,6 +10,44 @@ object GmaNativeBridge {
     @Volatile
     private var lastStage: String = "idle"
 
+    @Volatile
+    private var backendInitTried: Boolean = false
+
+    private fun tryLoadBackend(lib: String): Boolean {
+        return try {
+            System.loadLibrary(lib)
+            true
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    private fun ensureNativeBackends() {
+        if (backendInitTried) return
+        backendInitTried = true
+        setStage("backend_load_started")
+
+        val loaded = linkedMapOf<String, Boolean>()
+        for (name in listOf(
+            "omp",
+            "ggml-base",
+            "ggml",
+            "ggml-cpu-android_armv8.0_1",
+            "ggml-cpu-android_armv8.2_1",
+            "ggml-cpu-android_armv8.2_2",
+            "llama",
+            "llama-common",
+            "ai-chat"
+        )) {
+            loaded[name] = tryLoadBackend(name)
+        }
+
+        setStage("backend_load_result_" + loaded.entries.joinToString(",") { it.key + "=" + it.value })
+        if (!loaded.values.any { it }) {
+            throw IllegalStateException("No native backend library could be loaded: " + loaded)
+        }
+    }
+
     @JvmStatic
     fun getLastStage(): String = lastStage
 
@@ -27,6 +65,8 @@ object GmaNativeBridge {
                     setStage("bridge_model_missing")
                     throw java.io.FileNotFoundException(modelFile.absolutePath)
                 }
+
+                ensureNativeBackends()
 
                 setStage("load_started")
                 val engine = AiChat.getInferenceEngine(context)
