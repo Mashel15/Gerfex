@@ -1,6 +1,7 @@
 package com.mashel15.gerfex
 
 import android.content.Context
+import android.util.Log
 import java.io.File
 
 object GmaLlamaBridge {
@@ -17,32 +18,84 @@ object GmaLlamaBridge {
         lastStage = stage
     }
 
-    private fun loadNativeOnce() {
+
+    private fun loadNativeOnce(context: Context) {
         if (nativeLoaded) return
         setStage("llama_jni_load_started")
-        for (lib in listOf(
-            "omp",
-            "ggml-base",
-            "ggml",
-            "ggml-cpu-android_armv8.0_1",
-            "ggml-cpu-android_armv8.2_1",
-            "ggml-cpu-android_armv8.2_2",
-            "ggml-cpu-android_armv8.6_1",
-            "ggml-cpu-android_armv9.0_1",
-            "ggml-cpu-android_armv9.2_1",
-            "ggml-cpu-android_armv9.2_2",
-            "llama",
-            "llama-common"
-        )) {
-            try {
-                System.loadLibrary(lib)
-            } catch (_: Throwable) {
+
+        val libDir = context.applicationInfo.nativeLibraryDir ?: ""
+        Log.i("GMA_DEBUG", "nativeLibraryDir=$libDir")
+
+        fun tryLoadAbsolute(libFileName: String): Boolean {
+            return try {
+                val f = File(libDir, libFileName)
+                if (!f.exists()) {
+                    Log.w("GMA_DEBUG", "native lib missing: " + f.absolutePath)
+                    false
+                } else {
+                    Log.i("GMA_DEBUG", "loading native lib: " + f.absolutePath)
+                    System.load(f.absolutePath)
+                    Log.i("GMA_DEBUG", "loaded native lib: " + f.name)
+                    true
+                }
+            } catch (t: Throwable) {
+                Log.e("GMA_DEBUG", "failed loading native lib: $libFileName", t)
+                false
             }
         }
-        System.loadLibrary("gerfex_llama_jni")
+
+        var coreLoaded = 0
+        if (tryLoadAbsolute("libomp.so")) coreLoaded++
+        if (tryLoadAbsolute("libggml-base.so")) coreLoaded++
+        if (tryLoadAbsolute("libggml.so")) coreLoaded++
+        if (tryLoadAbsolute("libllama.so")) coreLoaded++
+        if (tryLoadAbsolute("libllama-common.so")) coreLoaded++
+
+        Log.i("GMA_DEBUG", "core native libs loaded count=" + coreLoaded)
+
+        var backendLoaded = 0
+        try {
+            val dir = File(libDir)
+            val cpuLibs = dir.listFiles()
+                ?.filter { it.isFile && it.name.startsWith("libggml-cpu-") && it.name.endsWith(".so") }
+                ?.sortedBy { it.name }
+                ?: emptyList()
+
+            Log.i("GMA_DEBUG", "detected ggml cpu libs count=" + cpuLibs.size)
+            for (f in cpuLibs) {
+                try {
+                    Log.i("GMA_DEBUG", "loading detected cpu backend: " + f.absolutePath)
+                    System.load(f.absolutePath)
+                    Log.i("GMA_DEBUG", "loaded detected cpu backend: " + f.name)
+                    backendLoaded++
+                } catch (t: Throwable) {
+                    Log.e("GMA_DEBUG", "failed detected cpu backend: " + f.name, t)
+                }
+            }
+        } catch (t: Throwable) {
+            Log.e("GMA_DEBUG", "failed while scanning nativeLibraryDir", t)
+        }
+
+        val jniLoaded = tryLoadAbsolute("libgerfex_llama_jni.so")
+        Log.i("GMA_DEBUG", "jniLoaded=" + jniLoaded + " backendLoaded=" + backendLoaded + " coreLoaded=" + coreLoaded)
+
+        if (coreLoaded < 5) {
+            setStage("llama_error_core_libs_incomplete")
+            throw IllegalStateException("GMA native core libs incomplete. loaded=" + coreLoaded)
+        }
+        if (backendLoaded < 1) {
+            setStage("llama_error_no_cpu_backend_loaded")
+            throw IllegalStateException("GMA no ggml cpu backend loaded from nativeLibraryDir=" + libDir)
+        }
+        if (!jniLoaded) {
+            setStage("llama_error_jni_not_loaded")
+            throw IllegalStateException("GMA JNI bridge failed to load")
+        }
+
         nativeLoaded = true
         setStage("llama_jni_loaded")
     }
+
 
     @JvmStatic
     fun generateBlocking(context: Context, modelPath: String, prompt: String, predictLength: Int = 256): String {
@@ -55,7 +108,7 @@ object GmaLlamaBridge {
                 throw java.io.FileNotFoundException(modelFile.absolutePath)
             }
 
-            loadNativeOnce()
+            loadNativeOnce(context)
 
             setStage("llama_native_generate_started")
 
@@ -64,6 +117,7 @@ object GmaLlamaBridge {
 
             val reply = nativeGenerate(
                 modelFile.absolutePath,
+                context.applicationInfo.nativeLibraryDir ?: "",
                 systemPrompt,
                 prompt,
                 predictLength
@@ -80,6 +134,7 @@ object GmaLlamaBridge {
     @JvmStatic
     private external fun nativeGenerate(
         modelPath: String,
+        nativeLibDir: String,
         systemPrompt: String,
         userPrompt: String,
         predictLength: Int

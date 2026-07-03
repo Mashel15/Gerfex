@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <android/log.h>
+#include <filesystem>
 
 #include "llama.h"
 #include "ggml-backend.h"
@@ -23,23 +24,19 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         JNIEnv *env,
         jobject,
         jstring modelPath,
+        jstring nativeLibDir,
         jstring systemPrompt,
         jstring userPrompt,
         jint predictLength
 ) {
     std::string model_path = jstr(env, modelPath);
+    std::string native_lib_dir = jstr(env, nativeLibDir);
     std::string sys = jstr(env, systemPrompt);
     std::string user = jstr(env, userPrompt);
 
     LOGI("nativeGenerate start model=%s predict=%d", model_path.c_str(), (int) predictLength);
 
     try {
-        ggml_backend_load_all();
-        LOGI("ggml_backend_load_all done");
-
-        llama_backend_init();
-        LOGI("llama_backend_init done");
-
         llama_log_set([](enum ggml_log_level level, const char * text, void * user_data) {
             if (!text) return;
             switch (level) {
@@ -57,6 +54,40 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     break;
             }
         }, nullptr);
+
+        ggml_backend_load_all();
+        LOGI("ggml_backend_load_all done");
+
+        int explicit_backend_loaded = 0;
+        try {
+            if (!native_lib_dir.empty()) {
+                for (const auto & entry : std::filesystem::directory_iterator(native_lib_dir)) {
+                    if (!entry.is_regular_file()) continue;
+                    auto name = entry.path().filename().string();
+                    if (name.rfind("libggml-cpu-", 0) == 0 && entry.path().extension() == ".so") {
+                        auto full = entry.path().string();
+                        LOGI("trying ggml_backend_load: %s", full.c_str());
+                        auto * reg = ggml_backend_load(full.c_str());
+                        if (reg != nullptr) {
+                            explicit_backend_loaded++;
+                            LOGI("ggml_backend_load success: %s", full.c_str());
+                        } else {
+                            LOGE("ggml_backend_load returned null: %s", full.c_str());
+                        }
+                    }
+                }
+            }
+        } catch (...) {
+            LOGE("filesystem scan for ggml backends failed");
+        }
+        LOGI("explicit ggml backend loaded count=%d", explicit_backend_loaded);
+        if (explicit_backend_loaded < 1) {
+            LOGE("no ggml backend registered inside JNI");
+            return env->NewStringUTF("GMA_LLAMA_ERROR: no_backend_loaded");
+        }
+
+        llama_backend_init();
+        LOGI("llama_backend_init done");
 
         llama_model_params mparams = llama_model_default_params();
         mparams.use_mmap = true;
