@@ -29,7 +29,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -655,20 +655,80 @@ private String mapPackage(String name) {
 
 
     private File ensureGmaModelFile() throws Exception {
+        final String assetPath = "GerfexModels/google_gemma-3-4b-it-Q2_K.gguf";
+
         File dir = new File(getContext().getFilesDir(), "GerfexModels");
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists() && !dir.mkdirs() && !dir.exists()) {
+            throw new IOException("Failed to create GerfexModels dir: " + dir.getAbsolutePath());
+        }
 
         File out = new File(dir, "google_gemma-3-4b-it-Q2_K.gguf");
-        if (out.exists() && out.length() > 1000000L) return out;
 
-        InputStream in = getContext().getAssets().open("GerfexModels/google_gemma-3-4b-it-Q2_K.gguf");
-        OutputStream os = new FileOutputStream(out);
-        byte[] buf = new byte[1024 * 1024];
-        int n;
-        while ((n = in.read(buf)) > 0) os.write(buf, 0, n);
-        os.close();
-        in.close();
-        return out;
+        android.content.res.AssetFileDescriptor afd = null;
+        long assetSize = 1729028512L;
+        try {
+            afd = getContext().getAssets().openFd(assetPath);
+            long detectedSize = afd.getLength();
+            if (detectedSize > 0L) assetSize = detectedSize;
+        } catch (Exception ignored) {
+            android.util.Log.w("GMA_DEBUG", "GMA asset openFd failed; using expected assetSize=" + assetSize);
+        } finally {
+            if (afd != null) {
+                try { afd.close(); } catch (Exception ignored) {}
+            }
+        }
+
+        if (out.exists()) {
+            long existing = out.length();
+            if (assetSize > 0L && existing == assetSize) {
+                android.util.Log.i("GMA_DEBUG", "GMA model already present size=" + existing);
+                return out;
+            }
+            android.util.Log.w("GMA_DEBUG", "GMA model invalid/incomplete, deleting old copy. existing=" + existing + " asset=" + assetSize);
+            if (!out.delete()) {
+                throw new IOException("Failed to delete invalid model file: " + out.getAbsolutePath() + " size=" + existing);
+            }
+        }
+
+        android.util.Log.i("GMA_DEBUG", "Copying GMA model from assets to " + out.getAbsolutePath() + " assetSize=" + assetSize);
+
+        InputStream in = null;
+        OutputStream os = null;
+        try {
+            in = getContext().getAssets().open(assetPath);
+            os = new FileOutputStream(out, false);
+            byte[] buf = new byte[1024 * 1024];
+            int n;
+            long written = 0L;
+            while ((n = in.read(buf)) > 0) {
+                os.write(buf, 0, n);
+                written += n;
+            }
+            os.flush();
+            try {
+                if (os instanceof FileOutputStream) {
+                    ((FileOutputStream) os).getFD().sync();
+                }
+            } catch (Exception ignored) {}
+
+            long finalSize = out.length();
+            android.util.Log.i("GMA_DEBUG", "GMA model copy finished written=" + written + " finalSize=" + finalSize + " assetSize=" + assetSize);
+
+            if (assetSize > 0L && finalSize != assetSize) {
+                throw new IOException("Copied GGUF size mismatch. final=" + finalSize + " asset=" + assetSize);
+            }
+            if (finalSize < 100000000L) {
+                throw new IOException("Copied GGUF unexpectedly too small: " + finalSize);
+            }
+            return out;
+        } finally {
+            if (os != null) {
+                try { os.close(); } catch (Exception ignored) {}
+            }
+            if (in != null) {
+                try { in.close(); } catch (Exception ignored) {}
+            }
+        }
     }
 
     @PluginMethod
