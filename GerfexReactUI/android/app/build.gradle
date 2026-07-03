@@ -3,6 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.chaquo.python'
 
 android {
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
     kotlinOptions {
         jvmTarget = '17'
     }
