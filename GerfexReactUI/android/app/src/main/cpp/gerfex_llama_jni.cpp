@@ -40,6 +40,24 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         llama_backend_init();
         LOGI("llama_backend_init done");
 
+        llama_log_set([](enum ggml_log_level level, const char * text, void * user_data) {
+            if (!text) return;
+            switch (level) {
+                case GGML_LOG_LEVEL_ERROR:
+                    __android_log_print(ANDROID_LOG_ERROR, "GMA_LLAMA_LIB", "%s", text);
+                    break;
+                case GGML_LOG_LEVEL_WARN:
+                    __android_log_print(ANDROID_LOG_WARN, "GMA_LLAMA_LIB", "%s", text);
+                    break;
+                case GGML_LOG_LEVEL_INFO:
+                    __android_log_print(ANDROID_LOG_INFO, "GMA_LLAMA_LIB", "%s", text);
+                    break;
+                default:
+                    __android_log_print(ANDROID_LOG_DEBUG, "GMA_LLAMA_LIB", "%s", text);
+                    break;
+            }
+        }, nullptr);
+
         llama_model_params mparams = llama_model_default_params();
         mparams.use_mmap = true;
         mparams.use_mlock = false;

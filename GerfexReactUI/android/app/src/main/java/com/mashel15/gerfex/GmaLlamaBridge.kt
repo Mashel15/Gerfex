@@ -20,7 +20,20 @@ object GmaLlamaBridge {
     private fun loadNativeOnce() {
         if (nativeLoaded) return
         setStage("llama_jni_load_started")
-        for (lib in listOf("omp", "ggml-base", "ggml", "llama")) {
+        for (lib in listOf(
+            "omp",
+            "ggml-base",
+            "ggml",
+            "ggml-cpu-android_armv8.0_1",
+            "ggml-cpu-android_armv8.2_1",
+            "ggml-cpu-android_armv8.2_2",
+            "ggml-cpu-android_armv8.6_1",
+            "ggml-cpu-android_armv9.0_1",
+            "ggml-cpu-android_armv9.2_1",
+            "ggml-cpu-android_armv9.2_2",
+            "llama",
+            "llama-common"
+        )) {
             try {
                 System.loadLibrary(lib)
             } catch (_: Throwable) {
