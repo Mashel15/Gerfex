@@ -25,11 +25,23 @@ async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
 
   if (route !== "python_core" && modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
     const nativeGma = await GerfexNative.gmaNativeChat({ message: prompt, predictLength: 256 });
+
+    if (nativeGma?.ok === false) {
+      const errorText = nativeGma?.error_code || nativeGma?.error || "GMA_NATIVE_ERROR";
+      return {
+        ok: false,
+        reply: "خطأ في GMA Native: " + errorText,
+        speaker: "Gerfex",
+        replies: [{ speaker: "Gerfex", content: "خطأ في GMA Native: " + errorText }],
+        raw: nativeGma
+      };
+    }
+
     return {
       ok: !!nativeGma?.ok,
-      reply: nativeGma?.reply || nativeGma?.error || "لا يوجد رد من GMA.",
+      reply: nativeGma?.reply || "لا يوجد رد من GMA.",
       speaker: "GMA",
-      replies: [{ speaker: "GMA", content: nativeGma?.reply || nativeGma?.error || "لا يوجد رد من GMA." }],
+      replies: [{ speaker: "GMA", content: nativeGma?.reply || "لا يوجد رد من GMA." }],
       raw: nativeGma
     };
   }

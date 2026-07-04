@@ -755,14 +755,41 @@ private String mapPackage(String name) {
                 String reply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
                 android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
 
+                String replyText = reply == null ? "" : reply.trim();
+                String errorCode = null;
+
+                if (replyText.length() == 0) {
+                    errorCode = "GMA_LLAMA_EMPTY_REPLY";
+                } else if (replyText.contains("GMA_LLAMA_ERROR")) {
+                    errorCode = "GMA_LLAMA_ERROR";
+                } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
+                    errorCode = "GMA_LLAMA_EMPTY_REPLY";
+                } else if (replyText.contains("no_backend_loaded")) {
+                    errorCode = "no_backend_loaded";
+                } else if (replyText.contains("model_load_null")) {
+                    errorCode = "model_load_null";
+                } else if (replyText.contains("context_null")) {
+                    errorCode = "context_null";
+                }
+
                 if (finished.compareAndSet(false, true)) {
-                    ret.put("ok", true);
                     ret.put("engine", "llama.android");
-                    ret.put("stage", "done");
                     ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
                     ret.put("model_path", model.getAbsolutePath());
                     ret.put("model_size", modelSize);
-                    ret.put("reply", reply);
+
+                    if (errorCode != null) {
+                        ret.put("ok", false);
+                        ret.put("stage", "native_reply_error");
+                        ret.put("error_code", errorCode);
+                        ret.put("error", replyText);
+                        ret.put("reply", "");
+                    } else {
+                        ret.put("ok", true);
+                        ret.put("stage", "done");
+                        ret.put("reply", reply);
+                    }
+
                     call.resolve(ret);
                 }
             } catch (Throwable e) {
