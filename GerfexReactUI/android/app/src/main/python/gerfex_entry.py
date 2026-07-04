@@ -127,6 +127,80 @@ def think(message, model_state_json=None):
             "trace_id": trace.get("trace_id")
         }, ensure_ascii=False)
 
+
+def think_main(message, model_state_json=None):
+    """Main screen entry. User is talking to Gerfex."""
+    trace = new_trace(message)
+    add_stage(trace, "main_surface_received", source="gerfex_entry", goal=message)
+
+    try:
+        try:
+            model_state = json.loads(model_state_json or "{}") if isinstance(model_state_json, str) else (model_state_json or {})
+        except Exception:
+            model_state = {}
+
+        from GerfexIntegratedV1.surfaces.main_surface import think_main_surface
+
+        result = think_main_surface(message, model_state=model_state, trace=trace)
+        add_stage(trace, "main_surface_done", source="gerfex_entry", ok=result.get("ok"), path=result.get("path"))
+        save_trace(trace)
+
+        return json.dumps({
+            "ok": result.get("ok", True),
+            "speaker": "Gerfex",
+            "reply": result.get("reply", "تم تنفيذ الطلب داخل Gerfex."),
+            "surface": "main",
+            "path": result.get("path"),
+            "route_reason": result.get("route_reason"),
+            "storage": str(APP_HOME),
+            "trace_id": trace.get("trace_id"),
+            "raw": result.get("raw")
+        }, ensure_ascii=False)
+
+    except Exception as e:
+        add_stage(trace, "main_surface_exception", source="gerfex_entry", error=str(e))
+        try:
+            save_trace(trace)
+        except Exception:
+            pass
+
+        return json.dumps({
+            "ok": False,
+            "speaker": "Gerfex",
+            "reply": "خطأ داخلي في مسار Gerfex الرئيسي: " + str(e),
+            "surface": "main",
+            "trace_id": trace.get("trace_id")
+        }, ensure_ascii=False)
+
+
+def think_learning(message, learning_state_json=None):
+    """Learning page entry. User is talking directly to GMA."""
+    try:
+        try:
+            learning_state = json.loads(learning_state_json or "{}") if isinstance(learning_state_json, str) else (learning_state_json or {})
+        except Exception:
+            learning_state = {}
+
+        from GerfexIntegratedV1.surfaces.learning_surface import think_learning_surface
+
+        result = think_learning_surface(message, learning_state=learning_state)
+
+        return json.dumps({
+            "ok": result.get("ok", False),
+            "speaker": "GMA",
+            "reply": result.get("reply", "لم أستطع توليد رد تعلم الآن."),
+            "surface": "learning",
+            "raw": result.get("raw")
+        }, ensure_ascii=False)
+
+    except Exception as e:
+        return json.dumps({
+            "ok": False,
+            "speaker": "GMA",
+            "reply": "خطأ داخلي في مسار تعلم GMA: " + str(e),
+            "surface": "learning"
+        }, ensure_ascii=False)
+
 def learning_status():
     try:
         from GerfexIntegratedV1.internal_intelligence.learning.learning_manager import (

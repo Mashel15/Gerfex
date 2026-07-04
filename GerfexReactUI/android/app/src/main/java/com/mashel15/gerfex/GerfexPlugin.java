@@ -391,6 +391,67 @@ private String mapPackage(String name) {
         call.resolve(ret);
     }
 
+
+    @PluginMethod
+    public void thinkMain(PluginCall call) {
+        String message = call.getString("message", "");
+        JSObject modelStateObj = call.getObject("model_state", new JSObject());
+        String modelStateJson = modelStateObj.toString();
+
+        new Thread(() -> {
+            JSObject ret = new JSObject();
+            try {
+                if (!Python.isStarted()) {
+                    Python.start(new AndroidPlatform(getContext()));
+                }
+
+                Python py = Python.getInstance();
+                PyObject entry = py.getModule("gerfex_entry");
+                String result = entry.callAttr("think_main", message, modelStateJson).toString();
+
+                int nativeCount = executeFromResult(result);
+
+                ret.put("ok", true);
+                ret.put("result", result);
+                ret.put("native_executed_count", nativeCount);
+                call.resolve(ret);
+            } catch (Exception e) {
+                ret.put("ok", false);
+                ret.put("error", e.toString());
+                call.resolve(ret);
+            }
+        }).start();
+    }
+
+    @PluginMethod
+    public void thinkLearning(PluginCall call) {
+        String message = call.getString("message", "");
+        JSObject learningStateObj = call.getObject("learning_state", new JSObject());
+        String learningStateJson = learningStateObj.toString();
+
+        new Thread(() -> {
+            JSObject ret = new JSObject();
+            try {
+                if (!Python.isStarted()) {
+                    Python.start(new AndroidPlatform(getContext()));
+                }
+
+                Python py = Python.getInstance();
+                PyObject entry = py.getModule("gerfex_entry");
+                String result = entry.callAttr("think_learning", message, learningStateJson).toString();
+
+                ret.put("ok", true);
+                ret.put("result", result);
+                ret.put("native_executed_count", 0);
+                call.resolve(ret);
+            } catch (Exception e) {
+                ret.put("ok", false);
+                ret.put("error", e.toString());
+                call.resolve(ret);
+            }
+        }).start();
+    }
+
     @PluginMethod
     public void think(PluginCall call) {
         String message = call.getString("message", "");

@@ -3,50 +3,10 @@ import { registerPlugin } from "@capacitor/core";
 
 const GerfexNative = registerPlugin("Gerfex");
 
-function classifyGerfexRoute(prompt = "") {
-  const text = String(prompt || "").trim().toLowerCase();
-
-  const pythonCorePatterns = [
-    "افتح", "شغل", "سكر", "اقفل", "اضغط", "اسحب", "اكتب",
-    "ابحث", "بحث", "افحص", "اقرأ الشاشة", "حالة الإدراك", "حالة الادراك",
-    "احفظ", "تذكر", "علّم", "علم", "اعتمد", "لا تعتمد",
-    "نفذ", "نفّذ", "مهمة", "ثم", "ارجع", "التنفيذ", "الذاكرة", "تعلم"
-  ];
-
-  if (pythonCorePatterns.some((x) => text.includes(x))) {
-    return "python_core";
-  }
-
-  return "gma_native";
-}
-
-async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
-  const route = routeHint || classifyGerfexRoute(prompt);
-
-  if (route !== "python_core" && modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
-    const nativeGma = await GerfexNative.gmaNativeChat({ message: prompt, predictLength: 256 });
-
-    if (nativeGma?.ok === false) {
-      const errorText = nativeGma?.error_code || nativeGma?.error || "GMA_NATIVE_ERROR";
-      return {
-        ok: false,
-        reply: "خطأ في GMA Native: " + errorText,
-        speaker: "Gerfex",
-        replies: [{ speaker: "Gerfex", content: "خطأ في GMA Native: " + errorText }],
-        raw: nativeGma
-      };
-    }
-
-    return {
-      ok: !!nativeGma?.ok,
-      reply: nativeGma?.reply || "لا يوجد رد من GMA.",
-      speaker: "GMA",
-      replies: [{ speaker: "GMA", content: nativeGma?.reply || "لا يوجد رد من GMA." }],
-      raw: nativeGma
-    };
-  }
-
-  const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
+async function askGerfexNative(prompt, modelState = {}) {
+  const nativeRes = GerfexNative?.thinkMain
+    ? await GerfexNative.thinkMain({ message: prompt, model_state: modelState })
+    : await GerfexNative.think({ message: prompt, model_state: modelState });
 
   if (!nativeRes || nativeRes.ok === false) {
     return {
@@ -59,56 +19,16 @@ async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
   }
 
   const parsed = JSON.parse(nativeRes.result || "{}");
-  const external = parsed.external_models || {};
-  const advisors = Array.isArray(external.advisors) ? external.advisors : [];
-
-  const providerState = {};
-  (modelState.models || []).forEach((m) => {
-    providerState[m.name] = {
-      mute: !!m.mute,
-      hold: !!m.hold,
-      connected: !!m.connected
-    };
-  });
-
-  const visibleExternalReplies = advisors
-    .filter((a) => {
-      const st = providerState[a.provider] || {};
-      return !st.hold && !st.mute;
-    })
-    .map((a) => ({
-      speaker: a.provider || "External AI",
-      content: a.reply || a.error || "لا يوجد رد."
-    }));
-
-  const replies = [];
-
-  if (modelState.connected && !modelState.hold && !modelState.mute) {
-    replies.push({
-      speaker: parsed.speaker || "Gerfex",
-      content: parsed.reply || parsed.error || "لا يوجد رد."
-    });
-  }
-
-  replies.push(...visibleExternalReplies);
-
-  if (!modelState.connected || modelState.hold) {
-    if (visibleExternalReplies.length === 0 && (parsed.reply || parsed.error)) {
-      replies.push({
-        speaker: "Gerfex",
-        content: parsed.reply || parsed.error || "لا يوجد رد."
-      });
-    }
-  }
 
   return {
-    ok: parsed.ok,
-    reply: replies[0]?.content || parsed.reply || parsed.error || "لا يوجد رد.",
-    speaker: replies[0]?.speaker || parsed.speaker || "Gerfex",
-    replies,
-    raw: parsed.raw || parsed
+    ok: parsed.ok !== false,
+    reply: parsed.reply || "لا يوجد رد من Gerfex.",
+    speaker: "Gerfex",
+    replies: [{ speaker: "Gerfex", content: parsed.reply || "لا يوجد رد من Gerfex." }],
+    raw: parsed
   };
 }
+
 
 async function getNativePerceptionStatus() {
   const nativeRes = await GerfexNative.accessibilityStatus();
@@ -136,7 +56,6 @@ const defaultModels = [
   { id: 2, name: "ChatGPT", type: "API", model: "gpt", connected: false, mute: false, hold: false },
   { id: 3, name: "DeepSeek", type: "API/Local", model: "deepseek", connected: false, mute: false, hold: false }
 ];
-
 
 function buildExternalModelsRegistry(models) {
   const external = (models || []).filter((m) => m.name !== "GMA");
@@ -358,8 +277,12 @@ export default function App() {
           models: models
         };
 
-        const data = await askGerfexNative("[LEARNING_SESSION]\\n" + text, gmaState);
-        const replyText = data.reply || data.raw?.reply || data.raw?.error || "لم أستطع توليد رد تعلّم الآن.";
+        const data = GerfexNative?.thinkLearning
+          ? await GerfexNative.thinkLearning({ message: text, learning_state: gmaState })
+          : await askGerfexNative("[LEARNING_SESSION]\\n" + text, gmaState);
+
+        const parsedLearning = data?.result ? JSON.parse(data.result || "{}") : data;
+        const replyText = parsedLearning?.reply || parsedLearning?.raw?.reply || parsedLearning?.raw?.error || "لم أستطع توليد رد تعلّم الآن.";
         const replyMsg = { speaker: "GMA", content: replyText };
 
         const finalMessages = [...baseMessages, replyMsg];
@@ -407,10 +330,8 @@ export default function App() {
     setInput("");
     setVoiceInput(false);
 
-    const routeHint = classifyGerfexRoute(text);
-
     try {
-      const data = await askGerfexNative(text, modelState, routeHint);
+      const data = await askGerfexNative(text, modelState);
       const replies = Array.isArray(data.replies) ? data.replies : [];
 
       replies.forEach((r, idx) => {
