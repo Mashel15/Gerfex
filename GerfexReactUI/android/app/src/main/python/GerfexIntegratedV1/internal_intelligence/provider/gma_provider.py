@@ -1,3 +1,10 @@
+# GERFEX ARCHITECTURE WARNING:
+# This file is NOT the official GMA Native runtime path.
+# The official GMA runtime is:
+# App.jsx -> GerfexPlugin.gmaNativeChat() -> GmaLlamaBridge.kt -> gerfex_llama_jni.cpp -> llama/ggml -> GGUF.
+# Do not use this Python file to diagnose or fix GMA Native loading/generation issues.
+# This file is kept only for Python Core compatibility until a later cleanup phase.
+
 from .provider_contract import InternalIntelligenceProvider
 from internal_intelligence.learning.learning_manager import (
     pending_lessons,

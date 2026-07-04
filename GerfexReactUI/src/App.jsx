@@ -3,8 +3,27 @@ import { registerPlugin } from "@capacitor/core";
 
 const GerfexNative = registerPlugin("Gerfex");
 
-async function askGerfexNative(prompt, modelState = {}) {
-  if (modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
+function classifyGerfexRoute(prompt = "") {
+  const text = String(prompt || "").trim().toLowerCase();
+
+  const pythonCorePatterns = [
+    "افتح", "شغل", "سكر", "اقفل", "اضغط", "اسحب", "اكتب",
+    "ابحث", "بحث", "افحص", "اقرأ الشاشة", "حالة الإدراك", "حالة الادراك",
+    "احفظ", "تذكر", "علّم", "علم", "اعتمد", "لا تعتمد",
+    "نفذ", "نفّذ", "مهمة", "ثم", "ارجع", "التنفيذ", "الذاكرة", "تعلم"
+  ];
+
+  if (pythonCorePatterns.some((x) => text.includes(x))) {
+    return "python_core";
+  }
+
+  return "gma_native";
+}
+
+async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
+  const route = routeHint || classifyGerfexRoute(prompt);
+
+  if (route !== "python_core" && modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
     const nativeGma = await GerfexNative.gmaNativeChat({ message: prompt, predictLength: 256 });
     return {
       ok: !!nativeGma?.ok,
@@ -376,8 +395,10 @@ export default function App() {
     setInput("");
     setVoiceInput(false);
 
+    const routeHint = classifyGerfexRoute(text);
+
     try {
-      const data = await askGerfexNative(text, modelState);
+      const data = await askGerfexNative(text, modelState, routeHint);
       const replies = Array.isArray(data.replies) ? data.replies : [];
 
       replies.forEach((r, idx) => {
