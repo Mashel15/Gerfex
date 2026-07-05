@@ -19,10 +19,19 @@ def classify_main_surface(message, model_state=None):
 def think_main_surface(message, model_state=None, trace=None):
     route = classify_main_surface(message, model_state)
 
-    # Safe first version:
-    # Both branches return through Gerfex identity.
-    # The deeper separation between Gerfex-only and GMA-assisted reasoning
-    # will be refined after this surface layer is connected.
+    if route.get("path") == "gerfex_brain":
+        return {
+            "ok": True,
+            "surface": "main",
+            "speaker": "Gerfex",
+            "path": "gerfex_brain",
+            "route_reason": route.get("reason"),
+            "needs_gma_native": True,
+            "gma_mode": "main",
+            "gma_prompt": message,
+            "reply": ""
+        }
+
     result = run_goal(message, trace=trace)
 
     execution = result.get("execution", {}) if isinstance(result, dict) else {}
@@ -42,6 +51,7 @@ def think_main_surface(message, model_state=None, trace=None):
         "speaker": "Gerfex",
         "path": route.get("path"),
         "route_reason": route.get("reason"),
+        "needs_gma_native": False,
         "reply": reply,
         "raw": result
     }

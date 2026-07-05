@@ -392,6 +392,73 @@ private String mapPackage(String name) {
     }
 
 
+
+    private String fillGmaNativeIfNeeded(String result, String speakerName) {
+        try {
+            JSONObject root = new JSONObject(result);
+
+            if (!root.optBoolean("needs_gma_native", false)) {
+                return result;
+            }
+
+            String prompt = root.optString("gma_prompt", root.optString("reply", ""));
+            String mode = root.optString("gma_mode", "main");
+
+            File model = ensureGmaModelFile();
+            String nativeReply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), prompt, 256);
+            String replyText = nativeReply == null ? "" : nativeReply.trim();
+
+            String errorCode = null;
+            if (replyText.length() == 0) {
+                errorCode = "GMA_LLAMA_EMPTY_REPLY";
+            } else if (replyText.contains("GMA_LLAMA_ERROR")) {
+                errorCode = "GMA_LLAMA_ERROR";
+            } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
+                errorCode = "GMA_LLAMA_EMPTY_REPLY";
+            } else if (replyText.contains("no_backend_loaded")) {
+                errorCode = "no_backend_loaded";
+            } else if (replyText.contains("model_load_null")) {
+                errorCode = "model_load_null";
+            } else if (replyText.contains("context_null")) {
+                errorCode = "context_null";
+            }
+
+            root.put("speaker", speakerName);
+            root.put("surface_native_gma_used", true);
+            root.put("gma_mode", mode);
+            root.put("bridge_stage", GmaLlamaBridge.getLastStage());
+            root.put("model_path", model.getAbsolutePath());
+            root.put("model_size", model.length());
+
+            if (errorCode != null) {
+                root.put("ok", false);
+                root.put("stage", "surface_native_reply_error");
+                root.put("error_code", errorCode);
+                root.put("error", replyText);
+                root.put("reply", "خطأ في GMA Native: " + errorCode);
+            } else {
+                root.put("ok", true);
+                root.put("stage", "surface_native_done");
+                root.put("reply", nativeReply);
+            }
+
+            return root.toString();
+
+        } catch (Throwable e) {
+            try {
+                JSONObject err = new JSONObject(result);
+                err.put("ok", false);
+                err.put("speaker", speakerName);
+                err.put("stage", "surface_native_exception");
+                err.put("error", e.toString());
+                err.put("reply", "خطأ داخلي في ربط GMA Native: " + e.toString());
+                return err.toString();
+            } catch (Exception ignored) {
+                return result;
+            }
+        }
+    }
+
     @PluginMethod
     public void thinkMain(PluginCall call) {
         String message = call.getString("message", "");
@@ -408,6 +475,7 @@ private String mapPackage(String name) {
                 Python py = Python.getInstance();
                 PyObject entry = py.getModule("gerfex_entry");
                 String result = entry.callAttr("think_main", message, modelStateJson).toString();
+                result = fillGmaNativeIfNeeded(result, "Gerfex");
 
                 int nativeCount = executeFromResult(result);
 
@@ -439,6 +507,7 @@ private String mapPackage(String name) {
                 Python py = Python.getInstance();
                 PyObject entry = py.getModule("gerfex_entry");
                 String result = entry.callAttr("think_learning", message, learningStateJson).toString();
+                result = fillGmaNativeIfNeeded(result, "GMA");
 
                 ret.put("ok", true);
                 ret.put("result", result);
