@@ -4,6 +4,19 @@ from GerfexIntegratedV1.internal_intelligence.gerfex_entry_gate.gate import ente
 
 
 ROOT = Path(__file__).resolve().parent
+SECTIONS = ROOT / "sections"
+
+
+SECTION_ORDER = [
+    "01_identity.md",
+    "02_purpose.md",
+    "03_reasoning.md",
+    "04_behavior.md",
+    "05_learning.md",
+    "06_authority.md",
+    "07_boundaries.md",
+    "08_gerfex_interface.md",
+]
 
 
 def _read_text(path):
@@ -14,53 +27,43 @@ def _read_text(path):
 
 
 def build_gma_main_context():
-    return {
-        "constitution": _read_text(ROOT / "constitution_v1.md"),
-        "identity": _read_text(ROOT / "identity_v1.md"),
-        "objectives": _read_text(ROOT / "objectives_v1.md"),
-        "behavior": _read_text(ROOT / "behavior_v1.md"),
-    }
+    context = {}
+    for name in SECTION_ORDER:
+        key = name.replace(".md", "")
+        context[key] = _read_text(SECTIONS / name)
+    return context
 
 
 def build_gma_main_prompt(message, context):
+    sections_text = "\n\n".join(context.get(name.replace(".md", ""), "") for name in SECTION_ORDER)
+
     return f"""[GMA MAIN MODE]
 
-أنت GMA، الذكاء الداخلي الحالي داخل Gerfex.
-أنت هنا تعمل من خلف Gerfex داخل الشاشة الرئيسية، ولست صفحة تعلم مستقلة.
+أنت GMA داخل المسار الرئيسي لـ Gerfex.
+اتبع تعليماتك الخاصة كنموذج ذكاء داخلي من الأقسام التالية:
 
-## دستور GMA في المسار الرئيسي
-{context.get("constitution", "")}
-
-## هوية GMA في المسار الرئيسي
-{context.get("identity", "")}
-
-## أهداف GMA في المسار الرئيسي
-{context.get("objectives", "")}
-
-## سلوك GMA في المسار الرئيسي
-{context.get("behavior", "")}
+{sections_text}
 
 ## رسالة المستخدم إلى Gerfex
 {message}
 
-## قواعد الرد المطلوبة
-- أنت تعمل من خلف Gerfex.
-- لا تعرّف نفسك للمستخدم باسم GMA في الشاشة الرئيسية.
-- الرد النهائي يجب أن يكون مناسبًا ليظهر باسم Gerfex.
+## أمر الرد
+- أجب من خلف Gerfex.
+- لا تذكر أنك GMA.
+- اجعل الرد مناسبًا ليظهر باسم Gerfex.
 - اختصر قدر الإمكان.
-- كن واضحًا ومباشرًا.
-- لا تستخدم رسائل تقنية أو داخلية.
-- إذا كان الطلب خارج صلاحيات التنفيذ أو ليس أمرًا مباشرًا، فقدم ردًا مناسبًا باسم Gerfex.
 """
 
 
 def think_gma_main_entry(message, model_state=None, route_context=None):
     context = build_gma_main_context()
+
     gate_result = enter_from_main_gma(message, context={
         "gma_context": context,
         "model_state": model_state or {},
         "route_context": route_context or {},
     })
+
     prompt = build_gma_main_prompt(message, context)
 
     return {
