@@ -178,6 +178,9 @@ def think_main(message, model_state_json=None):
 
 def think_learning(message, learning_state_json=None):
     """Learning page entry. User is talking directly to GMA."""
+    trace = new_trace(message)
+    add_stage(trace, "learning_surface_received", source="gerfex_entry", goal=message)
+
     try:
         try:
             learning_state = json.loads(learning_state_json or "{}") if isinstance(learning_state_json, str) else (learning_state_json or {})
@@ -187,6 +190,8 @@ def think_learning(message, learning_state_json=None):
         from GerfexIntegratedV1.surfaces.learning_surface import think_learning_surface
 
         result = think_learning_surface(message, learning_state=learning_state)
+        add_stage(trace, "learning_surface_done", source="gerfex_entry", ok=result.get("ok"), mode=result.get("gma_mode"))
+        save_trace(trace)
 
         return json.dumps({
             "ok": result.get("ok", False),
@@ -196,15 +201,23 @@ def think_learning(message, learning_state_json=None):
             "needs_gma_native": result.get("needs_gma_native", False),
             "gma_mode": result.get("gma_mode"),
             "gma_prompt": result.get("gma_prompt"),
+            "trace_id": trace.get("trace_id"),
             "raw": result.get("raw")
         }, ensure_ascii=False)
 
     except Exception as e:
+        add_stage(trace, "learning_surface_exception", source="gerfex_entry", error=str(e))
+        try:
+            save_trace(trace)
+        except Exception:
+            pass
+
         return json.dumps({
             "ok": False,
             "speaker": "GMA",
             "reply": "خطأ داخلي في مسار تعلم GMA: " + str(e),
-            "surface": "learning"
+            "surface": "learning",
+            "trace_id": trace.get("trace_id")
         }, ensure_ascii=False)
 
 def learning_status():
