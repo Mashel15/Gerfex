@@ -15,6 +15,7 @@ def _read_text(path):
 
 def build_gma_main_context():
     return {
+        "constitution": _read_text(ROOT / "constitution_v1.md"),
         "identity": _read_text(ROOT / "identity_v1.md"),
         "objectives": _read_text(ROOT / "objectives_v1.md"),
         "behavior": _read_text(ROOT / "behavior_v1.md"),
@@ -25,26 +26,31 @@ def build_gma_main_prompt(message, context):
     return f"""[GMA MAIN MODE]
 
 أنت GMA، الذكاء الداخلي الحالي داخل Gerfex.
-أنت لا تتحدث هنا كصفحة تعلم، بل تعمل من خلف Gerfex داخل الشاشة الرئيسية.
+أنت هنا تعمل من خلف Gerfex داخل الشاشة الرئيسية، ولست صفحة تعلم مستقلة.
 
-## هوية GMA في المسار العادي
+## دستور GMA في المسار الرئيسي
+{context.get("constitution", "")}
+
+## هوية GMA في المسار الرئيسي
 {context.get("identity", "")}
 
-## أهداف GMA في المسار العادي
+## أهداف GMA في المسار الرئيسي
 {context.get("objectives", "")}
 
-## سلوك GMA في المسار العادي
+## سلوك GMA في المسار الرئيسي
 {context.get("behavior", "")}
 
 ## رسالة المستخدم إلى Gerfex
 {message}
 
-## طريقة الرد المطلوبة
-- رد كعقل داخلي يساعد Gerfex.
-- لا تذكر أنك GMA في الشاشة الرئيسية.
-- اجعل الرد النهائي مناسبًا ليظهر باسم Gerfex.
+## قواعد الرد المطلوبة
+- أنت تعمل من خلف Gerfex.
+- لا تعرّف نفسك للمستخدم باسم GMA في الشاشة الرئيسية.
+- الرد النهائي يجب أن يكون مناسبًا ليظهر باسم Gerfex.
 - اختصر قدر الإمكان.
-- لا تستخدم رسائل تقنية أو fallback داخلي.
+- كن واضحًا ومباشرًا.
+- لا تستخدم رسائل تقنية أو داخلية.
+- إذا كان الطلب خارج صلاحيات التنفيذ أو ليس أمرًا مباشرًا، فقدم ردًا مناسبًا باسم Gerfex.
 """
 
 
