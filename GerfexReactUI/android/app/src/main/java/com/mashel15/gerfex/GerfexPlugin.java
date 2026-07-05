@@ -401,10 +401,22 @@ private String mapPackage(String name) {
                 return result;
             }
 
+            String traceId = root.optString("trace_id", "");
             String prompt = root.optString("gma_prompt", root.optString("reply", ""));
             String mode = root.optString("gma_mode", "main");
 
+            JSONObject requestStage = new JSONObject();
+            requestStage.put("action", "gma_native_surface");
+            requestStage.put("args", new JSONObject().put("mode", mode).put("speaker", speakerName));
+            appendPluginTrace(traceId, requestStage, "surface_native_requested", true);
+
             File model = ensureGmaModelFile();
+
+            JSONObject startStage = new JSONObject();
+            startStage.put("action", "gma_native_bridge");
+            startStage.put("args", new JSONObject().put("mode", mode).put("model_size", model.length()));
+            appendPluginTrace(traceId, startStage, "surface_native_bridge_start", true);
+
             String nativeReply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), prompt, 256);
             String replyText = nativeReply == null ? "" : nativeReply.trim();
 
@@ -436,10 +448,26 @@ private String mapPackage(String name) {
                 root.put("error_code", errorCode);
                 root.put("error", replyText);
                 root.put("reply", "خطأ في GMA Native: " + errorCode);
+
+                JSONObject errorStage = new JSONObject();
+                errorStage.put("action", "gma_native_reply");
+                errorStage.put("args", new JSONObject()
+                    .put("mode", mode)
+                    .put("error_code", errorCode)
+                    .put("bridge_stage", GmaLlamaBridge.getLastStage()));
+                appendPluginTrace(traceId, errorStage, "surface_native_reply_error", false);
             } else {
                 root.put("ok", true);
                 root.put("stage", "surface_native_done");
                 root.put("reply", nativeReply);
+
+                JSONObject doneStage = new JSONObject();
+                doneStage.put("action", "gma_native_reply");
+                doneStage.put("args", new JSONObject()
+                    .put("mode", mode)
+                    .put("reply_len", replyText.length())
+                    .put("bridge_stage", GmaLlamaBridge.getLastStage()));
+                appendPluginTrace(traceId, doneStage, "surface_native_done", true);
             }
 
             return root.toString();
