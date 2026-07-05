@@ -1,5 +1,12 @@
 from pathlib import Path
 
+from internal_intelligence.learning.gma_learning_approval_gate import (
+    classify_learning_command,
+    add_pending,
+    approve_latest,
+    reject_latest,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -44,6 +51,7 @@ def build_learning_prompt(message, context):
 
 ## طريقة الرد المطلوبة
 - رد بصفتك GMA.
+- اختصر قدر الإمكان.
 - ركز على التحليل أو الاقتراح أو الإجابة التعليمية.
 - لا تتصرف كمنفذ أوامر Android.
 - لا تدّعي اعتماد أي قاعدة جديدة من نفسك.
@@ -53,6 +61,35 @@ def build_learning_prompt(message, context):
 
 def think_learning_entry(message, learning_state=None):
     context = build_learning_context()
+    command = classify_learning_command(message)
+
+    if command == "approve":
+        result = approve_latest()
+        return {
+            "ok": bool(result.get("ok")),
+            "surface": "learning",
+            "speaker": "GMA",
+            "needs_gma_native": False,
+            "gma_mode": "learning_approval",
+            "gma_prompt": "",
+            "learning_context": context,
+            "reply": result.get("reply", "تمت معالجة الاعتماد.")
+        }
+
+    if command == "reject":
+        result = reject_latest()
+        return {
+            "ok": bool(result.get("ok")),
+            "surface": "learning",
+            "speaker": "GMA",
+            "needs_gma_native": False,
+            "gma_mode": "learning_rejection",
+            "gma_prompt": "",
+            "learning_context": context,
+            "reply": result.get("reply", "تمت معالجة الرفض.")
+        }
+
+    pending = add_pending(message, context={"type": "discussion"})
     prompt = build_learning_prompt(message, context)
 
     return {
@@ -63,5 +100,6 @@ def think_learning_entry(message, learning_state=None):
         "gma_mode": "learning",
         "gma_prompt": prompt,
         "learning_context": context,
+        "pending_learning": pending,
         "reply": ""
     }
