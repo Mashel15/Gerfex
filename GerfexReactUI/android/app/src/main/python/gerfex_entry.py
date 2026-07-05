@@ -152,6 +152,9 @@ def think_main(message, model_state_json=None):
             "surface": "main",
             "path": result.get("path"),
             "route_reason": result.get("route_reason"),
+            "needs_gma_native": result.get("needs_gma_native", False),
+            "gma_mode": result.get("gma_mode"),
+            "gma_prompt": result.get("gma_prompt"),
             "storage": str(APP_HOME),
             "trace_id": trace.get("trace_id"),
             "raw": result.get("raw")
@@ -190,6 +193,9 @@ def think_learning(message, learning_state_json=None):
             "speaker": "GMA",
             "reply": result.get("reply", "لم أستطع توليد رد تعلم الآن."),
             "surface": "learning",
+            "needs_gma_native": result.get("needs_gma_native", False),
+            "gma_mode": result.get("gma_mode"),
+            "gma_prompt": result.get("gma_prompt"),
             "raw": result.get("raw")
         }, ensure_ascii=False)
 
