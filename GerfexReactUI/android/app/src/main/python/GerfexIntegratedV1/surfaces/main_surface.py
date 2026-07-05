@@ -1,30 +1,9 @@
 from core.gerfex_core import run_goal
+from GerfexIntegratedV1.surfaces.main_core_gate import classify_main_command
 
 
 def classify_main_surface(message, model_state=None):
-    text = (message or "").strip().lower()
-
-    # Structural Cleanup Gate V1:
-    # Gerfex Core receives only direct commands that are currently confirmed
-    # as Gerfex-owned capabilities. Everything else goes to GMA native.
-    direct_core_markers = [
-        "كروم", "chrome",
-        "يوتيوب", "youtube",
-        "الإعدادات", "الاعدادات", "اعدادات", "settings",
-        "الرئيسية", "home",
-        "ارجع", "back",
-    ]
-
-    if any(w in text for w in direct_core_markers):
-        return {
-            "path": "gerfex_core",
-            "reason": "main_surface_confirmed_gerfex_core_capability"
-        }
-
-    return {
-        "path": "gerfex_brain",
-        "reason": "main_surface_to_gma_native_by_default"
-    }
+    return classify_main_command(message, model_state=model_state)
 
 
 def think_main_surface(message, model_state=None, trace=None):
