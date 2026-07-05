@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from internal_intelligence.gerfex_entry_gate.gate import enter_from_learning
+
 from internal_intelligence.learning.gma_learning_approval_gate import (
     classify_learning_command,
     add_pending,
@@ -63,6 +65,8 @@ def think_learning_entry(message, learning_state=None):
     context = build_learning_context()
     command = classify_learning_command(message)
 
+    gate_result = enter_from_learning(message, context=context)
+
     if command == "approve":
         result = approve_latest()
         return {
@@ -73,6 +77,7 @@ def think_learning_entry(message, learning_state=None):
             "gma_mode": "learning_approval",
             "gma_prompt": "",
             "learning_context": context,
+            "gerfex_entry_gate": gate_result,
             "reply": result.get("reply", "تمت معالجة الاعتماد.")
         }
 
@@ -86,6 +91,7 @@ def think_learning_entry(message, learning_state=None):
             "gma_mode": "learning_rejection",
             "gma_prompt": "",
             "learning_context": context,
+            "gerfex_entry_gate": gate_result,
             "reply": result.get("reply", "تمت معالجة الرفض.")
         }
 
@@ -100,6 +106,7 @@ def think_learning_entry(message, learning_state=None):
         "gma_mode": "learning",
         "gma_prompt": prompt,
         "learning_context": context,
+        "gerfex_entry_gate": gate_result,
         "pending_learning": pending,
         "reply": ""
     }

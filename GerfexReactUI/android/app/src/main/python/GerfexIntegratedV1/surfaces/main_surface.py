@@ -1,5 +1,6 @@
 from core.gerfex_core import run_goal
 from GerfexIntegratedV1.surfaces.main_core_gate import classify_main_command
+from GerfexIntegratedV1.internal_intelligence.gerfex_entry_gate.gate import enter_from_main_gma
 
 
 def classify_main_surface(message, model_state=None):
@@ -10,6 +11,11 @@ def think_main_surface(message, model_state=None, trace=None):
     route = classify_main_surface(message, model_state)
 
     if route.get("path") == "gerfex_brain":
+        gate_result = enter_from_main_gma(message, context={
+            "route_reason": route.get("reason"),
+            "model_state": model_state or {}
+        })
+
         return {
             "ok": True,
             "surface": "main",
@@ -19,6 +25,7 @@ def think_main_surface(message, model_state=None, trace=None):
             "needs_gma_native": True,
             "gma_mode": "main",
             "gma_prompt": message,
+            "gerfex_entry_gate": gate_result,
             "reply": ""
         }
 
