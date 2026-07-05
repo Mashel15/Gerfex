@@ -4,16 +4,27 @@ from core.gerfex_core import run_goal
 def classify_main_surface(message, model_state=None):
     text = (message or "").strip().lower()
 
-    gerfex_core_words = [
-        "افتح", "ارجع", "الرئيسية", "home", "back",
-        "كروم", "يوتيوب", "الإعدادات", "الاعدادات",
-        "ابحث", "بحث", "نفذ", "نفّذ"
+    # Structural Cleanup Gate V1:
+    # Gerfex Core receives only direct commands that are currently confirmed
+    # as Gerfex-owned capabilities. Everything else goes to GMA native.
+    direct_core_markers = [
+        "كروم", "chrome",
+        "يوتيوب", "youtube",
+        "الإعدادات", "الاعدادات", "اعدادات", "settings",
+        "الرئيسية", "home",
+        "ارجع", "back",
     ]
 
-    if any(w in text for w in gerfex_core_words):
-        return {"path": "gerfex_core", "reason": "main_surface_core_capability"}
+    if any(w in text for w in direct_core_markers):
+        return {
+            "path": "gerfex_core",
+            "reason": "main_surface_confirmed_gerfex_core_capability"
+        }
 
-    return {"path": "gerfex_brain", "reason": "main_surface_internal_brain_needed"}
+    return {
+        "path": "gerfex_brain",
+        "reason": "main_surface_to_gma_native_by_default"
+    }
 
 
 def think_main_surface(message, model_state=None, trace=None):
