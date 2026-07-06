@@ -891,107 +891,16 @@ private String mapPackage(String name) {
 
     @PluginMethod
     public void gmaNativeChat(PluginCall call) {
-        String message = call.getString("message", "");
-        int predictLength = call.getInt("predictLength", 128);
-
-        final java.util.concurrent.atomic.AtomicBoolean finished = new java.util.concurrent.atomic.AtomicBoolean(false);
-        final String[] stage = new String[]{"chat_received"};
-
-        Thread worker = new Thread(() -> {
-            JSObject ret = new JSObject();
-            File model = null;
-            try {
-                stage[0] = "copy_check";
-                android.util.Log.i("GMA_DEBUG", "gmaNativeChat start message_len=" + message.length());
-                model = ensureGmaModelFile();
-
-                stage[0] = "copy_done";
-                long modelSize = model.length();
-
-                stage[0] = "bridge_call_started";
-                android.util.Log.i("GMA_DEBUG", "bridge_call_started model=" + model.getAbsolutePath() + " size=" + modelSize);
-                String reply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
-                android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
-
-                String replyText = reply == null ? "" : reply.trim();
-                String errorCode = null;
-
-                if (replyText.length() == 0) {
-                    errorCode = "GMA_LLAMA_EMPTY_REPLY";
-                } else if (replyText.contains("GMA_LLAMA_ERROR")) {
-                    errorCode = "GMA_LLAMA_ERROR";
-                } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
-                    errorCode = "GMA_LLAMA_EMPTY_REPLY";
-                } else if (replyText.contains("no_backend_loaded")) {
-                    errorCode = "no_backend_loaded";
-                } else if (replyText.contains("model_load_null")) {
-                    errorCode = "model_load_null";
-                } else if (replyText.contains("context_null")) {
-                    errorCode = "context_null";
-                }
-
-                if (finished.compareAndSet(false, true)) {
-                    ret.put("engine", "llama.android");
-                    ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
-                    ret.put("model_path", model.getAbsolutePath());
-                    ret.put("model_size", modelSize);
-
-                    if (errorCode != null) {
-                        ret.put("ok", false);
-                        ret.put("stage", "native_reply_error");
-                        ret.put("error_code", errorCode);
-                        ret.put("error", replyText);
-                        ret.put("reply", "");
-                    } else {
-                        ret.put("ok", true);
-                        ret.put("stage", "done");
-                        ret.put("reply", reply);
-                    }
-
-                    call.resolve(ret);
-                }
-            } catch (Throwable e) {
-                if (finished.compareAndSet(false, true)) {
-                    ret.put("ok", false);
-                    ret.put("stage", stage[0]);
-                    ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
-                    ret.put("error", e.toString());
-                    ret.put("error_class", e.getClass().getName());
-                    ret.put("error_message", e.getMessage());
-                    ret.put("abi", android.os.Build.SUPPORTED_ABIS != null ? java.util.Arrays.toString(android.os.Build.SUPPORTED_ABIS) : "null");
-                    ret.put("cpu_abi", android.os.Build.CPU_ABI);
-                    ret.put("model_path", model != null ? model.getAbsolutePath() : "null");
-                    ret.put("model_size", model != null ? model.length() : -1);
-
-                    java.io.StringWriter sw = new java.io.StringWriter();
-                    java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-                    e.printStackTrace(pw);
-                    pw.flush();
-                    ret.put("stacktrace", sw.toString());
-                    android.util.Log.e("GMA_DEBUG", "gmaNativeChat failed stage=" + stage[0] + " bridge=" + GmaLlamaBridge.getLastStage(), e);
-
-                    call.resolve(ret);
-                }
-            }
-        });
-
-        Thread watchdog = new Thread(() -> {
-            try {
-                Thread.sleep(180000);
-                if (finished.compareAndSet(false, true)) {
-                    JSObject ret = new JSObject();
-                    ret.put("ok", false);
-                    ret.put("error", "GMA_TIMEOUT_180_SECONDS");
-                    ret.put("stage", stage[0]);
-                    ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
-                    ret.put("reply", "GMA_TIMEOUT_180_SECONDS | stage=" + stage[0] + " | bridge_stage=" + GmaLlamaBridge.getLastStage());
-                    call.resolve(ret);
-                }
-            } catch (Exception ignored) {}
-        });
-
-        worker.start();
-        watchdog.start();
+        /*
+         * Legacy compatibility route.
+         *
+         * Direct GMA native chat is no longer an approved side door.
+         * All main GMA traffic must pass through:
+         * thinkMain -> gerfex_entry.think_main -> main_surface
+         * -> internal_intelligence/gma/main -> gerfex_entry_gate
+         * -> fillGmaNativeIfNeeded -> GmaLlamaBridge.
+         */
+        thinkMain(call);
     }
 
     @PluginMethod
