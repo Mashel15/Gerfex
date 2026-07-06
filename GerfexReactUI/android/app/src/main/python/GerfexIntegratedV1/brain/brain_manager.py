@@ -1,29 +1,18 @@
 import json
 from urllib.parse import quote_plus
 from GerfexIntegratedV1.gerfex_android_paths import app_path
-from internal_intelligence.provider.provider_loader import load_provider
 
 MEMORY = app_path("memory", "brain_memory.json")
 
 def _internal_intelligence_reply(prompt, mode="conversation"):
-    provider = load_provider()
-    if provider is None:
-        return "GMA غير متصل بمزود الذكاء الداخلي."
+    """
+    Legacy guard.
 
-    result = provider.think(prompt, context={"mode": mode})
-    thought = result.get("thought", {}) if isinstance(result, dict) else {}
-
-    for key in ("reply", "answer", "response", "summary", "proposal", "message"):
-        value = thought.get(key)
-        if value:
-            return str(value)
-
-    if thought:
-        return str(thought)
-
-    return "GMA استدعى مزود الذكاء الداخلي، لكن لم ينتج ردًا نصيًا واضحًا."
-
-
+    brain_manager is no longer allowed to call GMA/provider/runtime directly.
+    All model communication must pass through:
+    surfaces -> internal_intelligence/gma/* -> gerfex_entry_gate.
+    """
+    return ""
 def remember(event):
     MEMORY.parent.mkdir(parents=True, exist_ok=True)
     data = []
@@ -153,6 +142,6 @@ def decide(goal):
         "target": "conversation",
         "action": None,
         "actions": None,
-        "reply": _internal_intelligence_reply(text, mode="conversation"),
-        "reason": "gma_chat_response"
+        "reply": "",
+        "reason": "legacy_gma_chat_blocked_by_gateway_policy"
     }
