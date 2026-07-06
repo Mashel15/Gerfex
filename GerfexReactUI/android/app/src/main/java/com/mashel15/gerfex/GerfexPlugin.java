@@ -423,16 +423,22 @@ private String mapPackage(String name) {
             String errorCode = null;
             if (replyText.length() == 0) {
                 errorCode = "GMA_LLAMA_EMPTY_REPLY";
-            } else if (replyText.contains("GMA_LLAMA_ERROR")) {
-                errorCode = "GMA_LLAMA_ERROR";
-            } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
-                errorCode = "GMA_LLAMA_EMPTY_REPLY";
-            } else if (replyText.contains("no_backend_loaded")) {
-                errorCode = "no_backend_loaded";
             } else if (replyText.contains("model_load_null")) {
                 errorCode = "model_load_null";
             } else if (replyText.contains("context_null")) {
                 errorCode = "context_null";
+            } else if (replyText.contains("no_backend_loaded")) {
+                errorCode = "no_backend_loaded";
+            } else if (replyText.contains("prompt_decode_failed")) {
+                errorCode = "prompt_decode_failed";
+            } else if (replyText.contains("tokenize_failed")) {
+                errorCode = "tokenize_failed";
+            } else if (replyText.contains("native_exception")) {
+                errorCode = "native_exception";
+            } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
+                errorCode = "GMA_LLAMA_EMPTY_REPLY";
+            } else if (replyText.contains("GMA_LLAMA_ERROR")) {
+                errorCode = replyText;
             }
 
             root.put("speaker", speakerName);
