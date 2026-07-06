@@ -70,12 +70,39 @@ def build_execution_path(trace):
     stages = trace.get("stages", []) if isinstance(trace, dict) else []
     route, decision, execution = "-", {}, {}
     for st in stages:
-        if st.get("stage") == "brain_router":
+        stage_name = st.get("stage")
+
+        if stage_name == "brain_router":
             route = st.get("route", route)
-        if st.get("stage") == "provider_response":
+
+        if stage_name == "main_surface_done" and st.get("path") == "gerfex_brain":
+            route = "gma_native"
+
+        if stage_name in ["surface_native_requested", "surface_native_bridge_start"]:
+            route = "gma_native"
+
+        if stage_name == "surface_native_done":
+            route = "gma_native"
+            execution = {
+                "ok": True,
+                "reason": "GMA native reply generated",
+                "native_action_count": 0,
+            }
+
+        if stage_name == "surface_native_reply_error":
+            route = "gma_native"
+            execution = {
+                "ok": False,
+                "reason": st.get("error_code") or st.get("reason") or "GMA native error",
+                "native_action_count": 0,
+            }
+
+        if stage_name == "provider_response":
             decision = st
-        if st.get("stage") in ["execution_observed", "execution_manager_end", "execution_manager_stop"]:
+
+        if stage_name in ["execution_observed", "execution_manager_end", "execution_manager_stop"]:
             execution = st
+
     ok_value = execution.get("execution_ok", execution.get("ok", False))
     return {
         "trace_id": trace.get("trace_id"),
