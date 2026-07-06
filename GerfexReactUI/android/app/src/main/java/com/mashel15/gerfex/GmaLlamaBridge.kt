@@ -18,7 +18,6 @@ object GmaLlamaBridge {
         lastStage = stage
     }
 
-
     private fun loadNativeOnce(context: Context) {
         if (nativeLoaded) return
         setStage("llama_jni_load_started")
@@ -49,43 +48,15 @@ object GmaLlamaBridge {
         if (tryLoadAbsolute("libggml-base.so")) coreLoaded++
         if (tryLoadAbsolute("libggml.so")) coreLoaded++
         if (tryLoadAbsolute("libllama.so")) coreLoaded++
-        if (tryLoadAbsolute("libllama-common.so")) coreLoaded++
 
         Log.i("GMA_DEBUG", "core native libs loaded count=" + coreLoaded)
 
-        var backendLoaded = 0
-        try {
-            val dir = File(libDir)
-            val cpuLibs = dir.listFiles()
-                ?.filter { it.isFile && it.name.startsWith("libggml-cpu-") && it.name.endsWith(".so") }
-                ?.sortedBy { it.name }
-                ?: emptyList()
-
-            Log.i("GMA_DEBUG", "detected ggml cpu libs count=" + cpuLibs.size)
-            for (f in cpuLibs) {
-                try {
-                    Log.i("GMA_DEBUG", "loading detected cpu backend: " + f.absolutePath)
-                    System.load(f.absolutePath)
-                    Log.i("GMA_DEBUG", "loaded detected cpu backend: " + f.name)
-                    backendLoaded++
-                } catch (t: Throwable) {
-                    Log.e("GMA_DEBUG", "failed detected cpu backend: " + f.name, t)
-                }
-            }
-        } catch (t: Throwable) {
-            Log.e("GMA_DEBUG", "failed while scanning nativeLibraryDir", t)
-        }
-
         val jniLoaded = tryLoadAbsolute("libgerfex_llama_jni.so")
-        Log.i("GMA_DEBUG", "jniLoaded=" + jniLoaded + " backendLoaded=" + backendLoaded + " coreLoaded=" + coreLoaded)
+        Log.i("GMA_DEBUG", "jniLoaded=" + jniLoaded + " coreLoaded=" + coreLoaded)
 
-        if (coreLoaded < 5) {
+        if (coreLoaded < 4) {
             setStage("llama_error_core_libs_incomplete")
             throw IllegalStateException("GMA native core libs incomplete. loaded=" + coreLoaded)
-        }
-        if (backendLoaded < 1) {
-            setStage("llama_error_no_cpu_backend_loaded")
-            throw IllegalStateException("GMA no ggml cpu backend loaded from nativeLibraryDir=" + libDir)
         }
         if (!jniLoaded) {
             setStage("llama_error_jni_not_loaded")
@@ -96,12 +67,15 @@ object GmaLlamaBridge {
         setStage("llama_jni_loaded")
     }
 
-
     @JvmStatic
-    fun generateBlocking(context: Context, modelPath: String, prompt: String, predictLength: Int = 256): String {
+    fun generateBlocking(
+        context: Context,
+        modelPath: String,
+        prompt: String,
+        predictLength: Int = 256
+    ): String {
         try {
             setStage("llama_bridge_model_check")
-
             val modelFile = File(modelPath)
             if (!modelFile.exists()) {
                 setStage("llama_bridge_model_missing")
@@ -111,7 +85,6 @@ object GmaLlamaBridge {
             loadNativeOnce(context)
 
             setStage("llama_native_generate_started")
-
             val systemPrompt =
                 "أنت GMA، الذكاء الداخلي الرسمي داخل Gerfex. أجب بالعربية وبشكل مختصر ومفيد."
 

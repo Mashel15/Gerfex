@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <android/log.h>
-#include <filesystem>
 
 #include "llama.h"
 #include "ggml-backend.h"
@@ -55,37 +54,10 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             }
         }, nullptr);
 
-        ggml_backend_load_all();
-        LOGI("ggml_backend_load_all done");
+        LOGI("nativeLibDir=%s", native_lib_dir.c_str());
 
-        int explicit_backend_loaded = 0;
-        try {
-            if (!native_lib_dir.empty()) {
-                for (const auto & entry : std::filesystem::directory_iterator(native_lib_dir)) {
-                    if (!entry.is_regular_file()) continue;
-                    auto name = entry.path().filename().string();
-                    if (name.rfind("libggml-cpu-", 0) == 0 && entry.path().extension() == ".so") {
-                        auto full = entry.path().string();
-                        LOGI("trying ggml_backend_load: %s", full.c_str());
-                        auto * reg = ggml_backend_load(full.c_str());
-                        if (reg != nullptr) {
-                            explicit_backend_loaded++;
-                            LOGI("ggml_backend_load success: %s", full.c_str());
-                        } else {
-                            LOGE("ggml_backend_load returned null: %s", full.c_str());
-                        }
-                    }
-                }
-            }
-        } catch (...) {
-            LOGE("filesystem scan for ggml backends failed");
-        }
-        LOGI("explicit ggml backend loaded count=%d", explicit_backend_loaded);
-        if (explicit_backend_loaded < 1) {
-            LOGE("no ggml backend registered inside JNI");
-            return env->NewStringUTF("GMA_LLAMA_ERROR: no_backend_loaded");
-        }
-
+        // في هذا البيلد لا نعتمد على libggml-cpu-*.so منفصل.
+        // libllama/libggml المربوطين داخل التطبيق هم الباكند الفعلي.
         llama_backend_init();
         LOGI("llama_backend_init done");
 
@@ -134,7 +106,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         );
 
         if (n_tokens < 0) {
-            tokens.resize((size_t)(-n_tokens));
+            tokens.resize((size_t) (-n_tokens));
             n_tokens = llama_tokenize(
                     vocab,
                     prompt.c_str(),
