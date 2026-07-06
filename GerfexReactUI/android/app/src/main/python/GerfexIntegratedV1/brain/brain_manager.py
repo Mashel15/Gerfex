@@ -131,7 +131,7 @@ def decide(goal):
             "target": "learning",
             "action": None,
             "actions": None,
-            "reply": _internal_intelligence_reply(clean, mode="learning"),
+            "reply": "",
             "reason": "gma_learning_chat"
         }
 
