@@ -653,8 +653,12 @@ private String mapPackage(String name) {
                 }
 
                 Python py = Python.getInstance();
-                PyObject gateway = py.getModule("GerfexIntegratedV1.external_models.model_gateway");
-                String json = gateway.callAttr("test_model_connection_from_registry_json", name, sb.toString()).toString();
+                PyObject gateway = py.getModule("GerfexIntegratedV1.internal_intelligence.gerfex_entry_gate.gate");
+                String json = gateway.callAttr(
+                    "gerfex_to_external_model",
+                    "test_external_model_connection",
+                    name
+                ).toString();
 
                 ret.put("ok", true);
                 ret.put("registry_path", file.getAbsolutePath());
