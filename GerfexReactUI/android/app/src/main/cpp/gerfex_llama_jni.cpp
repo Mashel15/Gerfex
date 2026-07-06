@@ -62,7 +62,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         LOGI("llama_backend_init done");
 
         llama_model_params mparams = llama_model_default_params();
-        mparams.use_mmap = true;
+        mparams.use_mmap = false;
         mparams.use_mlock = false;
         mparams.check_tensors = false;
 
