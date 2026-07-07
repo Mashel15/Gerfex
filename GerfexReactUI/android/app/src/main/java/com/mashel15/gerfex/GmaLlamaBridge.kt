@@ -47,14 +47,25 @@ object GmaLlamaBridge {
         if (tryLoadAbsolute("libomp.so")) coreLoaded++
         if (tryLoadAbsolute("libggml-base.so")) coreLoaded++
         if (tryLoadAbsolute("libggml.so")) coreLoaded++
+
+        val cpuBackends = File(libDir).listFiles()
+            ?.filter { it.isFile && it.name.startsWith("libggml-cpu-") && it.name.endsWith(".so") }
+            ?.sortedBy { it.name }
+            ?: emptyList()
+
+        for (backend in cpuBackends) {
+            if (tryLoadAbsolute(backend.name)) coreLoaded++
+        }
+
         if (tryLoadAbsolute("libllama.so")) coreLoaded++
+        if (tryLoadAbsolute("libllama-common.so")) coreLoaded++
 
         Log.i("GMA_DEBUG", "core native libs loaded count=" + coreLoaded)
 
         val jniLoaded = tryLoadAbsolute("libgerfex_llama_jni.so")
         Log.i("GMA_DEBUG", "jniLoaded=" + jniLoaded + " coreLoaded=" + coreLoaded)
 
-        if (coreLoaded < 4) {
+        if (coreLoaded < 6) {
             setStage("llama_error_core_libs_incomplete")
             throw IllegalStateException("GMA native core libs incomplete. loaded=" + coreLoaded)
         }
