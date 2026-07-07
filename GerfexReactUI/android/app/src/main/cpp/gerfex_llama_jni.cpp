@@ -1,5 +1,9 @@
 #include <jni.h>
 #include <string>
+#include <algorithm>
+#include <sys/stat.h>
+#include <cstdio>
+#include <cerrno>
 #include <vector>
 #include <android/log.h>
 
@@ -15,6 +19,80 @@ static std::string jstr(JNIEnv *env, jstring s) {
     std::string out = c ? c : "";
     if (c) env->ReleaseStringUTFChars(s, c);
     return out;
+}
+
+
+#define GMA_STR_HELPER(x) #x
+#define GMA_STR(x) GMA_STR_HELPER(x)
+
+#ifdef LLAMA_BUILD_NUMBER
+static const char *GMA_LLAMA_BUILD = GMA_STR(LLAMA_BUILD_NUMBER);
+#else
+static const char *GMA_LLAMA_BUILD = "unknown";
+#endif
+
+static std::string g_gma_llama_log;
+
+static void gma_llama_log_cb(enum ggml_log_level level, const char * text, void * user_data) {
+    if (!text) return;
+    if (g_gma_llama_log.size() < 8000) {
+        g_gma_llama_log += text;
+    }
+    switch (level) {
+        case GGML_LOG_LEVEL_ERROR:
+            __android_log_print(ANDROID_LOG_ERROR, "GMA_LLAMA_LIB", "%s", text);
+            break;
+        case GGML_LOG_LEVEL_WARN:
+            __android_log_print(ANDROID_LOG_WARN, "GMA_LLAMA_LIB", "%s", text);
+            break;
+        case GGML_LOG_LEVEL_INFO:
+            __android_log_print(ANDROID_LOG_INFO, "GMA_LLAMA_LIB", "%s", text);
+            break;
+        default:
+            __android_log_print(ANDROID_LOG_DEBUG, "GMA_LLAMA_LIB", "%s", text);
+            break;
+    }
+}
+
+static std::string gma_model_load_error_debug(const std::string &model_path) {
+    struct stat st{};
+    errno = 0;
+    int stat_rc = stat(model_path.c_str(), &st);
+    int stat_errno = errno;
+
+    unsigned char head[16] = {0};
+    errno = 0;
+    FILE *fp = fopen(model_path.c_str(), "rb");
+    int fopen_errno = errno;
+    long head_n = -1;
+    if (fp) {
+        head_n = (long) fread(head, 1, 16, fp);
+        fclose(fp);
+    }
+
+    std::string log = g_gma_llama_log;
+    std::replace(log.begin(), log.end(), '\n', ' ');
+    std::replace(log.begin(), log.end(), '\r', ' ');
+    if (log.size() > 1200) log = log.substr(log.size() - 1200);
+
+    char buf[4096];
+    snprintf(
+        buf,
+        sizeof(buf),
+        "GMA_LLAMA_ERROR: model_load_null | llama_build=%s | cxx_path=%s | stat_rc=%d | stat_errno=%d | stat_size=%lld | fopen=%s | fopen_errno=%d | head_n=%ld | head=%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x | llama_log=%s",
+        GMA_LLAMA_BUILD,
+        model_path.c_str(),
+        stat_rc,
+        stat_errno,
+        (long long)(stat_rc == 0 ? st.st_size : -1),
+        fp ? "ok" : "fail",
+        fopen_errno,
+        head_n,
+        head[0], head[1], head[2], head[3], head[4], head[5], head[6], head[7],
+        head[8], head[9], head[10], head[11], head[12], head[13], head[14], head[15],
+        log.c_str()
+    );
+    return std::string(buf);
 }
 
 extern "C"
@@ -36,6 +114,10 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
     LOGI("nativeGenerate start model=%s predict=%d", model_path.c_str(), (int) predictLength);
 
     try {
+        g_gma_llama_log.clear();
+        llama_log_set(gma_llama_log_cb, nullptr);
+        ggml_backend_load_all();
+        LOGI("ggml_backend_load_all called; llama_build=%s", GMA_LLAMA_BUILD);
         llama_log_set([](enum ggml_log_level level, const char * text, void * user_data) {
             if (!text) return;
             switch (level) {
@@ -68,8 +150,9 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
         llama_model *model = llama_model_load_from_file(model_path.c_str(), mparams);
         if (!model) {
-            LOGE("llama_model_load_from_file returned null");
-            return env->NewStringUTF("GMA_LLAMA_ERROR: model_load_null");
+            std::string dbg = gma_model_load_error_debug(model_path);
+            LOGE("%s", dbg.c_str());
+            return env->NewStringUTF(dbg.c_str());
         }
 
         llama_context_params cparams = llama_context_default_params();
