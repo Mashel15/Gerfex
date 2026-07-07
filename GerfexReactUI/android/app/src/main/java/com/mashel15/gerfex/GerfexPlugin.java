@@ -428,6 +428,10 @@ private String mapPackage(String name) {
             String errorCode = null;
             if (replyText.length() == 0) {
                 errorCode = "GMA_LLAMA_EMPTY_REPLY";
+            } else if (replyText.contains("GMA_LLAMA_ERROR")) {
+                errorCode = replyText;
+            } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
+                errorCode = "GMA_LLAMA_EMPTY_REPLY";
             } else if (replyText.contains("model_load_null")) {
                 errorCode = "model_load_null";
             } else if (replyText.contains("context_null")) {
@@ -440,10 +444,6 @@ private String mapPackage(String name) {
                 errorCode = "tokenize_failed";
             } else if (replyText.contains("native_exception")) {
                 errorCode = "native_exception";
-            } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
-                errorCode = "GMA_LLAMA_EMPTY_REPLY";
-            } else if (replyText.contains("GMA_LLAMA_ERROR")) {
-                errorCode = replyText;
             }
 
             root.put("speaker", speakerName);
