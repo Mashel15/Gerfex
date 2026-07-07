@@ -417,6 +417,11 @@ private String mapPackage(String name) {
             startStage.put("args", new JSONObject().put("mode", mode).put("model_size", model.length()));
             appendPluginTrace(traceId, startStage, "surface_native_bridge_start", true);
 
+            String modelDebug = " path=" + model.getAbsolutePath()
+                + " exists=" + model.exists()
+                + " canRead=" + model.canRead()
+                + " length=" + model.length();
+
             String nativeReply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), prompt, 256);
             String replyText = nativeReply == null ? "" : nativeReply.trim();
 
@@ -453,7 +458,7 @@ private String mapPackage(String name) {
                 root.put("stage", "surface_native_reply_error");
                 root.put("error_code", errorCode);
                 root.put("error", replyText);
-                root.put("reply", "خطأ في GMA Native: " + errorCode);
+                root.put("reply", "خطأ في GMA Native: " + errorCode + " | modelDebug:" + modelDebug);
 
                 JSONObject errorStage = new JSONObject();
                 errorStage.put("action", "gma_native_reply");
