@@ -230,7 +230,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         LOGI("llama_backend_init done");
 
         llama_model_params mparams = llama_model_default_params();
-        mparams.use_mmap = false;
+        mparams.use_mmap = true;
         mparams.use_mlock = false;
         mparams.check_tensors = false;
 
@@ -250,9 +250,9 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         LOGI("model load OK");
 
         llama_context_params cparams = llama_context_default_params();
-        cparams.n_ctx = 1024;
-        cparams.n_batch = 128;
-        cparams.n_ubatch = 128;
+        cparams.n_ctx = 512;
+        cparams.n_batch = 32;
+        cparams.n_ubatch = 32;
         cparams.n_threads = 4;
         cparams.n_threads_batch = 4;
 
@@ -344,8 +344,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
         std::string out;
         int pos = n_tokens;
-        int max_pred = predictLength > 0 ? predictLength : 128;
-        if (max_pred > 256) max_pred = 256;
+        int max_pred = predictLength > 0 ? predictLength : 64;
+        if (max_pred > 64) max_pred = 64;
 
         for (int i = 0; i < max_pred; ++i) {
             llama_token tok = llama_sampler_sample(sampler, ctx, -1);

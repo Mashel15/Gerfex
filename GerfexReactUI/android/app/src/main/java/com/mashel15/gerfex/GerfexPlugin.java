@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -393,11 +394,29 @@ private String mapPackage(String name) {
 
 
 
-    private String fillGmaNativeIfNeeded(String result, String speakerName) {
+
+    private void appendGmaJavaTrace(String stage, String detail) {
         try {
+            Log.i("GERFEX_GMA_TRACE", stage + " | " + detail);
+
+            File dir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
+            if (!dir.exists()) dir.mkdirs();
+
+            File file = new File(dir, "gma_java_trace.txt");
+            FileWriter writer = new FileWriter(file, true);
+            writer.write(System.currentTimeMillis() + " | " + stage + " | " + detail + "\n");
+            writer.close();
+        } catch (Throwable ignored) {}
+    }
+
+    private String fillGmaNativeIfNeeded(String result, String speakerName) {
+        long t0 = System.currentTimeMillis();
+        try {
+            appendGmaJavaTrace("fill_native_enter", "result_len=" + (result == null ? 0 : result.length()));
             JSONObject root = new JSONObject(result);
 
             if (!root.optBoolean("needs_gma_native", false)) {
+                appendGmaJavaTrace("fill_native_skip_no_need", "elapsed_ms=" + (System.currentTimeMillis() - t0));
                 return result;
             }
 
@@ -411,6 +430,7 @@ private String mapPackage(String name) {
             appendPluginTrace(traceId, requestStage, "surface_native_requested", true);
 
             File model = ensureGmaModelFile();
+            appendGmaJavaTrace("fill_native_model_ready", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " model_size=" + model.length() + " canRead=" + model.canRead());
 
             JSONObject startStage = new JSONObject();
             startStage.put("action", "gma_native_bridge");
@@ -422,8 +442,10 @@ private String mapPackage(String name) {
                 + " canRead=" + model.canRead()
                 + " length=" + model.length();
 
+            appendGmaJavaTrace("fill_native_generate_start", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " prompt_len=" + prompt.length() + " bridge_stage=" + GmaLlamaBridge.getLastStage());
             String nativeReply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), prompt, 256);
             String replyText = nativeReply == null ? "" : nativeReply.trim();
+            appendGmaJavaTrace("fill_native_generate_done", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " reply_len=" + replyText.length() + " bridge_stage=" + GmaLlamaBridge.getLastStage());
 
             String errorCode = null;
             if (replyText.length() == 0) {
@@ -467,6 +489,7 @@ private String mapPackage(String name) {
                     .put("error_code", errorCode)
                     .put("bridge_stage", GmaLlamaBridge.getLastStage()));
                 appendPluginTrace(traceId, errorStage, "surface_native_reply_error", false);
+                appendGmaJavaTrace("fill_native_error_reply", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " error_code=" + errorCode + " bridge_stage=" + GmaLlamaBridge.getLastStage());
             } else {
                 root.put("ok", true);
                 root.put("stage", "surface_native_done");
@@ -479,11 +502,13 @@ private String mapPackage(String name) {
                     .put("reply_len", replyText.length())
                     .put("bridge_stage", GmaLlamaBridge.getLastStage()));
                 appendPluginTrace(traceId, doneStage, "surface_native_done", true);
+                appendGmaJavaTrace("fill_native_done", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " reply_len=" + replyText.length() + " bridge_stage=" + GmaLlamaBridge.getLastStage());
             }
 
             return root.toString();
 
         } catch (Throwable e) {
+            appendGmaJavaTrace("fill_native_exception", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " error=" + e.toString() + " bridge_stage=" + GmaLlamaBridge.getLastStage());
             try {
                 JSONObject err = new JSONObject(result);
                 err.put("ok", false);
@@ -505,8 +530,12 @@ private String mapPackage(String name) {
         String modelStateJson = modelStateObj.toString();
 
         new Thread(() -> {
+            long t0 = System.currentTimeMillis();
             JSObject ret = new JSObject();
             try {
+                appendGmaJavaTrace("think_main_enter", "msg_len=" + message.length());
+
+                appendGmaJavaTrace("think_main_python_start", "elapsed_ms=" + (System.currentTimeMillis() - t0));
                 if (!Python.isStarted()) {
                     Python.start(new AndroidPlatform(getContext()));
                 }
@@ -514,20 +543,28 @@ private String mapPackage(String name) {
                 Python py = Python.getInstance();
                 PyObject entry = py.getModule("gerfex_entry");
                 String result = entry.callAttr("think_main", message, modelStateJson).toString();
-                result = fillGmaNativeIfNeeded(result, "Gerfex");
+                appendGmaJavaTrace("think_main_python_done", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " result_len=" + result.length());
 
+                appendGmaJavaTrace("think_main_fill_native_start", "elapsed_ms=" + (System.currentTimeMillis() - t0));
+                result = fillGmaNativeIfNeeded(result, "Gerfex");
+                appendGmaJavaTrace("think_main_fill_native_done", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " result_len=" + result.length());
+
+                appendGmaJavaTrace("think_main_execute_result_start", "elapsed_ms=" + (System.currentTimeMillis() - t0));
                 int nativeCount = executeFromResult(result);
+                appendGmaJavaTrace("think_main_execute_result_done", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " native_count=" + nativeCount);
 
                 ret.put("ok", true);
                 ret.put("result", result);
                 ret.put("native_executed_count", nativeCount);
+                appendGmaJavaTrace("think_main_resolve_ok", "elapsed_ms=" + (System.currentTimeMillis() - t0));
                 call.resolve(ret);
-            } catch (Exception e) {
+            } catch (Throwable e) {
+                appendGmaJavaTrace("think_main_exception", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " error=" + e.toString());
                 ret.put("ok", false);
                 ret.put("error", e.toString());
                 call.resolve(ret);
             }
-        }).start();
+        }, "gerfex-think-main").start();
     }
 
     @PluginMethod
