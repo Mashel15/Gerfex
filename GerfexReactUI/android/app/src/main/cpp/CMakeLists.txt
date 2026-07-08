@@ -15,9 +15,6 @@ set_target_properties(ggml PROPERTIES IMPORTED_LOCATION ${PREBUILT_DIR}/libggml.
 add_library(ggml-base SHARED IMPORTED)
 set_target_properties(ggml-base PROPERTIES IMPORTED_LOCATION ${PREBUILT_DIR}/libggml-base.so)
 
-add_library(omp SHARED IMPORTED)
-set_target_properties(omp PROPERTIES IMPORTED_LOCATION ${PREBUILT_DIR}/libomp.so)
-
 add_library(
     gerfex_llama_jni
     SHARED
@@ -38,7 +35,6 @@ target_link_libraries(
     llama
     ggml
     ggml-base
-    omp
     ${log-lib}
     dl
 )

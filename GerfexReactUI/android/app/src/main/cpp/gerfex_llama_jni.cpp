@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cerrno>
 #include <vector>
+#include <sstream>
 #include <android/log.h>
 
 #include "llama.h"
@@ -12,6 +13,7 @@
 
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, "GMA_LLAMA", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "GMA_LLAMA", __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "GMA_LLAMA", __VA_ARGS__)
 
 static std::string jstr(JNIEnv *env, jstring s) {
     if (!s) return "";
@@ -20,7 +22,6 @@ static std::string jstr(JNIEnv *env, jstring s) {
     if (c) env->ReleaseStringUTFChars(s, c);
     return out;
 }
-
 
 #define GMA_STR_HELPER(x) #x
 #define GMA_STR(x) GMA_STR_HELPER(x)
@@ -35,9 +36,11 @@ static std::string g_gma_llama_log;
 
 static void gma_llama_log_cb(enum ggml_log_level level, const char * text, void * user_data) {
     if (!text) return;
-    if (g_gma_llama_log.size() < 8000) {
+
+    if (g_gma_llama_log.size() < 32000) {
         g_gma_llama_log += text;
     }
+
     switch (level) {
         case GGML_LOG_LEVEL_ERROR:
             __android_log_print(ANDROID_LOG_ERROR, "GMA_LLAMA_LIB", "%s", text);
@@ -54,7 +57,16 @@ static void gma_llama_log_cb(enum ggml_log_level level, const char * text, void 
     }
 }
 
-static std::string gma_model_load_error_debug(const std::string &model_path) {
+static std::string gma_trim_log(std::string s, size_t max_len = 4000) {
+    std::replace(s.begin(), s.end(), '\n', ' ');
+    std::replace(s.begin(), s.end(), '\r', ' ');
+    if (s.size() > max_len) {
+        s = s.substr(s.size() - max_len);
+    }
+    return s;
+}
+
+static std::string gma_file_debug(const std::string &model_path) {
     struct stat st{};
     errno = 0;
     int stat_rc = stat(model_path.c_str(), &st);
@@ -70,18 +82,10 @@ static std::string gma_model_load_error_debug(const std::string &model_path) {
         fclose(fp);
     }
 
-    std::string log = g_gma_llama_log;
-    std::replace(log.begin(), log.end(), '\n', ' ');
-    std::replace(log.begin(), log.end(), '\r', ' ');
-    if (log.size() > 1200) log = log.substr(log.size() - 1200);
-
-    char buf[4096];
+    char buf[1024];
     snprintf(
-        buf,
-        sizeof(buf),
-        "GMA_LLAMA_ERROR: model_load_null | llama_build=%s | cxx_path=%s | stat_rc=%d | stat_errno=%d | stat_size=%lld | fopen=%s | fopen_errno=%d | head_n=%ld | head=%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x | llama_log=%s",
-        GMA_LLAMA_BUILD,
-        model_path.c_str(),
+        buf, sizeof(buf),
+        "stat_rc=%d | stat_errno=%d | stat_size=%lld | fopen=%s | fopen_errno=%d | head_n=%ld | head=%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",
         stat_rc,
         stat_errno,
         (long long)(stat_rc == 0 ? st.st_size : -1),
@@ -89,7 +93,31 @@ static std::string gma_model_load_error_debug(const std::string &model_path) {
         fopen_errno,
         head_n,
         head[0], head[1], head[2], head[3], head[4], head[5], head[6], head[7],
-        head[8], head[9], head[10], head[11], head[12], head[13], head[14], head[15],
+        head[8], head[9], head[10], head[11], head[12], head[13], head[14], head[15]
+    );
+    return std::string(buf);
+}
+
+static std::string gma_model_load_error_debug(
+        const std::string &model_path,
+        const std::string &native_lib_dir,
+        const llama_model_params &mparams) {
+
+    std::string log = gma_trim_log(g_gma_llama_log, 5000);
+    std::string fdbg = gma_file_debug(model_path);
+
+    char buf[8192];
+    snprintf(
+        buf,
+        sizeof(buf),
+        "GMA_LLAMA_ERROR: model_load_null | llama_build=%s | model_path=%s | nativeLibDir=%s | use_mmap=%d | use_mlock=%d | check_tensors=%d | %s | llama_log=%s",
+        GMA_LLAMA_BUILD,
+        model_path.c_str(),
+        native_lib_dir.c_str(),
+        (int)mparams.use_mmap,
+        (int)mparams.use_mlock,
+        (int)mparams.check_tensors,
+        fdbg.c_str(),
         log.c_str()
     );
     return std::string(buf);
@@ -112,34 +140,19 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
     std::string user = jstr(env, userPrompt);
 
     LOGI("nativeGenerate start model=%s predict=%d", model_path.c_str(), (int) predictLength);
+    LOGI("nativeLibDir=%s", native_lib_dir.c_str());
 
     try {
         g_gma_llama_log.clear();
+
+        // callback واحد فقط — لا نعيد استبداله
         llama_log_set(gma_llama_log_cb, nullptr);
+
+        LOGI("calling ggml_backend_load_all()");
         ggml_backend_load_all();
-        LOGI("ggml_backend_load_all called; llama_build=%s", GMA_LLAMA_BUILD);
-        llama_log_set([](enum ggml_log_level level, const char * text, void * user_data) {
-            if (!text) return;
-            switch (level) {
-                case GGML_LOG_LEVEL_ERROR:
-                    __android_log_print(ANDROID_LOG_ERROR, "GMA_LLAMA_LIB", "%s", text);
-                    break;
-                case GGML_LOG_LEVEL_WARN:
-                    __android_log_print(ANDROID_LOG_WARN, "GMA_LLAMA_LIB", "%s", text);
-                    break;
-                case GGML_LOG_LEVEL_INFO:
-                    __android_log_print(ANDROID_LOG_INFO, "GMA_LLAMA_LIB", "%s", text);
-                    break;
-                default:
-                    __android_log_print(ANDROID_LOG_DEBUG, "GMA_LLAMA_LIB", "%s", text);
-                    break;
-            }
-        }, nullptr);
+        LOGI("ggml_backend_load_all done; llama_build=%s", GMA_LLAMA_BUILD);
 
-        LOGI("nativeLibDir=%s", native_lib_dir.c_str());
-
-        // في هذا البيلد لا نعتمد على libggml-cpu-*.so منفصل.
-        // libllama/libggml المربوطين داخل التطبيق هم الباكند الفعلي.
+        LOGI("calling llama_backend_init()");
         llama_backend_init();
         LOGI("llama_backend_init done");
 
@@ -148,12 +161,20 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         mparams.use_mlock = false;
         mparams.check_tensors = false;
 
+        LOGI("llama_model_load_from_file begin: mmap=%d mlock=%d check_tensors=%d",
+             (int)mparams.use_mmap,
+             (int)mparams.use_mlock,
+             (int)mparams.check_tensors);
+
         llama_model *model = llama_model_load_from_file(model_path.c_str(), mparams);
         if (!model) {
-            std::string dbg = gma_model_load_error_debug(model_path);
+            std::string dbg = gma_model_load_error_debug(model_path, native_lib_dir, mparams);
             LOGE("%s", dbg.c_str());
+            llama_backend_free();
             return env->NewStringUTF(dbg.c_str());
         }
+
+        LOGI("model load OK");
 
         llama_context_params cparams = llama_context_default_params();
         cparams.n_ctx = 1024;
@@ -165,7 +186,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         llama_context *ctx = llama_init_from_model(model, cparams);
         if (!ctx) {
             llama_model_free(model);
-            LOGE("llama_init_from_model returned null");
+            llama_backend_free();
+            LOGE("GMA_LLAMA_ERROR: context_null");
             return env->NewStringUTF("GMA_LLAMA_ERROR: context_null");
         }
 
@@ -177,7 +199,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                 user +
                 "<end_of_turn>\n<start_of_turn>model\n";
 
-        std::vector<llama_token> tokens(prompt.size() + 32);
+        std::vector<llama_token> tokens(prompt.size() + 64);
         int32_t n_tokens = llama_tokenize(
                 vocab,
                 prompt.c_str(),
@@ -189,7 +211,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         );
 
         if (n_tokens < 0) {
-            tokens.resize((size_t) (-n_tokens));
+            tokens.resize((size_t)(-n_tokens));
             n_tokens = llama_tokenize(
                     vocab,
                     prompt.c_str(),
@@ -204,7 +226,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         if (n_tokens <= 0) {
             llama_free(ctx);
             llama_model_free(model);
-            LOGE("tokenize failed n=%d", n_tokens);
+            llama_backend_free();
+            LOGE("GMA_LLAMA_ERROR: tokenize_failed n=%d", n_tokens);
             return env->NewStringUTF("GMA_LLAMA_ERROR: tokenize_failed");
         }
 
@@ -222,7 +245,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             llama_batch_free(batch);
             llama_free(ctx);
             llama_model_free(model);
-            LOGE("prompt decode failed");
+            llama_backend_free();
+            LOGE("GMA_LLAMA_ERROR: prompt_decode_failed");
             return env->NewStringUTF("GMA_LLAMA_ERROR: prompt_decode_failed");
         }
 
@@ -233,7 +257,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
         std::string out;
         int pos = n_tokens;
-
         int max_pred = predictLength > 0 ? predictLength : 128;
         if (max_pred > 256) max_pred = 256;
 
@@ -259,7 +282,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
             if (llama_decode(ctx, next) != 0) {
                 llama_batch_free(next);
-                LOGE("decode failed during generation");
                 break;
             }
             llama_batch_free(next);
@@ -269,16 +291,22 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         llama_batch_free(batch);
         llama_free(ctx);
         llama_model_free(model);
+        llama_backend_free();
 
         if (out.empty()) {
-            return env->NewStringUTF("GMA_LLAMA_EMPTY_REPLY");
+            return env->NewStringUTF("GMA_LLAMA_ERROR: empty_reply");
         }
 
-        LOGI("nativeGenerate done reply_len=%d", (int) out.size());
         return env->NewStringUTF(out.c_str());
 
+    } catch (const std::exception &e) {
+        std::string err = std::string("GMA_LLAMA_ERROR: exception: ") + e.what();
+        LOGE("%s", err.c_str());
+        llama_backend_free();
+        return env->NewStringUTF(err.c_str());
     } catch (...) {
-        LOGE("nativeGenerate unknown exception");
-        return env->NewStringUTF("GMA_LLAMA_ERROR: native_exception");
+        LOGE("GMA_LLAMA_ERROR: unknown_exception");
+        llama_backend_free();
+        return env->NewStringUTF("GMA_LLAMA_ERROR: unknown_exception");
     }
 }

@@ -44,7 +44,6 @@ object GmaLlamaBridge {
         }
 
         var coreLoaded = 0
-        if (tryLoadAbsolute("libomp.so")) coreLoaded++
         if (tryLoadAbsolute("libggml-base.so")) coreLoaded++
         if (tryLoadAbsolute("libggml.so")) coreLoaded++
 
