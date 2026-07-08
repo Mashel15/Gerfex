@@ -7,6 +7,7 @@
 #include <vector>
 #include <sstream>
 #include <android/log.h>
+#include <dlfcn.h>
 
 #include "llama.h"
 #include "ggml-backend.h"
@@ -98,6 +99,66 @@ static std::string gma_file_debug(const std::string &model_path) {
     return std::string(buf);
 }
 
+
+static std::vector<ggml_backend_reg_t> g_gma_backend_regs;
+static bool g_gma_manual_backends_loaded = false;
+
+static int gma_manual_load_cpu_backends(const std::string &native_lib_dir, std::string &report) {
+    const char *names[] = {
+        "libggml-cpu-android_armv8.0_1.so",
+        "libggml-cpu-android_armv8.2_1.so",
+        "libggml-cpu-android_armv8.2_2.so",
+        "libggml-cpu-android_armv8.6_1.so",
+        "libggml-cpu-android_armv9.0_1.so",
+        "libggml-cpu-android_armv9.2_1.so",
+        "libggml-cpu-android_armv9.2_2.so",
+    };
+
+    if (g_gma_manual_backends_loaded && !g_gma_backend_regs.empty()) {
+        report += "manual_backends_already_loaded=" + std::to_string((int)g_gma_backend_regs.size()) + "; ";
+        return (int)g_gma_backend_regs.size();
+    }
+
+    int loaded = 0;
+
+    for (const char *name : names) {
+        std::string path = native_lib_dir;
+        if (!path.empty() && path.back() != '/') path += "/";
+        path += name;
+
+        struct stat st{};
+        int stat_rc = stat(path.c_str(), &st);
+
+        report += std::string(name) + "[";
+        report += "stat=" + std::to_string(stat_rc);
+        if (stat_rc == 0) report += ",size=" + std::to_string((long long)st.st_size);
+
+        ggml_backend_reg_t reg = ggml_backend_load(path.c_str());
+        if (reg) {
+            g_gma_backend_regs.push_back(reg);
+            loaded++;
+            report += ",ggml_backend_load=OK";
+            LOGI("manual backend loaded: %s", path.c_str());
+        } else {
+            const char *err = dlerror();
+            report += ",ggml_backend_load=FAIL";
+            if (err) {
+                report += ",dlerror=";
+                report += err;
+            }
+            LOGE("manual backend failed: %s", path.c_str());
+        }
+
+        report += "]; ";
+    }
+
+    if (loaded > 0) {
+        g_gma_manual_backends_loaded = true;
+    }
+
+    return loaded;
+}
+
 static std::string gma_model_load_error_debug(
         const std::string &model_path,
         const std::string &native_lib_dir,
@@ -148,9 +209,21 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         // callback واحد فقط — لا نعيد استبداله
         llama_log_set(gma_llama_log_cb, nullptr);
 
+        std::string backend_report;
+        int manual_backend_count = gma_manual_load_cpu_backends(native_lib_dir, backend_report);
+        LOGI("manual_backend_count=%d report=%s", manual_backend_count, backend_report.c_str());
+
         LOGI("calling ggml_backend_load_all()");
         ggml_backend_load_all();
         LOGI("ggml_backend_load_all done; llama_build=%s", GMA_LLAMA_BUILD);
+
+        if (manual_backend_count <= 0) {
+            std::string err = "GMA_LLAMA_ERROR: backend_load_failed | nativeLibDir=" + native_lib_dir
+                    + " | backend_report=" + backend_report
+                    + " | llama_log=" + gma_trim_log(g_gma_llama_log, 3000);
+            LOGE("%s", err.c_str());
+            return env->NewStringUTF(err.c_str());
+        }
 
         LOGI("calling llama_backend_init()");
         llama_backend_init();
@@ -241,13 +314,27 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         }
         batch.n_tokens = n_tokens;
 
-        if (llama_decode(ctx, batch) != 0) {
+        LOGI("prompt decode inputs: n_tokens=%d n_batch=%u n_ctx=%u",
+             n_tokens,
+             cparams.n_batch,
+             cparams.n_ctx);
+
+        int decode_ret = llama_decode(ctx, batch);
+        LOGI("llama_decode returned: %d", decode_ret);
+
+        if (decode_ret != 0) {
+            std::string err =
+                    "GMA_LLAMA_ERROR: prompt_decode_failed"
+                    " | decode_ret=" + std::to_string(decode_ret) +
+                    " | n_tokens=" + std::to_string(n_tokens) +
+                    " | n_batch=" + std::to_string((unsigned)cparams.n_batch) +
+                    " | n_ctx=" + std::to_string((unsigned)cparams.n_ctx);
+            LOGE("%s", err.c_str());
             llama_batch_free(batch);
             llama_free(ctx);
             llama_model_free(model);
             llama_backend_free();
-            LOGE("GMA_LLAMA_ERROR: prompt_decode_failed");
-            return env->NewStringUTF("GMA_LLAMA_ERROR: prompt_decode_failed");
+            return env->NewStringUTF(err.c_str());
         }
 
         llama_sampler *sampler = llama_sampler_chain_init(llama_sampler_chain_default_params());
