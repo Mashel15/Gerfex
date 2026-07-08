@@ -907,15 +907,29 @@ private String mapPackage(String name) {
     @PluginMethod
     public void gmaNativeChat(PluginCall call) {
         /*
-         * Legacy compatibility route.
+         * Run legacy GMA route off the plugin/UI path.
          *
-         * Direct GMA native chat is no longer an approved side door.
-         * All main GMA traffic must pass through:
+         * We still keep the approved route:
          * thinkMain -> gerfex_entry.think_main -> main_surface
          * -> internal_intelligence/gma/main -> gerfex_entry_gate
-         * -> fillGmaNativeIfNeeded -> GmaLlamaBridge.
+         * -> fillGmaNativeIfNeeded -> GmaLlamaBridge
+         *
+         * But we execute it on a worker thread because the native path
+         * may block for model load / context init / decode.
          */
-        thinkMain(call);
+        new Thread(() -> {
+            try {
+                thinkMain(call);
+            } catch (Throwable e) {
+                try {
+                    JSObject ret = new JSObject();
+                    ret.put("ok", false);
+                    ret.put("stage", "gma_native_thread_exception");
+                    ret.put("error", String.valueOf(e));
+                    call.resolve(ret);
+                } catch (Throwable ignored) {}
+            }
+        }, "gerfex-gma-native-chat").start();
     }
 
     @PluginMethod
