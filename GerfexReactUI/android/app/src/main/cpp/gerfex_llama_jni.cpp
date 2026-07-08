@@ -304,16 +304,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             return env->NewStringUTF("GMA_LLAMA_ERROR: tokenize_failed");
         }
 
-        llama_batch batch = llama_batch_init(n_tokens, 0, 1);
-        for (int i = 0; i < n_tokens; ++i) {
-            batch.token[i] = tokens[i];
-            batch.pos[i] = i;
-            batch.n_seq_id[i] = 1;
-            batch.seq_id[i][0] = 0;
-            batch.logits[i] = (i == n_tokens - 1);
-        }
-        batch.n_tokens = n_tokens;
-
         LOGI("prompt decode inputs: n_tokens=%d n_batch=%u n_ctx=%u",
              n_tokens,
              cparams.n_batch,
@@ -330,7 +320,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     " | n_ctx=" + std::to_string(ctx_limit) +
                     " | reserve=" + std::to_string(safe_reply_reserve);
             LOGE("%s", err.c_str());
-            llama_batch_free(batch);
             llama_free(ctx);
             llama_model_free(model);
             llama_backend_free();
@@ -344,29 +333,53 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     " | allowed=" + std::to_string(allowed_prompt_tokens) +
                     " | n_ctx=" + std::to_string(ctx_limit);
             LOGE("%s", err.c_str());
-            llama_batch_free(batch);
             llama_free(ctx);
             llama_model_free(model);
             llama_backend_free();
             return env->NewStringUTF(err.c_str());
         }
 
-        int decode_ret = llama_decode(ctx, batch);
-        LOGI("llama_decode returned: %d", decode_ret);
+        int decode_ret = 0;
+        int decoded_pos = 0;
+        while (decoded_pos < n_tokens) {
+            int chunk = (int)cparams.n_batch;
+            if (chunk <= 0) chunk = 32;
+            if (chunk > n_tokens - decoded_pos) chunk = n_tokens - decoded_pos;
 
-        if (decode_ret != 0) {
-            std::string err =
-                    "GMA_LLAMA_ERROR: prompt_decode_failed"
-                    " | decode_ret=" + std::to_string(decode_ret) +
-                    " | n_tokens=" + std::to_string(n_tokens) +
-                    " | n_batch=" + std::to_string((unsigned)cparams.n_batch) +
-                    " | n_ctx=" + std::to_string((unsigned)cparams.n_ctx);
-            LOGE("%s", err.c_str());
-            llama_batch_free(batch);
-            llama_free(ctx);
-            llama_model_free(model);
-            llama_backend_free();
-            return env->NewStringUTF(err.c_str());
+            llama_batch chunk_batch = llama_batch_init(chunk, 0, 1);
+            for (int i = 0; i < chunk; ++i) {
+                int idx = decoded_pos + i;
+                chunk_batch.token[i] = tokens[idx];
+                chunk_batch.pos[i] = idx;
+                chunk_batch.n_seq_id[i] = 1;
+                chunk_batch.seq_id[i][0] = 0;
+                chunk_batch.logits[i] = (idx == n_tokens - 1);
+            }
+            chunk_batch.n_tokens = chunk;
+
+            LOGI("prompt decode chunk: start=%d chunk=%d total=%d n_batch=%u n_ctx=%u",
+                 decoded_pos, chunk, n_tokens, cparams.n_batch, cparams.n_ctx);
+
+            decode_ret = llama_decode(ctx, chunk_batch);
+            llama_batch_free(chunk_batch);
+
+            if (decode_ret != 0) {
+                std::string err =
+                        "GMA_LLAMA_ERROR: prompt_decode_failed"
+                        " | decode_ret=" + std::to_string(decode_ret) +
+                        " | decoded_pos=" + std::to_string(decoded_pos) +
+                        " | chunk=" + std::to_string(chunk) +
+                        " | n_tokens=" + std::to_string(n_tokens) +
+                        " | n_batch=" + std::to_string((unsigned)cparams.n_batch) +
+                        " | n_ctx=" + std::to_string((unsigned)cparams.n_ctx);
+                LOGE("%s", err.c_str());
+                llama_free(ctx);
+                llama_model_free(model);
+                llama_backend_free();
+                return env->NewStringUTF(err.c_str());
+            }
+
+            decoded_pos += chunk;
         }
 
         llama_sampler *sampler = llama_sampler_chain_init(llama_sampler_chain_default_params());
@@ -407,7 +420,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         }
 
         llama_sampler_free(sampler);
-        llama_batch_free(batch);
         llama_free(ctx);
         llama_model_free(model);
         llama_backend_free();
