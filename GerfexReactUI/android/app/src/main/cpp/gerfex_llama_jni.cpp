@@ -250,9 +250,9 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         LOGI("model load OK");
 
         llama_context_params cparams = llama_context_default_params();
-        cparams.n_ctx = 512;
-        cparams.n_batch = 32;
-        cparams.n_ubatch = 32;
+        cparams.n_ctx = 2048;
+        cparams.n_batch = 128;
+        cparams.n_ubatch = 128;
         cparams.n_threads = 4;
         cparams.n_threads_batch = 4;
 
@@ -318,6 +318,40 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
              n_tokens,
              cparams.n_batch,
              cparams.n_ctx);
+
+        const int safe_reply_reserve = 96;
+        const int ctx_limit = (int) cparams.n_ctx;
+        const int allowed_prompt_tokens = ctx_limit - safe_reply_reserve;
+
+        if (allowed_prompt_tokens <= 32) {
+            std::string err =
+                    "GMA_LLAMA_ERROR: prompt_budget_invalid"
+                    " | n_tokens=" + std::to_string(n_tokens) +
+                    " | n_ctx=" + std::to_string(ctx_limit) +
+                    " | reserve=" + std::to_string(safe_reply_reserve);
+            LOGE("%s", err.c_str());
+            append_native_trace("prompt_too_long_guard_invalid_budget", err);
+            llama_batch_free(batch);
+            llama_free(ctx);
+            llama_model_free(model);
+            llama_backend_free();
+            return env->NewStringUTF(err.c_str());
+        }
+
+        if (n_tokens > allowed_prompt_tokens) {
+            std::string err =
+                    "GMA_LLAMA_ERROR: prompt_too_long"
+                    " | n_tokens=" + std::to_string(n_tokens) +
+                    " | allowed=" + std::to_string(allowed_prompt_tokens) +
+                    " | n_ctx=" + std::to_string(ctx_limit);
+            LOGE("%s", err.c_str());
+            append_native_trace("prompt_too_long_guard", err);
+            llama_batch_free(batch);
+            llama_free(ctx);
+            llama_model_free(model);
+            llama_backend_free();
+            return env->NewStringUTF(err.c_str());
+        }
 
         int decode_ret = llama_decode(ctx, batch);
         LOGI("llama_decode returned: %d", decode_ret);
