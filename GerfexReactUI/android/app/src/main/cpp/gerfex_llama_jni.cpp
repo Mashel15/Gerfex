@@ -330,7 +330,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     " | n_ctx=" + std::to_string(ctx_limit) +
                     " | reserve=" + std::to_string(safe_reply_reserve);
             LOGE("%s", err.c_str());
-            append_native_trace("prompt_too_long_guard_invalid_budget", err);
             llama_batch_free(batch);
             llama_free(ctx);
             llama_model_free(model);
@@ -345,7 +344,6 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     " | allowed=" + std::to_string(allowed_prompt_tokens) +
                     " | n_ctx=" + std::to_string(ctx_limit);
             LOGE("%s", err.c_str());
-            append_native_trace("prompt_too_long_guard", err);
             llama_batch_free(batch);
             llama_free(ctx);
             llama_model_free(model);
