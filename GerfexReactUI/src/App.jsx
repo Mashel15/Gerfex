@@ -19,7 +19,7 @@ async function askGerfexNative(prompt, modelState = {}) {
           reply: "انتهت مهلة انتظار GMA Native قبل رجوع الرد للواجهة.",
           stage: "ui_timeout"
         })
-      }), 65000)
+      }), 120000)
     )
   ]);
 
