@@ -435,6 +435,17 @@ private String mapPackage(String name) {
         }
     }
 
+    private String limitGmaPrompt(String prompt, String mode) {
+        if (prompt == null) return "";
+        int maxChars = "learning".equals(mode) ? 1400 : 1800;
+        if (prompt.length() <= maxChars) return prompt;
+
+        String kept = prompt.substring(prompt.length() - maxChars);
+        return "[GMA_PROMPT_TRIMMED original_chars=" + prompt.length()
+                + " kept_chars=" + kept.length()
+                + " mode=" + mode + "]\n" + kept;
+    }
+
     private String fillGmaNativeIfNeeded(String result, String speakerName) {
         long t0 = System.currentTimeMillis();
         try {
@@ -449,6 +460,9 @@ private String mapPackage(String name) {
             String traceId = root.optString("trace_id", "");
             String prompt = root.optString("gma_prompt", root.optString("reply", ""));
             String mode = root.optString("gma_mode", "main");
+            int originalPromptLen = prompt.length();
+            prompt = limitGmaPrompt(prompt, mode);
+            appendGmaJavaTrace("fill_native_prompt_budget", "mode=" + mode + " original_len=" + originalPromptLen + " final_len=" + prompt.length());
 
             JSONObject requestStage = new JSONObject();
             requestStage.put("action", "gma_native_surface");
