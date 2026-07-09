@@ -4,27 +4,58 @@ import { registerPlugin } from "@capacitor/core";
 const GerfexNative = registerPlugin("Gerfex");
 
 async function askGerfexNative(prompt, modelState = {}) {
-  const nativeRes = GerfexNative?.thinkMain
-    ? await GerfexNative.thinkMain({ message: prompt, model_state: modelState })
-    : await GerfexNative.think({ message: prompt, model_state: modelState });
+  const nativePromise = GerfexNative?.thinkMain
+    ? GerfexNative.thinkMain({ message: prompt, model_state: modelState })
+    : GerfexNative.think({ message: prompt, model_state: modelState });
+
+  const nativeRes = await Promise.race([
+    nativePromise,
+    new Promise((resolve) =>
+      setTimeout(() => resolve({
+        ok: false,
+        error: "GMA_NATIVE_UI_TIMEOUT",
+        result: JSON.stringify({
+          ok: false,
+          reply: "انتهت مهلة انتظار GMA Native قبل رجوع الرد للواجهة.",
+          stage: "ui_timeout"
+        })
+      }), 65000)
+    )
+  ]);
 
   if (!nativeRes || nativeRes.ok === false) {
+    let fallbackReply = "خطأ Gerfex Native: " + (nativeRes?.error || "لا يوجد تفاصيل");
+    try {
+      const parsedError = JSON.parse(nativeRes?.result || "{}");
+      fallbackReply = parsedError.reply || parsedError.error || fallbackReply;
+    } catch {}
     return {
       ok: false,
-      reply: "خطأ Gerfex Native: " + (nativeRes?.error || "لا يوجد تفاصيل"),
+      reply: fallbackReply,
       speaker: "Gerfex",
-      replies: [{ speaker: "Gerfex", content: "خطأ Gerfex Native: " + (nativeRes?.error || "لا يوجد تفاصيل") }],
+      replies: [{ speaker: "Gerfex", content: fallbackReply }],
       raw: nativeRes
     };
   }
 
-  const parsed = JSON.parse(nativeRes.result || "{}");
+  let parsed = {};
+  try {
+    parsed = JSON.parse(nativeRes.result || "{}");
+  } catch (e) {
+    parsed = {
+      ok: false,
+      reply: "فشل تحليل نتيجة Gerfex Native: " + (e?.message || e),
+      raw_result: nativeRes.result || ""
+    };
+  }
+
+  const replyText = parsed.reply || parsed.error || parsed.raw_result || "لا يوجد رد من Gerfex.";
 
   return {
     ok: parsed.ok !== false,
-    reply: parsed.reply || "لا يوجد رد من Gerfex.",
-    speaker: "Gerfex",
-    replies: [{ speaker: "Gerfex", content: parsed.reply || "لا يوجد رد من Gerfex." }],
+    reply: replyText,
+    speaker: parsed.speaker || "Gerfex",
+    replies: [{ speaker: parsed.speaker || "Gerfex", content: replyText }],
     raw: parsed
   };
 }

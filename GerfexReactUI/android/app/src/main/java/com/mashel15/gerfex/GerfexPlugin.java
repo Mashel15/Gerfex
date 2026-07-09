@@ -409,6 +409,32 @@ private String mapPackage(String name) {
         } catch (Throwable ignored) {}
     }
 
+    @PluginMethod
+    public void getGmaTrace(PluginCall call) {
+        JSObject ret = new JSObject();
+        try {
+            File dir = new File(getContext().getFilesDir(), "gerfex_runtime_data/runtime");
+            File file = new File(dir, "gma_java_trace.txt");
+            String content = "";
+            if (file.exists()) {
+                byte[] bytes = java.nio.file.Files.readAllBytes(file.toPath());
+                content = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+                if (content.length() > 20000) {
+                    content = content.substring(content.length() - 20000);
+                }
+            }
+            ret.put("ok", true);
+            ret.put("path", file.getAbsolutePath());
+            ret.put("exists", file.exists());
+            ret.put("content", content);
+            call.resolve(ret);
+        } catch (Throwable e) {
+            ret.put("ok", false);
+            ret.put("error", e.toString());
+            call.resolve(ret);
+        }
+    }
+
     private String fillGmaNativeIfNeeded(String result, String speakerName) {
         long t0 = System.currentTimeMillis();
         try {
@@ -462,6 +488,12 @@ private String mapPackage(String name) {
                 errorCode = "no_backend_loaded";
             } else if (replyText.contains("prompt_decode_failed")) {
                 errorCode = "prompt_decode_failed";
+            } else if (replyText.contains("generation_decode_failed")) {
+                errorCode = "generation_decode_failed";
+            } else if (replyText.contains("generation_timeout")) {
+                errorCode = "generation_timeout";
+            } else if (replyText.contains("generation_no_tokens")) {
+                errorCode = "generation_no_tokens";
             } else if (replyText.contains("tokenize_failed")) {
                 errorCode = "tokenize_failed";
             } else if (replyText.contains("native_exception")) {

@@ -6,6 +6,7 @@
 #include <cerrno>
 #include <vector>
 #include <sstream>
+#include <chrono>
 #include <android/log.h>
 #include <dlfcn.h>
 
@@ -392,17 +393,45 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         int max_pred = predictLength > 0 ? predictLength : 64;
         if (max_pred > 64) max_pred = 64;
 
+        LOGI("generation start: max_pred=%d start_pos=%d", max_pred, pos);
+
+        const auto gen_started_at = std::chrono::steady_clock::now();
+        const long long gen_timeout_ms = 15000; // 15s hard cap to avoid hanging UI
+        int generation_decode_error = 0;
+        int generation_error_step = -1;
+        int generated_tokens = 0;
+        bool generation_timed_out = false;
+        bool generation_hit_eog = false;
+
         for (int i = 0; i < max_pred; ++i) {
+            auto now = std::chrono::steady_clock::now();
+            long long elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - gen_started_at).count();
+            if (elapsed_ms > gen_timeout_ms) {
+                generation_timed_out = true;
+                generation_error_step = i;
+                LOGE("generation timeout: step=%d elapsed_ms=%lld out_len=%zu pos=%d", i, elapsed_ms, out.size(), pos);
+                break;
+            }
+
+            if (i == 0 || (i % 8) == 0) {
+                LOGI("generation step begin: step=%d elapsed_ms=%lld out_len=%zu pos=%d", i, elapsed_ms, out.size(), pos);
+            }
+
             llama_token tok = llama_sampler_sample(sampler, ctx, -1);
             llama_sampler_accept(sampler, tok);
 
             if (llama_vocab_is_eog(vocab, tok)) {
+                generation_hit_eog = true;
+                LOGI("generation eog: step=%d elapsed_ms=%lld out_len=%zu", i, elapsed_ms, out.size());
                 break;
             }
 
             char piece[256];
             int n = llama_token_to_piece(vocab, tok, piece, sizeof(piece), 0, true);
-            if (n > 0) out.append(piece, piece + n);
+            if (n > 0) {
+                out.append(piece, piece + n);
+            }
+            generated_tokens++;
 
             llama_batch next = llama_batch_init(1, 0, 1);
             next.token[0] = tok;
@@ -412,11 +441,19 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             next.logits[0] = true;
             next.n_tokens = 1;
 
-            if (llama_decode(ctx, next) != 0) {
-                llama_batch_free(next);
+            int next_decode = llama_decode(ctx, next);
+            llama_batch_free(next);
+
+            if (next_decode != 0) {
+                generation_decode_error = next_decode;
+                generation_error_step = i;
+                LOGE("generation decode failed: step=%d decode_ret=%d out_len=%zu pos=%d", i, next_decode, out.size(), pos);
                 break;
             }
-            llama_batch_free(next);
+
+            if (i == 0 || (i % 8) == 0) {
+                LOGI("generation step done: step=%d out_len=%zu generated_tokens=%d pos=%d", i, out.size(), generated_tokens, pos);
+            }
         }
 
         llama_sampler_free(sampler);
@@ -424,10 +461,43 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         llama_model_free(model);
         llama_backend_free();
 
-        if (out.empty()) {
-            return env->NewStringUTF("GMA_LLAMA_ERROR: empty_reply");
+        if (generation_decode_error != 0) {
+            std::string err =
+                    "GMA_LLAMA_ERROR: generation_decode_failed"
+                    " | decode_ret=" + std::to_string(generation_decode_error) +
+                    " | step=" + std::to_string(generation_error_step) +
+                    " | generated_tokens=" + std::to_string(generated_tokens) +
+                    " | out_len=" + std::to_string((int) out.size()) +
+                    " | n_ctx=" + std::to_string((unsigned)cparams.n_ctx) +
+                    " | n_batch=" + std::to_string((unsigned)cparams.n_batch);
+            LOGE("%s", err.c_str());
+            return env->NewStringUTF(err.c_str());
         }
 
+        if (generation_timed_out) {
+            std::string err =
+                    "GMA_LLAMA_ERROR: generation_timeout"
+                    " | step=" + std::to_string(generation_error_step) +
+                    " | generated_tokens=" + std::to_string(generated_tokens) +
+                    " | out_len=" + std::to_string((int) out.size()) +
+                    " | n_ctx=" + std::to_string((unsigned)cparams.n_ctx) +
+                    " | n_batch=" + std::to_string((unsigned)cparams.n_batch);
+            LOGE("%s", err.c_str());
+            return env->NewStringUTF(err.c_str());
+        }
+
+        if (out.empty()) {
+            std::string err =
+                    "GMA_LLAMA_ERROR: generation_no_tokens"
+                    " | generated_tokens=" + std::to_string(generated_tokens) +
+                    " | hit_eog=" + std::string(generation_hit_eog ? "1" : "0") +
+                    " | n_ctx=" + std::to_string((unsigned)cparams.n_ctx) +
+                    " | n_batch=" + std::to_string((unsigned)cparams.n_batch);
+            LOGE("%s", err.c_str());
+            return env->NewStringUTF(err.c_str());
+        }
+
+        LOGI("generation done: out_len=%zu generated_tokens=%d", out.size(), generated_tokens);
         return env->NewStringUTF(out.c_str());
 
     } catch (const std::exception &e) {

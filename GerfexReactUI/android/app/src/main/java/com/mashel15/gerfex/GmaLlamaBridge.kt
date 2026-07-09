@@ -106,9 +106,12 @@ object GmaLlamaBridge {
                 predictLength
             )
 
+            Log.i("GMA_DEBUG", "nativeGenerate returned len=${reply.length}")
+            setStage("llama_native_generate_returned_len_${reply.length}")
             setStage("llama_native_generate_done")
             return reply
         } catch (e: Throwable) {
+            Log.e("GMA_DEBUG", "nativeGenerate failed stage=$lastStage", e)
             setStage("llama_error_${e.javaClass.simpleName}: ${e.message}")
             throw e
         }
