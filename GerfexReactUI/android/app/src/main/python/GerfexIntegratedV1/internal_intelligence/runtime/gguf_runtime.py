@@ -15,14 +15,14 @@ class GGUFRuntime:
             "loaded": self.loaded,
             "model_path": self.model_path,
             "model_asset": self.model_asset,
-            "note": "GGUF runtime adapter exists. Native llama.cpp binding is not connected yet."
+            "note": "GGUF model is served through Android Native GmaLlamaBridge/JNI, not this Python fallback adapter."
         }
 
     def generate(self, prompt, **kwargs):
         return {
             "ok": False,
-            "reply": "GGUF Runtime موجود، لكن محرك llama.cpp الأصلي لم يتم ربطه بعد.",
-            "reason": "native_llama_cpp_not_connected_yet",
+            "reply": "GMA Native يعمل عبر Android JNI. هذا المسار Python fallback غير مخصص للمحادثة المباشرة.",
+            "reason": "use_android_gma_native_bridge",
             "engine": self.engine,
             "model_path": self.model_path,
             "model_asset": self.model_asset
