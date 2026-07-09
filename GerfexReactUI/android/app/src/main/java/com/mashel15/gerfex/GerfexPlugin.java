@@ -484,7 +484,7 @@ private String mapPackage(String name) {
                 + " length=" + model.length();
 
             appendGmaJavaTrace("fill_native_generate_start", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " prompt_len=" + prompt.length() + " bridge_stage=" + GmaLlamaBridge.getLastStage());
-            String nativeReply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), prompt, 256);
+            String nativeReply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), prompt, 24);
             String replyText = nativeReply == null ? "" : nativeReply.trim();
             appendGmaJavaTrace("fill_native_generate_done", "elapsed_ms=" + (System.currentTimeMillis() - t0) + " reply_len=" + replyText.length() + " bridge_stage=" + GmaLlamaBridge.getLastStage());
 

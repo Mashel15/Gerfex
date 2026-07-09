@@ -396,7 +396,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         LOGI("generation start: max_pred=%d start_pos=%d", max_pred, pos);
 
         const auto gen_started_at = std::chrono::steady_clock::now();
-        const long long gen_timeout_ms = 15000; // 15s hard cap to avoid hanging UI
+        const long long gen_timeout_ms = 90000; // 15s hard cap to avoid hanging UI
         int generation_decode_error = 0;
         int generation_error_step = -1;
         int generated_tokens = 0;
@@ -475,6 +475,11 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         }
 
         if (generation_timed_out) {
+            if (!out.empty()) {
+                LOGW("generation timeout with partial output: step=%d generated_tokens=%d out_len=%zu",
+                     generation_error_step, generated_tokens, out.size());
+                return env->NewStringUTF(out.c_str());
+            }
             std::string err =
                     "GMA_LLAMA_ERROR: generation_timeout"
                     " | step=" + std::to_string(generation_error_step) +
