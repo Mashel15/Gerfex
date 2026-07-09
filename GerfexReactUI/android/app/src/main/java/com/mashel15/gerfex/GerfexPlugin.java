@@ -437,7 +437,8 @@ private String mapPackage(String name) {
 
     private String limitGmaPrompt(String prompt, String mode) {
         if (prompt == null) return "";
-        int maxChars = "learning".equals(mode) ? 1400 : 1800;
+        String m = mode == null ? "" : mode.toLowerCase();
+        int maxChars = m.contains("learn") ? 1200 : 1600;
         if (prompt.length() <= maxChars) return prompt;
 
         String kept = prompt.substring(prompt.length() - maxChars);
