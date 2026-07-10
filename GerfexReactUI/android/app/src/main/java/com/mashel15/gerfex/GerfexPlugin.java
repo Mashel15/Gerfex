@@ -564,7 +564,7 @@ private String mapPackage(String name) {
                     getContext(),
                     model.getAbsolutePath(),
                     limitedPrompt,
-                    256
+                    64
             );
 
             nativeReply = normalizeGmaFormatting(nativeReply);

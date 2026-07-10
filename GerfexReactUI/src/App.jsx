@@ -340,7 +340,7 @@ export default function App() {
 
       const nativeGma = await GerfexNative.gmaNativeChat({
         message: "[LEARNING_SESSION]\\n" + text,
-        predictLength: 256
+        predictLength: 128
       });
 
       const data = {
