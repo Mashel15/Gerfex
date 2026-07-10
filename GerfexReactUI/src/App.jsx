@@ -21,31 +21,7 @@ function classifyGerfexRoute(prompt = "") {
 }
 
 async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
-  const route = routeHint || classifyGerfexRoute(prompt);
-
-  if (route !== "python_core" && modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
-    const nativeGma = await GerfexNative.gmaNativeChat({ message: prompt, predictLength: 256 });
-
-    if (nativeGma?.ok === false) {
-      const errorText = nativeGma?.error_code || nativeGma?.error || "GMA_NATIVE_ERROR";
-      return {
-        ok: false,
-        reply: "خطأ في GMA Native: " + errorText,
-        speaker: "Gerfex",
-        replies: [{ speaker: "Gerfex", content: "خطأ في GMA Native: " + errorText }],
-        raw: nativeGma
-      };
-    }
-
-    return {
-      ok: !!nativeGma?.ok,
-      reply: nativeGma?.reply || "لا يوجد رد من GMA.",
-      speaker: "GMA",
-      replies: [{ speaker: "GMA", content: nativeGma?.reply || "لا يوجد رد من GMA." }],
-      raw: nativeGma
-    };
-  }
-
+  // الشاشة الرئيسية تبدأ دائمًا من Gerfex، وليس من GMA مباشرة.
   const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
 
   if (!nativeRes || nativeRes.ok === false) {
@@ -358,7 +334,21 @@ export default function App() {
           models: models
         };
 
-        const data = await askGerfexNative("[LEARNING_SESSION]\\n" + text, gmaState);
+        if (!GerfexNative?.gmaNativeChat) {
+        throw new Error("gmaNativeChat غير متوفر لصفحة التعليم");
+      }
+
+      const nativeGma = await GerfexNative.gmaNativeChat({
+        message: "[LEARNING_SESSION]\\n" + text,
+        predictLength: 256
+      });
+
+      const data = {
+        ok: !!nativeGma?.ok,
+        reply: nativeGma?.reply || nativeGma?.error || "لم أستطع توليد رد تعلّم الآن.",
+        speaker: "GMA",
+        raw: nativeGma
+      };
         const replyText = data.reply || data.raw?.reply || data.raw?.error || "لم أستطع توليد رد تعلّم الآن.";
         const replyMsg = { speaker: "GMA", content: replyText };
 
