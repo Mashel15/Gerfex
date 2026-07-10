@@ -392,6 +392,24 @@ private String mapPackage(String name) {
     }
 
 
+    private String limitGmaPrompt(String prompt, String mode) {
+        if (prompt == null) return "";
+
+        String normalizedMode = mode == null ? "" : mode.toLowerCase();
+        int maxChars = normalizedMode.contains("learn") ? 1200 : 1600;
+
+        if (prompt.length() <= maxChars) {
+            return prompt;
+        }
+
+        String kept = prompt.substring(prompt.length() - maxChars);
+
+        return "[GMA_PROMPT_TRIMMED original_chars=" + prompt.length()
+                + " kept_chars=" + kept.length()
+                + " mode=" + mode + "]\n"
+                + kept;
+    }
+
     private String resolveMainGmaNativeReply(String result, String originalMessage) {
         try {
             JSONObject root = new JSONObject(result);
@@ -446,10 +464,12 @@ private String mapPackage(String name) {
 
             File model = ensureGmaModelFile();
 
+            String limitedPrompt = limitGmaPrompt(originalMessage, "main");
+
             String nativeReply = GmaLlamaBridge.generateBlocking(
                     getContext(),
                     model.getAbsolutePath(),
-                    originalMessage,
+                    limitedPrompt,
                     256
             );
 
@@ -468,6 +488,8 @@ private String mapPackage(String name) {
                 errorCode = "model_load_null";
             } else if (replyText.contains("context_null")) {
                 errorCode = "context_null";
+            } else if (replyText.contains("prompt_decode_failed")) {
+                errorCode = "prompt_decode_failed";
             }
 
             if (errorCode != null) {
@@ -921,7 +943,20 @@ private String mapPackage(String name) {
 
                 stage[0] = "bridge_call_started";
                 android.util.Log.i("GMA_DEBUG", "bridge_call_started model=" + model.getAbsolutePath() + " size=" + modelSize);
-                String reply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
+
+                String limitedMessage = limitGmaPrompt(
+                        message,
+                        message != null && message.contains("[LEARNING_SESSION]")
+                                ? "learning"
+                                : "direct"
+                );
+
+                String reply = GmaLlamaBridge.generateBlocking(
+                        getContext(),
+                        model.getAbsolutePath(),
+                        limitedMessage,
+                        predictLength
+                );
                 android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
 
                 String replyText = reply == null ? "" : reply.trim();
@@ -939,6 +974,8 @@ private String mapPackage(String name) {
                     errorCode = "model_load_null";
                 } else if (replyText.contains("context_null")) {
                     errorCode = "context_null";
+                } else if (replyText.contains("prompt_decode_failed")) {
+                    errorCode = "prompt_decode_failed";
                 }
 
                 if (finished.compareAndSet(false, true)) {
