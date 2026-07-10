@@ -410,6 +410,32 @@ private String mapPackage(String name) {
                 + kept;
     }
 
+    private String normalizeGmaFormatting(String text) {
+        if (text == null || text.isEmpty()) return "";
+
+        String normalized = text;
+
+        // إزالة Markdown bold/italic المشوه في العربية.
+        normalized = normalized.replace("**", "");
+        normalized = normalized.replace("__", "");
+
+        // إزالة النجوم التي تُستخدم كبداية عناصر قائمة.
+        normalized = normalized.replaceAll(
+                "(?m)^\\s*\\*\\s+",
+                "- "
+        );
+
+        // إزالة النجوم المفردة المتبقية حول الكلمات.
+        normalized = normalized.replace("*", "");
+
+        // تنظيف المسافات الزائدة الناتجة عن الإزالة.
+        normalized = normalized.replaceAll("[ \\t]+\\n", "\n");
+        normalized = normalized.replaceAll("\\n{3,}", "\n\n");
+
+        return normalized.trim();
+    }
+
+
     private String normalizeArabicPunctuation(String text) {
         if (text == null || text.isEmpty()) return "";
 
@@ -541,6 +567,7 @@ private String mapPackage(String name) {
                     256
             );
 
+            nativeReply = normalizeGmaFormatting(nativeReply);
             nativeReply = normalizeArabicPunctuation(nativeReply);
             String replyText = nativeReply == null ? "" : nativeReply.trim();
             String errorCode = null;
@@ -1028,6 +1055,7 @@ private String mapPackage(String name) {
                 );
                 android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
 
+                reply = normalizeGmaFormatting(reply);
                 reply = normalizeArabicPunctuation(reply);
                 String replyText = reply == null ? "" : reply.trim();
                 String errorCode = null;
