@@ -391,6 +391,169 @@ private String mapPackage(String name) {
         call.resolve(ret);
     }
 
+
+    private String resolveMainGmaNativeReply(String result, String originalMessage) {
+        try {
+            JSONObject root = new JSONObject(result);
+
+            JSONObject raw = root.optJSONObject("raw");
+            JSONObject execution = raw != null ? raw.optJSONObject("execution") : null;
+
+            JSONObject decision = execution != null
+                    ? execution.optJSONObject("decision")
+                    : null;
+
+            if (decision == null && raw != null) {
+                decision = raw.optJSONObject("decision");
+            }
+            if (decision == null) {
+                decision = root.optJSONObject("decision");
+            }
+
+            String intent = "";
+            if (execution != null) {
+                intent = execution.optString("intent", "");
+            }
+            if (intent.isEmpty() && decision != null) {
+                intent = decision.optString("intent", "");
+            }
+            if (intent.isEmpty()) {
+                intent = root.optString("intent", "");
+            }
+
+            // الشاشة الرئيسية فقط. صفحة التعليم تبقى على gmaNativeChat المباشر.
+            if (!"gma_chat".equals(intent) && !"conversation".equals(intent)) {
+                return result;
+            }
+
+            String traceId = root.optString("trace_id", "");
+
+            JSONObject startAction = new JSONObject();
+            startAction.put("action", "internal_intelligence_native");
+            startAction.put(
+                    "args",
+                    new JSONObject()
+                            .put("provider", "GMA")
+                            .put("mode", "main")
+            );
+
+            appendPluginTrace(
+                    traceId,
+                    startAction,
+                    "internal_intelligence_native_start",
+                    true
+            );
+
+            File model = ensureGmaModelFile();
+
+            String nativeReply = GmaLlamaBridge.generateBlocking(
+                    getContext(),
+                    model.getAbsolutePath(),
+                    originalMessage,
+                    256
+            );
+
+            String replyText = nativeReply == null ? "" : nativeReply.trim();
+            String errorCode = null;
+
+            if (replyText.isEmpty()) {
+                errorCode = "GMA_LLAMA_EMPTY_REPLY";
+            } else if (replyText.contains("GMA_LLAMA_ERROR")) {
+                errorCode = "GMA_LLAMA_ERROR";
+            } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
+                errorCode = "GMA_LLAMA_EMPTY_REPLY";
+            } else if (replyText.contains("no_backend_loaded")) {
+                errorCode = "no_backend_loaded";
+            } else if (replyText.contains("model_load_null")) {
+                errorCode = "model_load_null";
+            } else if (replyText.contains("context_null")) {
+                errorCode = "context_null";
+            }
+
+            if (errorCode != null) {
+                root.put("ok", false);
+                root.put("speaker", "Gerfex");
+                root.put("error_code", errorCode);
+                root.put("error", replyText);
+                root.put("reply", "خطأ في الذكاء الداخلي: " + errorCode);
+
+                JSONObject errorAction = new JSONObject();
+                errorAction.put("action", "internal_intelligence_native_reply");
+                errorAction.put(
+                        "args",
+                        new JSONObject()
+                                .put("provider", "GMA")
+                                .put("error_code", errorCode)
+                                .put("bridge_stage", GmaLlamaBridge.getLastStage())
+                );
+
+                appendPluginTrace(
+                        traceId,
+                        errorAction,
+                        "internal_intelligence_native_error",
+                        false
+                );
+
+                return root.toString();
+            }
+
+            // النتيجة مملوكة لجيرفكس، وGMA هو العقل الداخلي الذي ولّدها.
+            root.put("ok", true);
+            root.put("speaker", "Gerfex");
+            root.put("reply", nativeReply);
+            root.put("internal_intelligence_provider", "GMA");
+            root.put("internal_intelligence_native_used", true);
+            root.put("bridge_stage", GmaLlamaBridge.getLastStage());
+            root.put("model_path", model.getAbsolutePath());
+            root.put("model_size", model.length());
+
+            if (raw != null) {
+                raw.put("ok", true);
+                raw.put("speaker", "Gerfex");
+                raw.put("reply", nativeReply);
+
+                if (execution != null) {
+                    execution.put("ok", true);
+                    execution.put("reply", nativeReply);
+                    execution.put("message", nativeReply);
+                    execution.put("reason", "internal_intelligence_native_reply");
+                }
+
+                if (decision != null) {
+                    decision.put("reply", nativeReply);
+                    decision.put("reason", "internal_intelligence_native_reply");
+                }
+            }
+
+            JSONObject doneAction = new JSONObject();
+            doneAction.put("action", "internal_intelligence_native_reply");
+            doneAction.put(
+                    "args",
+                    new JSONObject()
+                            .put("provider", "GMA")
+                            .put("reply_len", replyText.length())
+                            .put("bridge_stage", GmaLlamaBridge.getLastStage())
+            );
+
+            appendPluginTrace(
+                    traceId,
+                    doneAction,
+                    "internal_intelligence_native_done",
+                    true
+            );
+
+            return root.toString();
+
+        } catch (Throwable e) {
+            android.util.Log.e(
+                    "GMA_DEBUG",
+                    "resolveMainGmaNativeReply failed",
+                    e
+            );
+            return result;
+        }
+    }
+
     @PluginMethod
     public void think(PluginCall call) {
         String message = call.getString("message", "");
@@ -412,9 +575,15 @@ private String mapPackage(String name) {
                 PyObject entry = py.getModule("gerfex_entry");
                 String result = entry.callAttr("think", message, modelStateJson).toString();
 
+                // Gerfex Core يقرر أولًا، ثم يستدعي عقله الداخلي GMA عند gma_chat.
+                result = resolveMainGmaNativeReply(result, message);
+
                 int nativeCount = executeFromResult(result);
 
-                try { Thread.sleep(1500L); } catch(Exception ignored) {}
+                // الانتظار مطلوب بعد تنفيذ Android فقط، وليس بعد المحادثة.
+                if (nativeCount > 0) {
+                    try { Thread.sleep(1500L); } catch(Exception ignored) {}
+                }
 
                 String screenTextAfterExecution = GerfexAccessibilityService.dumpText();
                 String screenTextAfterPath = saveNativeScreenText(screenTextAfterExecution);

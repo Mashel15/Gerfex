@@ -3,18 +3,25 @@ import { registerPlugin } from "@capacitor/core";
 
 const GerfexNative = registerPlugin("Gerfex");
 
-async function askGerfexNative(prompt, modelState = {}) {
-  if (modelState?.name === "GMA" && modelState?.connected && !modelState?.hold && !modelState?.mute && GerfexNative?.gmaNativeChat) {
-    const nativeGma = await GerfexNative.gmaNativeChat({ message: prompt, predictLength: 256 });
-    return {
-      ok: !!nativeGma?.ok,
-      reply: nativeGma?.reply || nativeGma?.error || "لا يوجد رد من GMA.",
-      speaker: "GMA",
-      replies: [{ speaker: "GMA", content: nativeGma?.reply || nativeGma?.error || "لا يوجد رد من GMA." }],
-      raw: nativeGma
-    };
+function classifyGerfexRoute(prompt = "") {
+  const text = String(prompt || "").trim().toLowerCase();
+
+  const pythonCorePatterns = [
+    "افتح", "شغل", "سكر", "اقفل", "اضغط", "اسحب", "اكتب",
+    "ابحث", "بحث", "افحص", "اقرأ الشاشة", "حالة الإدراك", "حالة الادراك",
+    "احفظ", "تذكر", "علّم", "علم", "اعتمد", "لا تعتمد",
+    "نفذ", "نفّذ", "مهمة", "ثم", "ارجع", "التنفيذ", "الذاكرة", "تعلم"
+  ];
+
+  if (pythonCorePatterns.some((x) => text.includes(x))) {
+    return "python_core";
   }
 
+  return "gma_native";
+}
+
+async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
+  // الشاشة الرئيسية تبدأ دائمًا من Gerfex، وليس من GMA مباشرة.
   const nativeRes = await GerfexNative.think({ message: prompt, model_state: modelState });
 
   if (!nativeRes || nativeRes.ok === false) {
@@ -327,7 +334,21 @@ export default function App() {
           models: models
         };
 
-        const data = await askGerfexNative("[LEARNING_SESSION]\\n" + text, gmaState);
+        if (!GerfexNative?.gmaNativeChat) {
+        throw new Error("gmaNativeChat غير متوفر لصفحة التعليم");
+      }
+
+      const nativeGma = await GerfexNative.gmaNativeChat({
+        message: "[LEARNING_SESSION]\\n" + text,
+        predictLength: 256
+      });
+
+      const data = {
+        ok: !!nativeGma?.ok,
+        reply: nativeGma?.reply || nativeGma?.error || "لم أستطع توليد رد تعلّم الآن.",
+        speaker: "GMA",
+        raw: nativeGma
+      };
         const replyText = data.reply || data.raw?.reply || data.raw?.error || "لم أستطع توليد رد تعلّم الآن.";
         const replyMsg = { speaker: "GMA", content: replyText };
 
@@ -376,8 +397,10 @@ export default function App() {
     setInput("");
     setVoiceInput(false);
 
+    const routeHint = classifyGerfexRoute(text);
+
     try {
-      const data = await askGerfexNative(text, modelState);
+      const data = await askGerfexNative(text, modelState, routeHint);
       const replies = Array.isArray(data.replies) ? data.replies : [];
 
       replies.forEach((r, idx) => {
