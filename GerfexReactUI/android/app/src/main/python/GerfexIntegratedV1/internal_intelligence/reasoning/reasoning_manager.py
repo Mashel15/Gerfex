@@ -14,6 +14,6 @@ def reason(prompt, mode="conversation", approved_knowledge=None, learned_skills=
     return {
         "ok": True,
         "kind": "conversation",
-        "answer": "GMA متصل الآن بمسار GGUF Runtime، لكن llama.cpp native binding لم يتم تركيبه بعد؛ لذلك يعمل fallback مؤقت عبر Reasoning Manager.",
-        "reason": "conversation_reasoning_manager_active"
+        "answer": "GMA Native هو المسار المعتمد للردود المباشرة. هذا المسار الاحتياطي في Python غير مخصص للمحادثة العادية.",
+        "reason": "native_gma_direct_required"
     }
