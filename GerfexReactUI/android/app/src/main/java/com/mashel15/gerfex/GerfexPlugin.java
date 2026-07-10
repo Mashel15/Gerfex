@@ -392,6 +392,24 @@ private String mapPackage(String name) {
     }
 
 
+    private String limitGmaPrompt(String prompt, String mode) {
+        if (prompt == null) return "";
+
+        String normalizedMode = mode == null ? "" : mode.toLowerCase();
+        int maxChars = normalizedMode.contains("learn") ? 1200 : 1600;
+
+        if (prompt.length() <= maxChars) {
+            return prompt;
+        }
+
+        String kept = prompt.substring(prompt.length() - maxChars);
+
+        return "[GMA_PROMPT_TRIMMED original_chars=" + prompt.length()
+                + " kept_chars=" + kept.length()
+                + " mode=" + mode + "]\n"
+                + kept;
+    }
+
     private String resolveMainGmaNativeReply(String result, String originalMessage) {
         try {
             JSONObject root = new JSONObject(result);
@@ -446,10 +464,12 @@ private String mapPackage(String name) {
 
             File model = ensureGmaModelFile();
 
+            String limitedPrompt = limitGmaPrompt(originalMessage, "main");
+
             String nativeReply = GmaLlamaBridge.generateBlocking(
                     getContext(),
                     model.getAbsolutePath(),
-                    originalMessage,
+                    limitedPrompt,
                     256
             );
 
@@ -468,6 +488,8 @@ private String mapPackage(String name) {
                 errorCode = "model_load_null";
             } else if (replyText.contains("context_null")) {
                 errorCode = "context_null";
+            } else if (replyText.contains("prompt_decode_failed")) {
+                errorCode = "prompt_decode_failed";
             }
 
             if (errorCode != null) {
@@ -900,61 +922,6 @@ private String mapPackage(String name) {
         }
     }
 
-
-    private void appendGmaDirectExecutionTrace(String message, String stage, boolean ok, String detail) {
-        try {
-            String traceId = "gma_" + System.currentTimeMillis();
-
-            JSONObject trace = new JSONObject();
-            trace.put("trace_id", traceId);
-            trace.put("time", java.time.Instant.now().toString());
-            trace.put("goal", message == null ? "" : message);
-
-            JSONArray stages = new JSONArray();
-
-            JSONObject s1 = new JSONObject();
-            s1.put("time", java.time.Instant.now().toString());
-            s1.put("stage", "gma_native_chat");
-            s1.put("source", "GerfexPlugin");
-            s1.put("ok", ok);
-            s1.put("detail", detail == null ? "" : detail);
-            stages.put(s1);
-
-            trace.put("stages", stages);
-
-            File file = executionTraceFile();
-            java.util.List<String> lines = new java.util.ArrayList<>();
-            if (file.exists()) {
-                lines = java.nio.file.Files.readAllLines(file.toPath(), java.nio.charset.StandardCharsets.UTF_8);
-            }
-            lines.add(trace.toString());
-            if (lines.size() > 10) lines = lines.subList(lines.size() - 10, lines.size());
-            java.nio.file.Files.write(file.toPath(), lines, java.nio.charset.StandardCharsets.UTF_8,
-                    java.nio.file.StandardOpenOption.CREATE,
-                    java.nio.file.StandardOpenOption.TRUNCATE_EXISTING);
-
-            JSONObject path = new JSONObject();
-            path.put("trace_id", traceId);
-            path.put("time", java.time.Instant.now().toString());
-            path.put("goal", message == null ? "" : message);
-            path.put("path", "gma_native_chat [GerfexPlugin] -> GmaLlamaBridge -> llama_jni");
-            path.put("route", "gma_native_direct");
-            path.put("ok", ok);
-            path.put("detail", detail == null ? "" : detail);
-
-            File pf = executionPathFile();
-            java.util.List<String> pathLines = new java.util.ArrayList<>();
-            if (pf.exists()) {
-                pathLines = java.nio.file.Files.readAllLines(pf.toPath(), java.nio.charset.StandardCharsets.UTF_8);
-            }
-            pathLines.add(path.toString());
-            if (pathLines.size() > 10) pathLines = pathLines.subList(pathLines.size() - 10, pathLines.size());
-            java.nio.file.Files.write(pf.toPath(), pathLines, java.nio.charset.StandardCharsets.UTF_8,
-                    java.nio.file.StandardOpenOption.CREATE,
-                    java.nio.file.StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (Throwable ignored) {}
-    }
-
     @PluginMethod
     public void gmaNativeChat(PluginCall call) {
         String message = call.getString("message", "");
@@ -969,7 +936,6 @@ private String mapPackage(String name) {
             try {
                 stage[0] = "copy_check";
                 android.util.Log.i("GMA_DEBUG", "gmaNativeChat start message_len=" + message.length());
-                appendGmaDirectExecutionTrace(message, "start", true, "message_len=" + message.length());
                 model = ensureGmaModelFile();
 
                 stage[0] = "copy_done";
@@ -977,18 +943,59 @@ private String mapPackage(String name) {
 
                 stage[0] = "bridge_call_started";
                 android.util.Log.i("GMA_DEBUG", "bridge_call_started model=" + model.getAbsolutePath() + " size=" + modelSize);
-                String reply = GmaLlamaBridge.generateBlocking(getContext(), model.getAbsolutePath(), message, predictLength);
+
+                String limitedMessage = limitGmaPrompt(
+                        message,
+                        message != null && message.contains("[LEARNING_SESSION]")
+                                ? "learning"
+                                : "direct"
+                );
+
+                String reply = GmaLlamaBridge.generateBlocking(
+                        getContext(),
+                        model.getAbsolutePath(),
+                        limitedMessage,
+                        predictLength
+                );
                 android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
-                appendGmaDirectExecutionTrace(message, "done", true, "reply_len=" + (reply == null ? -1 : reply.length()) + " bridge_stage=" + GmaLlamaBridge.getLastStage());
+
+                String replyText = reply == null ? "" : reply.trim();
+                String errorCode = null;
+
+                if (replyText.length() == 0) {
+                    errorCode = "GMA_LLAMA_EMPTY_REPLY";
+                } else if (replyText.contains("GMA_LLAMA_ERROR")) {
+                    errorCode = "GMA_LLAMA_ERROR";
+                } else if (replyText.contains("GMA_LLAMA_EMPTY_REPLY")) {
+                    errorCode = "GMA_LLAMA_EMPTY_REPLY";
+                } else if (replyText.contains("no_backend_loaded")) {
+                    errorCode = "no_backend_loaded";
+                } else if (replyText.contains("model_load_null")) {
+                    errorCode = "model_load_null";
+                } else if (replyText.contains("context_null")) {
+                    errorCode = "context_null";
+                } else if (replyText.contains("prompt_decode_failed")) {
+                    errorCode = "prompt_decode_failed";
+                }
 
                 if (finished.compareAndSet(false, true)) {
-                    ret.put("ok", true);
                     ret.put("engine", "llama.android");
-                    ret.put("stage", "done");
                     ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
                     ret.put("model_path", model.getAbsolutePath());
                     ret.put("model_size", modelSize);
-                    ret.put("reply", reply);
+
+                    if (errorCode != null) {
+                        ret.put("ok", false);
+                        ret.put("stage", "native_reply_error");
+                        ret.put("error_code", errorCode);
+                        ret.put("error", replyText);
+                        ret.put("reply", "");
+                    } else {
+                        ret.put("ok", true);
+                        ret.put("stage", "done");
+                        ret.put("reply", reply);
+                    }
+
                     call.resolve(ret);
                 }
             } catch (Throwable e) {
@@ -1010,7 +1017,6 @@ private String mapPackage(String name) {
                     pw.flush();
                     ret.put("stacktrace", sw.toString());
                     android.util.Log.e("GMA_DEBUG", "gmaNativeChat failed stage=" + stage[0] + " bridge=" + GmaLlamaBridge.getLastStage(), e);
-                    appendGmaDirectExecutionTrace(message, "error", false, e.toString() + " stage=" + stage[0] + " bridge_stage=" + GmaLlamaBridge.getLastStage());
 
                     call.resolve(ret);
                 }
@@ -1027,7 +1033,6 @@ private String mapPackage(String name) {
                     ret.put("stage", stage[0]);
                     ret.put("bridge_stage", GmaLlamaBridge.getLastStage());
                     ret.put("reply", "GMA_TIMEOUT_180_SECONDS | stage=" + stage[0] + " | bridge_stage=" + GmaLlamaBridge.getLastStage());
-                    appendGmaDirectExecutionTrace(message, "timeout", false, "stage=" + stage[0] + " bridge_stage=" + GmaLlamaBridge.getLastStage());
                     call.resolve(ret);
                 }
             } catch (Exception ignored) {}
