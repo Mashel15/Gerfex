@@ -2,9 +2,11 @@ package com.mashel15.gerfex
 
 import android.content.Context
 import android.util.Log
-import java.util.concurrent.ConcurrentHashMap
 
 object GmaPromptComposer {
+
+    private const val TAG = "GMA_DEBUG"
+    private const val PROMPT_ROOT = "GerfexGMA/prompts"
 
     data class PromptPackage(
         val mode: String,
@@ -12,50 +14,57 @@ object GmaPromptComposer {
         val userPrompt: String
     )
 
-    private const val BASE = "GerfexGMA/prompts"
-    private const val MAX_SYSTEM_CHARS = 1400
-
-    // الملفات صغيرة وتُقرأ مرة واحدة فقط خلال عمر التطبيق.
-    private val assetCache = ConcurrentHashMap<String, String>()
-
     private fun readAsset(
         context: Context,
         relativePath: String,
         fallback: String
     ): String {
-        return assetCache.getOrPut(relativePath) {
-            try {
-                context.assets.open("$BASE/$relativePath")
-                    .bufferedReader(Charsets.UTF_8)
-                    .use { it.readText().trim() }
-                    .ifBlank { fallback }
-            } catch (t: Throwable) {
-                Log.w(
-                    "GMA_DEBUG",
-                    "Prompt asset fallback path=$relativePath error=${t.message}"
-                )
-                fallback
-            }
+        val fullPath = "$PROMPT_ROOT/$relativePath"
+
+        return try {
+            context.assets
+                .open(fullPath)
+                .bufferedReader(Charsets.UTF_8)
+                .use { it.readText().trim() }
+                .ifBlank { fallback }
+        } catch (error: Throwable) {
+            Log.w(
+                TAG,
+                "Prompt asset unavailable: $fullPath; using fallback",
+                error
+            )
+            fallback
         }
     }
 
     private fun detectMode(prompt: String): String {
         return when {
-            prompt.contains("[LEARNING_SESSION]", ignoreCase = true) ->
-                "learning"
+            prompt.contains(
+                "[LEARNING_SESSION]",
+                ignoreCase = true
+            ) -> "learning"
 
-            prompt.contains("[DEVELOPMENT_SESSION]", ignoreCase = true) ->
-                "development"
+            prompt.contains(
+                "[DEVELOPMENT_SESSION]",
+                ignoreCase = true
+            ) -> "development"
 
-            else ->
-                "main"
+            else -> "main"
         }
     }
 
     private fun cleanUserPrompt(prompt: String): String {
         return prompt
-            .replace("[LEARNING_SESSION]", "", ignoreCase = true)
-            .replace("[DEVELOPMENT_SESSION]", "", ignoreCase = true)
+            .replace(
+                "[LEARNING_SESSION]",
+                "",
+                ignoreCase = true
+            )
+            .replace(
+                "[DEVELOPMENT_SESSION]",
+                "",
+                ignoreCase = true
+            )
             .trim()
     }
 
@@ -71,7 +80,7 @@ object GmaPromptComposer {
         val constitution = readAsset(
             context,
             "learning/constitution/learning_constitution.txt",
-            "صفحة التعلم للنقاش والاقتراح فقط، والاعتماد بيد Mashel."
+            "صفحة التعلم للنقاش والاقتراح، والاعتماد بيد Mashel."
         )
 
         val behavior = readAsset(
@@ -107,51 +116,59 @@ object GmaPromptComposer {
             sessionPolicy
         )
             .filter { it.isNotBlank() }
-            .joinToString("\n")
+            .joinToString("\n\n")
     }
 
-
     @JvmStatic
-    fun compose(context: Context, prompt: String): PromptPackage {
+    fun compose(
+        context: Context,
+        prompt: String
+    ): PromptPackage {
         val mode = detectMode(prompt)
+        val cleanedPrompt = cleanUserPrompt(prompt)
 
         val identity = readAsset(
             context,
             "identity/core_identity.txt",
-            "أنت GMA، الذكاء الداخلي داخل Gerfex."
+            "GMA هو الذكاء الداخلي العامل خلف Gerfex."
         )
 
         val mission = readAsset(
             context,
             "mission/core_mission.txt",
-            "مهمتك دعم Gerfex بدقة ووضوح."
+            "مهمتك مساعدة Gerfex وMashel بدقة وصدق."
         )
 
         val behavior = readAsset(
             context,
             "behavior/response_behavior.txt",
-            "أجب بالعربية مباشرة وباختصار، ولا تخمّن."
+            "أجب بالعربية بوضوح واختصار، ولا تخمّن."
         )
 
-        val modeInstruction = when (mode) {
-
+        val modeInstructions = when (mode) {
             "learning" -> composeLearningInstructions(context)
 
+            "development" -> readAsset(
+                context,
+                "modes/development.txt",
+                "حلل المشكلات التقنية واقترح حلولًا قابلة للمراجعة."
+            )
 
-        if (systemPrompt.length > MAX_SYSTEM_CHARS) {
-            systemPrompt = systemPrompt.take(MAX_SYSTEM_CHARS)
-            Log.w(
-                "GMA_DEBUG",
-                "GMA system prompt trimmed to $MAX_SYSTEM_CHARS chars"
+            else -> readAsset(
+                context,
+                "modes/main.txt",
+                "أجب مباشرة باسم Gerfex دون تكرار هوية GMA."
             )
         }
 
-        val cleanedPrompt = cleanUserPrompt(prompt)
-
-        Log.i(
-            "GMA_DEBUG",
-            "GMA prompt composed mode=$mode system_len=${systemPrompt.length} user_len=${cleanedPrompt.length}"
+        val systemPrompt = listOf(
+            identity,
+            mission,
+            behavior,
+            modeInstructions
         )
+            .filter { it.isNotBlank() }
+            .joinToString("\n\n")
 
         return PromptPackage(
             mode = mode,
