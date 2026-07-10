@@ -410,6 +410,74 @@ private String mapPackage(String name) {
                 + kept;
     }
 
+    private String normalizeArabicPunctuation(String text) {
+        if (text == null || text.isEmpty()) return "";
+
+        String[] lines = text.split("\\r?\\n", -1);
+        StringBuilder out = new StringBuilder();
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+
+            if (!line.isEmpty()) {
+                String leadingSpaces = "";
+                int index = 0;
+
+                while (index < line.length() && Character.isWhitespace(line.charAt(index))) {
+                    index++;
+                }
+
+                if (index > 0) {
+                    leadingSpaces = line.substring(0, index);
+                }
+
+                String body = line.substring(index);
+
+                if (body.length() > 1) {
+                    char first = body.charAt(0);
+
+                    boolean movablePunctuation =
+                            first == '.'
+                            || first == '،'
+                            || first == ','
+                            || first == '؛'
+                            || first == ';'
+                            || first == ':'
+                            || first == '!'
+                            || first == '؟'
+                            || first == '?';
+
+                    boolean looksLikeUrlOrCode =
+                            body.startsWith("://")
+                            || body.startsWith("./")
+                            || body.startsWith("../")
+                            || body.startsWith(".")
+                               && body.length() > 1
+                               && Character.isLetterOrDigit(body.charAt(1));
+
+                    if (movablePunctuation && !looksLikeUrlOrCode) {
+                        String remainder = body.substring(1).trim();
+
+                        if (!remainder.isEmpty()) {
+                            body = remainder + first;
+                        }
+                    }
+                }
+
+                line = leadingSpaces + body;
+            }
+
+            out.append(line);
+
+            if (i < lines.length - 1) {
+                out.append('\n');
+            }
+        }
+
+        return out.toString();
+    }
+
+
     private String resolveMainGmaNativeReply(String result, String originalMessage) {
         try {
             JSONObject root = new JSONObject(result);
@@ -473,6 +541,7 @@ private String mapPackage(String name) {
                     256
             );
 
+            nativeReply = normalizeArabicPunctuation(nativeReply);
             String replyText = nativeReply == null ? "" : nativeReply.trim();
             String errorCode = null;
 
@@ -959,6 +1028,7 @@ private String mapPackage(String name) {
                 );
                 android.util.Log.i("GMA_DEBUG", "bridge_reply_len=" + (reply == null ? -1 : reply.length()));
 
+                reply = normalizeArabicPunctuation(reply);
                 String replyText = reply == null ? "" : reply.trim();
                 String errorCode = null;
 
