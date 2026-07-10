@@ -112,14 +112,14 @@ object GmaLlamaBridge {
 
             setStage("llama_native_generate_started")
 
-            val systemPrompt =
-                "أنت GMA، الذكاء الداخلي الرسمي داخل Gerfex. أجب بالعربية وبشكل مختصر ومفيد."
+            val promptPackage =
+                GmaPromptComposer.compose(context, prompt)
 
             val reply = nativeGenerate(
                 modelFile.absolutePath,
                 context.applicationInfo.nativeLibraryDir ?: "",
-                systemPrompt,
-                prompt,
+                promptPackage.systemPrompt,
+                promptPackage.userPrompt,
                 predictLength
             )
 
