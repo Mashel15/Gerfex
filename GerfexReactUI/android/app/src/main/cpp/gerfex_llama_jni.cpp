@@ -66,45 +66,75 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     break;
             }
         }, nullptr);
+        if (!g_gma_backend_initialized) {
+            ggml_backend_load_all();
+            LOGI("ggml_backend_load_all done first_time=1");
 
-        ggml_backend_load_all();
-        LOGI("ggml_backend_load_all done");
+            int explicit_backend_loaded = 0;
 
-        int explicit_backend_loaded = 0;
-        try {
-            if (!native_lib_dir.empty()) {
-                for (const auto & entry : std::filesystem::directory_iterator(native_lib_dir)) {
-                    if (!entry.is_regular_file()) continue;
-                    auto name = entry.path().filename().string();
-                    if (name.rfind("libggml-cpu-", 0) == 0 && entry.path().extension() == ".so") {
-                        auto full = entry.path().string();
-                        LOGI("trying ggml_backend_load: %s", full.c_str());
-                        auto * reg = ggml_backend_load(full.c_str());
-                        if (reg != nullptr) {
-                            explicit_backend_loaded++;
-                            LOGI("ggml_backend_load success: %s", full.c_str());
-                        } else {
-                            LOGE("ggml_backend_load returned null: %s", full.c_str());
+            try {
+                if (!native_lib_dir.empty()) {
+                    for (const auto & entry :
+                            std::filesystem::directory_iterator(native_lib_dir)) {
+
+                        if (!entry.is_regular_file()) continue;
+
+                        auto name = entry.path().filename().string();
+
+                        if (name.rfind("libggml-cpu-", 0) == 0 &&
+                            entry.path().extension() == ".so") {
+
+                            auto full = entry.path().string();
+
+                            LOGI(
+                                "trying ggml_backend_load: %s",
+                                full.c_str()
+                            );
+
+                            auto *reg = ggml_backend_load(full.c_str());
+
+                            if (reg != nullptr) {
+                                explicit_backend_loaded++;
+
+                                LOGI(
+                                    "ggml_backend_load success: %s",
+                                    full.c_str()
+                                );
+                            } else {
+                                LOGE(
+                                    "ggml_backend_load returned null: %s",
+                                    full.c_str()
+                                );
+                            }
                         }
                     }
                 }
+            } catch (...) {
+                LOGE("filesystem scan for ggml backends failed");
             }
-        } catch (...) {
-            LOGE("filesystem scan for ggml backends failed");
-        }
-        LOGI("explicit ggml backend loaded count=%d", explicit_backend_loaded);
-        if (explicit_backend_loaded < 1) {
-            LOGE("no ggml backend registered inside JNI");
-            return env->NewStringUTF("GMA_LLAMA_ERROR: no_backend_loaded");
-        }
 
-        if (!g_gma_backend_initialized) {
+            LOGI(
+                "explicit ggml backend loaded count=%d",
+                explicit_backend_loaded
+            );
+
+            if (explicit_backend_loaded < 1) {
+                LOGE("no ggml backend registered inside JNI");
+
+                return env->NewStringUTF(
+                    "GMA_LLAMA_ERROR: no_backend_loaded"
+                );
+            }
+
             llama_backend_init();
             g_gma_backend_initialized = true;
+
             LOGI("llama_backend_init done first_time=1");
+
         } else {
-            LOGI("llama_backend_init skipped already_initialized=1");
+            LOGI("backend loading skipped already_initialized=1");
         }
+
 
         llama_model_params mparams = llama_model_default_params();
         mparams.use_mmap = true;
