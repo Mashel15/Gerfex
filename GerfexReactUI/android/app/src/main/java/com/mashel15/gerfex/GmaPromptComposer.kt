@@ -59,6 +59,58 @@ object GmaPromptComposer {
             .trim()
     }
 
+    private fun composeLearningInstructions(
+        context: Context
+    ): String {
+        val learningMode = readAsset(
+            context,
+            "modes/learning.txt",
+            "ناقش واقترح فقط، ولا تعتمد أي تعلم دون موافقة Mashel."
+        )
+
+        val constitution = readAsset(
+            context,
+            "learning/constitution/learning_constitution.txt",
+            "صفحة التعلم للنقاش والاقتراح فقط، والاعتماد بيد Mashel."
+        )
+
+        val behavior = readAsset(
+            context,
+            "learning/personality_behavior/learning_behavior.txt",
+            "ناقش بوضوح، ولا تخمّن، ولا تكرر هويتك."
+        )
+
+        val developerRole = readAsset(
+            context,
+            "learning/developer_role/developer_role.txt",
+            "حلل Gerfex واقترح حلولًا، ولا تدّع تنفيذ شيء لم يحدث."
+        )
+
+        val governance = readAsset(
+            context,
+            "learning/governance/approval_policy.txt",
+            "كل تعلم يبقى مقترحًا حتى اعتماد Mashel الصريح."
+        )
+
+        val sessionPolicy = readAsset(
+            context,
+            "learning/session/learning_session_policy.txt",
+            "ركز على موضوع الجلسة، ولا تنفذ أوامر Android من صفحة التعلم."
+        )
+
+        return listOf(
+            learningMode,
+            constitution,
+            behavior,
+            developerRole,
+            governance,
+            sessionPolicy
+        )
+            .filter { it.isNotBlank() }
+            .joinToString("\n")
+    }
+
+
     @JvmStatic
     fun compose(context: Context, prompt: String): PromptPackage {
         val mode = detectMode(prompt)
@@ -82,33 +134,9 @@ object GmaPromptComposer {
         )
 
         val modeInstruction = when (mode) {
-            "learning" -> readAsset(
-                context,
-                "modes/learning.txt",
-                "ناقش واقترح فقط، ولا تعتمد أي تعلم دون موافقة Mashel."
-            )
 
-            "development" -> readAsset(
-                context,
-                "modes/development.txt",
-                "حلل المشكلة التقنية ولا تدّع تنفيذ شيء لم يُنفذ."
-            )
+            "learning" -> composeLearningInstructions(context)
 
-            else -> readAsset(
-                context,
-                "modes/main.txt",
-                "أجب عن السؤال مباشرة دون مقدمة طويلة."
-            )
-        }
-
-        var systemPrompt = listOf(
-            identity,
-            mission,
-            behavior,
-            modeInstruction
-        )
-            .filter { it.isNotBlank() }
-            .joinToString("\n")
 
         if (systemPrompt.length > MAX_SYSTEM_CHARS) {
             systemPrompt = systemPrompt.take(MAX_SYSTEM_CHARS)
