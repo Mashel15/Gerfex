@@ -115,6 +115,14 @@ object GmaLlamaBridge {
             val promptPackage =
                 GmaPromptComposer.compose(context, prompt)
 
+            Log.i(
+                "GMA_DEBUG",
+                "prompt_mode=${promptPackage.mode} " +
+                "system_chars=${promptPackage.systemPrompt.length} " +
+                "user_chars=${promptPackage.userPrompt.length} " +
+                "predict=$predictLength"
+            )
+
             val reply = nativeGenerate(
                 modelFile.absolutePath,
                 context.applicationInfo.nativeLibraryDir ?: "",
