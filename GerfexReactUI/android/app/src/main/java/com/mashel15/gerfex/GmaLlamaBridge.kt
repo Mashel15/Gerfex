@@ -112,22 +112,17 @@ object GmaLlamaBridge {
 
             setStage("llama_native_generate_started")
 
-            val promptPackage =
-                GmaPromptComposer.compose(context, prompt)
-
-            Log.i(
-                "GMA_DEBUG",
-                "prompt_mode=${promptPackage.mode} " +
-                "system_chars=${promptPackage.systemPrompt.length} " +
-                "user_chars=${promptPackage.userPrompt.length} " +
-                "predict=$predictLength"
-            )
+            // Temporary stable runtime:
+            // Keep the new prompt architecture saved but disconnected
+            // until its runtime cost is reviewed safely.
+            val systemPrompt =
+                "أنت GMA، الذكاء الداخلي الرسمي داخل Gerfex. أجب بالعربية وبشكل مختصر ومفيد."
 
             val reply = nativeGenerate(
                 modelFile.absolutePath,
                 context.applicationInfo.nativeLibraryDir ?: "",
-                promptPackage.systemPrompt,
-                promptPackage.userPrompt,
+                systemPrompt,
+                prompt,
                 predictLength
             )
 
