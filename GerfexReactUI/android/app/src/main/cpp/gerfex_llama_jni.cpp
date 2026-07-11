@@ -4,6 +4,7 @@
 #include <android/log.h>
 #include <filesystem>
 #include <chrono>
+#include <atomic>
 
 #include "llama.h"
 #include <mutex>
@@ -28,6 +29,7 @@ static std::mutex g_gma_runtime_mutex;
 static llama_model *g_gma_cached_model = nullptr;
 static std::string g_gma_cached_model_path;
 static bool g_gma_backend_initialized = false;
+static std::atomic<uint64_t> g_gma_request_counter{0};
 
 extern "C"
 JNIEXPORT jstring JNICALL
@@ -45,9 +47,27 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
     std::string sys = jstr(env, systemPrompt);
     std::string user = jstr(env, userPrompt);
 
-    LOGI("nativeGenerate start model=%s predict=%d", model_path.c_str(), (int) predictLength);
+    const uint64_t request_id = ++g_gma_request_counter;
+
+    LOGI(
+            "GMA_TRACK request_start id=%llu model=%s "
+            "system_chars=%d user_chars=%d predict=%d",
+            (unsigned long long) request_id,
+            model_path.c_str(),
+            (int) sys.size(),
+            (int) user.size(),
+            (int) predictLength
+    );
+
+    LOGI("nativeGenerate start model=%s predict=%d",
+         model_path.c_str(), (int) predictLength);
 
     std::lock_guard<std::mutex> runtime_lock(g_gma_runtime_mutex);
+
+    LOGI(
+            "GMA_TRACK mutex_acquired id=%llu",
+            (unsigned long long) request_id
+    );
 
     try {
         llama_log_set([](enum ggml_log_level level, const char * text, void * user_data) {
@@ -188,7 +208,35 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                 cparams.n_threads_batch
         );
 
+        LOGI(
+                "GMA_TRACK context_create_start id=%llu threads=%d "
+                "batch_threads=%d n_ctx=%d n_batch=%d n_ubatch=%d",
+                (unsigned long long) request_id,
+                cparams.n_threads,
+                cparams.n_threads_batch,
+                cparams.n_ctx,
+                cparams.n_batch,
+                cparams.n_ubatch
+        );
+
+        const auto context_started_at =
+                std::chrono::steady_clock::now();
+
         llama_context *ctx = llama_init_from_model(model, cparams);
+
+        const double context_seconds =
+                std::chrono::duration<double>(
+                        std::chrono::steady_clock::now() -
+                        context_started_at
+                ).count();
+
+        LOGI(
+                "GMA_TRACK context_create_done id=%llu seconds=%.3f ok=%d",
+                (unsigned long long) request_id,
+                context_seconds,
+                ctx != nullptr ? 1 : 0
+        );
+
         if (!ctx) {
             /* Persistent GMA model: do not free per request. */
             LOGE("llama_init_from_model returned null");
@@ -227,6 +275,14 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             );
         }
 
+        LOGI(
+                "GMA_TRACK tokenize_done id=%llu prompt_chars=%d "
+                "prompt_tokens=%d",
+                (unsigned long long) request_id,
+                (int) prompt.size(),
+                n_tokens
+        );
+
         if (n_tokens <= 0) {
             llama_free(ctx);
             /* Persistent GMA model: do not free per request. */
@@ -244,7 +300,33 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         }
         batch.n_tokens = n_tokens;
 
-        if (llama_decode(ctx, batch) != 0) {
+        LOGI(
+                "GMA_TRACK prompt_decode_start id=%llu prompt_tokens=%d",
+                (unsigned long long) request_id,
+                n_tokens
+        );
+
+        const auto prompt_decode_started_at =
+                std::chrono::steady_clock::now();
+
+        const int prompt_decode_result =
+                llama_decode(ctx, batch);
+
+        const double prompt_decode_seconds =
+                std::chrono::duration<double>(
+                        std::chrono::steady_clock::now() -
+                        prompt_decode_started_at
+                ).count();
+
+        LOGI(
+                "GMA_TRACK prompt_decode_done id=%llu result=%d "
+                "seconds=%.3f",
+                (unsigned long long) request_id,
+                prompt_decode_result,
+                prompt_decode_seconds
+        );
+
+        if (prompt_decode_result != 0) {
             llama_batch_free(batch);
             llama_free(ctx);
             /* Persistent GMA model: do not free per request. */
@@ -267,15 +349,57 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         int max_pred = predictLength > 0 ? predictLength : 128;
         if (max_pred > 256) max_pred = 256;
 
+        LOGI(
+                "GMA_TRACK generation_start id=%llu max_pred=%d "
+                "prompt_tokens=%d",
+                (unsigned long long) request_id,
+                max_pred,
+                n_tokens
+        );
+
+        bool ended_by_eog = false;
+        bool ended_by_decode_error = false;
+
         for (int i = 0; i < max_pred; ++i) {
             llama_token tok = llama_sampler_sample(sampler, ctx, -1);
             llama_sampler_accept(sampler, tok);
 
             if (llama_vocab_is_eog(vocab, tok)) {
+                ended_by_eog = true;
+
+                LOGI(
+                        "GMA_TRACK generation_eog id=%llu "
+                        "generated_tokens=%d",
+                        (unsigned long long) request_id,
+                        generated_tokens
+                );
+
                 break;
             }
 
             generated_tokens++;
+
+            if (generated_tokens == 1 ||
+                generated_tokens % 16 == 0) {
+
+                const double elapsed_seconds =
+                        std::chrono::duration<double>(
+                                std::chrono::steady_clock::now() -
+                                generation_started_at
+                        ).count();
+
+                LOGI(
+                        "GMA_TRACK generation_progress id=%llu "
+                        "generated_tokens=%d seconds=%.3f "
+                        "tok_per_sec=%.3f",
+                        (unsigned long long) request_id,
+                        generated_tokens,
+                        elapsed_seconds,
+                        elapsed_seconds > 0.0
+                        ? generated_tokens / elapsed_seconds
+                        : 0.0
+                );
+            }
 
             char piece[256];
             int n = llama_token_to_piece(vocab, tok, piece, sizeof(piece), 0, true);
@@ -291,6 +415,15 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
             if (llama_decode(ctx, next) != 0) {
                 llama_batch_free(next);
+                ended_by_decode_error = true;
+
+                LOGE(
+                        "GMA_TRACK generation_decode_error id=%llu "
+                        "generated_tokens=%d",
+                        (unsigned long long) request_id,
+                        generated_tokens
+                );
+
                 LOGE("decode failed during generation");
                 break;
             }
@@ -310,16 +443,35 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                 ? generated_tokens / generation_seconds
                 : 0.0;
 
+        const char *stop_reason =
+                ended_by_eog
+                ? "eog"
+                : ended_by_decode_error
+                ? "decode_error"
+                : generated_tokens >= max_pred
+                ? "max_pred"
+                : "unknown";
+
         LOGI(
-                "GMA generation stats prompt_tokens=%d "
+                "GMA generation stats request_id=%llu prompt_tokens=%d "
                 "generated_tokens=%d seconds=%.3f tok_per_sec=%.3f "
-                "threads=%d predict=%d",
+                "threads=%d predict=%d stop_reason=%s",
+                (unsigned long long) request_id,
                 n_tokens,
                 generated_tokens,
                 generation_seconds,
                 tokens_per_second,
                 cparams.n_threads,
-                max_pred
+                max_pred,
+                stop_reason
+        );
+
+        LOGI(
+                "GMA_TRACK request_done id=%llu reply_bytes=%d "
+                "stop_reason=%s",
+                (unsigned long long) request_id,
+                (int) out.size(),
+                stop_reason
         );
 
         llama_sampler_free(sampler);
@@ -335,6 +487,11 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         return env->NewStringUTF(out.c_str());
 
     } catch (...) {
+        LOGE(
+                "GMA_TRACK request_exception id=%llu",
+                (unsigned long long) request_id
+        );
+
         LOGE("nativeGenerate unknown exception");
         return env->NewStringUTF("GMA_LLAMA_ERROR: native_exception");
     }
