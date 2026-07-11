@@ -3,6 +3,7 @@
 #include <vector>
 #include <android/log.h>
 #include <filesystem>
+#include <chrono>
 
 #include "llama.h"
 #include <mutex>
@@ -176,8 +177,16 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         cparams.n_ctx = 1024;
         cparams.n_batch = 128;
         cparams.n_ubatch = 128;
-        cparams.n_threads = 4;
-        cparams.n_threads_batch = 4;
+        // Conservative Galaxy A15 CPU tuning.
+        // Keep quality and generation behavior unchanged.
+        cparams.n_threads = 6;
+        cparams.n_threads_batch = 6;
+
+        LOGI(
+                "GMA runtime tuning threads=%d batch_threads=%d",
+                cparams.n_threads,
+                cparams.n_threads_batch
+        );
 
         llama_context *ctx = llama_init_from_model(model, cparams);
         if (!ctx) {
@@ -250,6 +259,10 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
         std::string out;
         int pos = n_tokens;
+        int generated_tokens = 0;
+
+        const auto generation_started_at =
+                std::chrono::steady_clock::now();
 
         int max_pred = predictLength > 0 ? predictLength : 128;
         if (max_pred > 256) max_pred = 256;
@@ -261,6 +274,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             if (llama_vocab_is_eog(vocab, tok)) {
                 break;
             }
+
+            generated_tokens++;
 
             char piece[256];
             int n = llama_token_to_piece(vocab, tok, piece, sizeof(piece), 0, true);
@@ -281,6 +296,31 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
             }
             llama_batch_free(next);
         }
+
+        const auto generation_finished_at =
+                std::chrono::steady_clock::now();
+
+        const double generation_seconds =
+                std::chrono::duration<double>(
+                        generation_finished_at - generation_started_at
+                ).count();
+
+        const double tokens_per_second =
+                generation_seconds > 0.0
+                ? generated_tokens / generation_seconds
+                : 0.0;
+
+        LOGI(
+                "GMA generation stats prompt_tokens=%d "
+                "generated_tokens=%d seconds=%.3f tok_per_sec=%.3f "
+                "threads=%d predict=%d",
+                n_tokens,
+                generated_tokens,
+                generation_seconds,
+                tokens_per_second,
+                cparams.n_threads,
+                max_pred
+        );
 
         llama_sampler_free(sampler);
         llama_batch_free(batch);
