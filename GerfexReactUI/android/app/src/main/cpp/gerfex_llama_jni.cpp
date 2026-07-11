@@ -580,18 +580,40 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         int max_pred = predictLength > 0 ? predictLength : 128;
         if (max_pred > 256) max_pred = 256;
 
+        // One limited continuation only when GMA does not reach EOG.
+        // Main: 64 -> 96. Learning: 128 -> 192.
+        const int extension_tokens =
+                max_pred <= 64 ? 32 : 64;
+
+        const int hard_max_pred =
+                std::min(256, max_pred + extension_tokens);
+
+        bool extension_activated = false;
+
         LOGI(
                 "GMA_TRACK generation_start id=%llu max_pred=%d "
-                "prompt_tokens=%d",
+                "hard_max_pred=%d prompt_tokens=%d",
                 (unsigned long long) request_id,
                 max_pred,
+                hard_max_pred,
                 n_tokens
         );
 
         bool ended_by_eog = false;
         bool ended_by_decode_error = false;
 
-        for (int i = 0; i < max_pred; ++i) {
+        for (int i = 0; i < hard_max_pred; ++i) {
+            if (!extension_activated && i == max_pred) {
+                extension_activated = true;
+
+                LOGI(
+                        "GMA_TRACK generation_extension id=%llu "
+                        "from=%d to=%d",
+                        (unsigned long long) request_id,
+                        max_pred,
+                        hard_max_pred
+                );
+            }
             llama_token tok = llama_sampler_sample(sampler, ctx, -1);
             llama_sampler_accept(sampler, tok);
 
@@ -679,14 +701,17 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                 ? "eog"
                 : ended_by_decode_error
                 ? "decode_error"
-                : generated_tokens >= max_pred
-                ? "max_pred"
+                : generated_tokens >= hard_max_pred
+                ? "extended_max_pred"
+                : extension_activated
+                ? "extension_incomplete"
                 : "unknown";
 
         LOGI(
                 "GMA generation stats request_id=%llu prompt_tokens=%d "
                 "generated_tokens=%d seconds=%.3f tok_per_sec=%.3f "
-                "threads=%d predict=%d stop_reason=%s",
+                "threads=%d predict=%d hard_predict=%d "
+                "extended=%d stop_reason=%s",
                 (unsigned long long) request_id,
                 n_tokens,
                 generated_tokens,
@@ -694,6 +719,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                 tokens_per_second,
                 cparams.n_threads,
                 max_pred,
+                hard_max_pred,
+                extension_activated ? 1 : 0,
                 stop_reason
         );
 
