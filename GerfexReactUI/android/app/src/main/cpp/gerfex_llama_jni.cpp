@@ -323,7 +323,7 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                     );
 
             if (!tail_removed) {
-                LOGW(
+                LOGI(
                         "GMA_TRACK prefix_cache_fallback id=%llu "
                         "reason=tail_remove_failed",
                         (unsigned long long) request_id
