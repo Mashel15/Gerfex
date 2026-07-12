@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.chaquo.python'
 
 android {
+    ndkVersion "29.0.14206865"
     packaging {
         jniLibs {
             useLegacyPackaging = true
