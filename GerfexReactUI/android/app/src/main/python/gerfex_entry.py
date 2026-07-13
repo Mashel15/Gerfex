@@ -10,8 +10,31 @@ from GerfexIntegratedV1.gerfex_android_paths import ensure_dirs
 from core.gerfex_core import run_goal
 from GerfexIntegratedV1.external_models.model_gateway import ask_external_models
 from runtime.execution_trace import new_trace, add_stage, save_trace
+from GerfexIntegratedV1.diagnostics import DiagnosticsManager
+from GerfexIntegratedV1.diagnostics.execution_trace_adapter import safe_export_trace
 
 APP_HOME = ensure_dirs()
+
+_GDF_MANAGER = DiagnosticsManager(
+    APP_HOME / "diagnostics"
+)
+
+
+def _save_trace_with_gdf(trace):
+    """Save Execution Trace first, then safely export to GDF."""
+    saved_trace = save_trace(trace)
+
+    try:
+        safe_export_trace(
+            trace,
+            _GDF_MANAGER,
+        )
+    except Exception:
+        # Diagnostics must never interrupt Gerfex execution.
+        pass
+
+    return saved_trace
+
 
 def think(message, model_state_json=None):
     trace = new_trace(message)
@@ -38,7 +61,7 @@ def think(message, model_state_json=None):
             )
 
             add_stage(trace, "internal_brain_off_external_direct", source="gerfex_entry", advisors=len(advisors))
-            save_trace(trace)
+            _save_trace_with_gdf(trace)
 
             return json.dumps({
                 "ok": bool(first.get("ok", external_advice.get("ok", False))),
@@ -92,7 +115,7 @@ def think(message, model_state_json=None):
                 or "تم تنفيذ الطلب داخل Gerfex."
             )
 
-            save_trace(trace)
+            _save_trace_with_gdf(trace)
 
             return json.dumps({
                 "ok": result.get("ok", True),
@@ -104,7 +127,7 @@ def think(message, model_state_json=None):
             }, ensure_ascii=False)
 
         add_stage(trace, "non_dict_result", source="gerfex_entry", value=str(result)[:300])
-        save_trace(trace)
+        _save_trace_with_gdf(trace)
 
         return json.dumps({
             "ok": True,
@@ -116,7 +139,7 @@ def think(message, model_state_json=None):
     except Exception as e:
         add_stage(trace, "exception", source="gerfex_entry", error=str(e))
         try:
-            save_trace(trace)
+            _save_trace_with_gdf(trace)
         except Exception:
             pass
 
