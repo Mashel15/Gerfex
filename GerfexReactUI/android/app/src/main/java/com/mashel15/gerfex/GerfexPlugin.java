@@ -379,6 +379,76 @@ private String mapPackage(String name) {
     }
 
     @PluginMethod
+    public void readDiagnostics(PluginCall call) {
+        JSObject ret = new JSObject();
+
+        try {
+            File appRoot = new File(
+                    getContext().getFilesDir(),
+                    "gerfex_runtime_data"
+            );
+
+            File gdfEvents = new File(
+                    appRoot,
+                    "diagnostics/gdf_events.jsonl"
+            );
+
+            File javaDiagnostics = new File(
+                    appRoot,
+                    "runtime/gerfex_java_diagnostics.txt"
+            );
+
+            ret.put(
+                    "gdf_events",
+                    readInternalTextFile(gdfEvents)
+            );
+
+            ret.put(
+                    "java_diagnostics",
+                    readInternalTextFile(javaDiagnostics)
+            );
+
+            ret.put("ok", true);
+            call.resolve(ret);
+
+        } catch (Throwable error) {
+            ret.put("ok", false);
+            ret.put("error", error.toString());
+            call.resolve(ret);
+        }
+    }
+
+
+    private String readInternalTextFile(File file) {
+        if (file == null || !file.exists()) {
+            return "";
+        }
+
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file),
+                            StandardCharsets.UTF_8
+                    )
+            );
+
+            StringBuilder content = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+
+            reader.close();
+            return content.toString();
+
+        } catch (Throwable ignored) {
+            return "";
+        }
+    }
+
+
+    @PluginMethod
     public void accessibilityStatus(PluginCall call) {
         JSObject ret = new JSObject();
         String screenText = GerfexAccessibilityService.dumpText();

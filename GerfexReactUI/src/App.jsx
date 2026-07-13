@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { registerPlugin } from "@capacitor/core";
+import TrackingPage from "./components/TrackingPage";
 
 const GerfexNative = registerPlugin("Gerfex");
 
@@ -105,7 +106,7 @@ const sections = [
   ["models", "🤖", "النماذج"],
   ["sessions", "💬", "الجلسات"],
   ["learning", "🧠", "التعليم"],
-  ["dev", "⚙️", "التطوير"]
+  ["dev", "⚙️", "التتبع"]
 ];
 
 const defaultModels = [
@@ -165,13 +166,6 @@ export default function App() {
   const [menu, setMenu] = useState(false);
   const [quick, setQuick] = useState(false);
   const [section, setSection] = useState("sessions");
-  const [devDoor, setDevDoor] = useState(null);
-  const [devRoot, setDevRoot] = useState("system");
-  const [devPath, setDevPath] = useState("");
-  const [devItems, setDevItems] = useState([]);
-  const [devFilePath, setDevFilePath] = useState("");
-  const [devContent, setDevContent] = useState("");
-  const [devStatus, setDevStatus] = useState("");
   const [input, setInput] = useState("");
   const [typingFocus, setTypingFocus] = useState(false);
   const [listening, setListening] = useState(false);
@@ -946,199 +940,11 @@ export default function App() {
     );
   }
 
-  async function loadDevList(root = devRoot, path = "") {
-    setDevRoot(root);
-    setDevPath(path);
-    setDevFilePath("");
-    setDevContent("");
-    setDevStatus("جاري قراءة الملفات...");
-    try {
-      const res = await fetch(`${API_BASE}/dev/list?root=${encodeURIComponent(root)}&path=${encodeURIComponent(path)}`);
-      const data = await res.json();
-      setDevItems(data.items || []);
-      setDevStatus(data.ok ? "" : (data.error || "فشل قراءة الملفات"));
-    } catch {
-      setDevStatus("فشل الاتصال ببوابة الملفات");
-    }
-  }
-
-  async function openDevFile(path) {
-    setDevFilePath(path);
-    setDevStatus("جاري فتح الملف...");
-    try {
-      const res = await fetch(`${API_BASE}/dev/read?root=${encodeURIComponent(devRoot)}&path=${encodeURIComponent(path)}`);
-      const data = await res.json();
-      setDevContent(data.content || "");
-      setDevDoor("code");
-      setDevStatus(data.ok ? "" : (data.error || "فشل فتح الملف"));
-    } catch {
-      setDevStatus("فشل الاتصال بمحرر الكود");
-    }
-  }
-
-  async function saveDevFile() {
-    if (!devFilePath) {
-      setDevStatus("اختر ملفاً أولاً من مستكشف الملفات.");
-      return;
-    }
-    setDevStatus("جاري الحفظ...");
-    try {
-      const res = await fetch(`${API_BASE}/dev/write`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ root: devRoot, path: devFilePath, content: devContent })
-      });
-      const data = await res.json();
-      setDevStatus(data.ok ? "تم حفظ الملف." : (data.error || "فشل الحفظ"));
-    } catch {
-      setDevStatus("فشل الاتصال أثناء الحفظ");
-    }
-  }
-
-  function parentDevPath(path) {
-    if (!path) return "";
-    const parts = path.split("/").filter(Boolean);
-    parts.pop();
-    return parts.join("/");
-  }
-
-  function renderCodeDoor() {
-    return (
-      <section style={st.panel}>
-        <button style={st.card} onClick={() => setDevDoor(null)}>← رجوع إلى التطوير</button>
-        <h3>💻 محرر الكود</h3>
-        <p style={st.note}>{devFilePath ? `الملف: ${devRoot}/${devFilePath}` : "افتح ملفاً من مستكشف الملفات أو الصق كوداً هنا."}</p>
-        <textarea
-          value={devContent}
-          onChange={(e) => setDevContent(e.target.value)}
-          style={{ width: "100%", minHeight: 320, borderRadius: 14, padding: 12, background: "#020617", color: "#e5e7eb", border: "1px solid #1f2937", fontFamily: "monospace", direction: "ltr" }}
-          placeholder="الكود هنا..."
-        />
-        <button style={st.card} onClick={saveDevFile}>💾 حفظ الملف</button>
-        {devStatus && <p style={st.note}>{devStatus}</p>}
-      </section>
-    );
-  }
-
-  function renderFileDoor() {
-    return (
-      <section style={st.panel}>
-        <button style={st.card} onClick={() => setDevDoor(null)}>← رجوع إلى التطوير</button>
-        <h3>📁 مستكشف الملفات</h3>
-        <p style={st.note}>🏠 Gerfex System / {devPath || ""}</p>
-
-        <button style={st.card} onClick={() => loadDevList("system", "")}>🏠 Gerfex System</button>
-        <button style={st.card} onClick={() => loadDevList("ui", "")}>🤖 GerfexReactUI</button>
-        {devPath && <button style={st.card} onClick={() => loadDevList(devRoot, parentDevPath(devPath))}>⬆️ رجوع مجلد</button>}
-
-        <div style={st.list}>
-          {devItems.map((x) => (
-            <button
-              key={x.path}
-              style={st.card}
-              onClick={() => x.type === "dir" ? loadDevList(devRoot, x.path) : openDevFile(x.path)}
-            >
-              {x.type === "dir" ? "📁" : "📄"} {x.name}
-            </button>
-          ))}
-        </div>
-
-        {devStatus && <p style={st.note}>{devStatus}</p>}
-      </section>
-    );
-  }
-
-  async function showExecutionTrace() {
-    try {
-      const nativeRes = await GerfexNative.readExecutionTrace();
-      const lines = (nativeRes?.content || "").split("\n").filter(Boolean).slice(-10);
-
-      const pretty = lines.map((line, i) => {
-        try {
-          const o = JSON.parse(line);
-          const stages = Array.isArray(o.stages) ? o.stages : [];
-          const route = [...stages].reverse().find(x => x.stage === "brain_router")?.route || "-";
-          const decision = [...stages].reverse().find(x => x.stage === "provider_response") || {};
-          const execution = [...stages].reverse().find(x =>
-            x.stage === "execution_observed" ||
-            x.stage === "execution_manager_end" ||
-            x.stage === "execution_manager_stop"
-          ) || {};
-
-          const ok = (execution.execution_ok ?? execution.ok) ? "نجح" : "فشل";
-
-          return `${i + 1}) ${o.goal || "-"}\nالمسار: ${route}\nالقرار: ${decision.intent || "-"} / ${decision.target || "-"}\nالتنفيذ: ${ok}\nالسبب: ${decision.reason || execution.reason || "-"}`;
-        } catch {
-          return `${i + 1}) ${line}`;
-        }
-      }).join("\n\n");
-
-      setDevStatus(pretty || "لا يوجد تتبع بعد.");
-    } catch (err) {
-      setDevStatus("فشل عرض التتبع: " + (err?.message || err));
-    }
-  }
-
-  async function showExecutionPath() {
-    try {
-      const nativeRes = await GerfexNative.readExecutionPath();
-      const lines = (nativeRes?.content || "").split("\n").filter(Boolean).slice(-10);
-
-      const pretty = lines.map((line, i) => {
-        try {
-          const o = JSON.parse(line);
-          const path = Array.isArray(o.path) ? o.path : [];
-
-          return `${i + 1}) ${o.goal || "-"}\nالمسار: ${o.route || "-"}\nالقرار: ${(o.decision?.intent || "-")} / ${(o.decision?.target || "-")}\nالتنفيذ: ${o.execution?.ok ? "نجح" : "فشل"}\n\nخط السير:\n- ${path.join("\n- ")}`;
-        } catch {
-          return `${i + 1}) ${line}`;
-        }
-      }).join("\n\n");
-
-      setDevStatus(pretty || "لا يوجد خط سير بعد.");
-    } catch (err) {
-      setDevStatus("فشل عرض خط السير: " + (err?.message || err));
-    }
-  }
-
-  function renderDev() {
-    return (
-      <section style={st.panel}>
-        <h3>🧾 تتبع تنفيذ Gerfex</h3>
-        <p style={st.note}>يعرض آخر 10 أوامر فقط من ملف التتبع الداخلي.</p>
-
-        <button style={st.item} onClick={showExecutionTrace}>
-          🧾 عرض آخر 10 أوامر
-        </button>
-
-        <button style={st.item} onClick={showExecutionPath}>
-          🛣️ عرض خط السير
-        </button>
-
-        {devStatus && (
-          <pre style={{
-            whiteSpace: "pre-wrap",
-            background: "#020617",
-            color: "#e5e7eb",
-            border: "1px solid #1f2937",
-            borderRadius: 14,
-            padding: 12,
-            maxHeight: 420,
-            overflow: "auto",
-            direction: "rtl"
-          }}>
-            {devStatus}
-          </pre>
-        )}
-      </section>
-    );
-  }
-
   function body() {
     if (section === "sessions") return renderSessions();
     if (section === "models") return renderModels();
     if (section === "learning") return renderLearning();
-    return renderDev();
+    return <TrackingPage />;
   }
 
   const activeModels = models.filter((m) => m.connected);
