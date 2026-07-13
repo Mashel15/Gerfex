@@ -680,6 +680,7 @@ private String mapPackage(String name) {
 
         new Thread(() -> {
             JSObject ret = new JSObject();
+            String traceId = "";
 
             try {
                 if (!Python.isStarted()) {
@@ -695,6 +696,24 @@ private String mapPackage(String name) {
 
                 // Gerfex Core يقرر أولًا، ثم يستدعي عقله الداخلي GMA عند gma_chat.
                 result = resolveMainGmaNativeReply(result, message);
+
+                try {
+                    JSONObject gerfexResult =
+                            new JSONObject(result);
+
+                    traceId = gerfexResult.optString(
+                            "trace_id",
+                            ""
+                    );
+                } catch (Throwable ignored) {
+                    // Keep the original Gerfex result unchanged.
+                }
+
+                appendGerfexDiagnosticTrace(
+                        traceId,
+                        "python_result_received",
+                        "result_chars=" + result.length()
+                );
 
                 int nativeCount = executeFromResult(result);
 
@@ -718,14 +737,28 @@ private String mapPackage(String name) {
 
                 ret.put("ok", true);
                 ret.put("result", result);
+                ret.put("trace_id", traceId);
                 ret.put("native_executed_count", nativeCount);
                 ret.put("screen_text_saved_path", screenTextPath);
                 ret.put("post_execution_verification", verification);
 
+                appendGerfexDiagnosticTrace(
+                        traceId,
+                        "capacitor_resolve",
+                        "ok=true native_count=" + nativeCount
+                );
+
                 call.resolve(ret);
 
             } catch (Exception e) {
+                appendGerfexDiagnosticTrace(
+                        traceId,
+                        "think_exception",
+                        e.getClass().getName()
+                );
+
                 ret.put("ok", false);
+                ret.put("trace_id", traceId);
                 ret.put("error", e.toString());
                 call.resolve(ret);
             }
@@ -937,6 +970,114 @@ private String mapPackage(String name) {
             } catch (Exception ignored) {
                 return "{\"ok\":false,\"error\":\"gerfex_entry_call_failed\"}";
             }
+        }
+    }
+
+
+    /**
+     * Provider-neutral Java diagnostics for Gerfex requests.
+     *
+     * Failures in diagnostics must never interrupt Gerfex execution.
+     */
+    private void appendGerfexDiagnosticTrace(
+            String traceId,
+            String stage,
+            String detail
+    ) {
+        try {
+            String safeTraceId =
+                    traceId == null || traceId.trim().isEmpty()
+                            ? "unknown"
+                            : traceId.trim();
+
+            String safeStage =
+                    stage == null || stage.trim().isEmpty()
+                            ? "unknown_stage"
+                            : stage.trim();
+
+            String safeDetail =
+                    detail == null
+                            ? ""
+                            : detail
+                                    .replace("\n", " ")
+                                    .replace("\r", " ");
+
+            if (safeDetail.length() > 1000) {
+                safeDetail = safeDetail.substring(0, 1000);
+            }
+
+            String line =
+                    System.currentTimeMillis()
+                            + " trace_id=" + safeTraceId
+                            + " layer=java_plugin"
+                            + " stage=" + safeStage
+                            + " detail=" + safeDetail;
+
+            android.util.Log.i(
+                    "GERFEX_DIAGNOSTICS",
+                    line
+            );
+
+            java.io.File runtimeDir = new java.io.File(
+                    getContext().getFilesDir(),
+                    "gerfex_runtime_data/runtime"
+            );
+
+            if (!runtimeDir.exists()) {
+                runtimeDir.mkdirs();
+            }
+
+            java.io.File traceFile = new java.io.File(
+                    runtimeDir,
+                    "gerfex_java_diagnostics.txt"
+            );
+
+            if (traceFile.exists()
+                    && traceFile.length() > 512L * 1024L) {
+                java.io.RandomAccessFile reader =
+                        new java.io.RandomAccessFile(
+                                traceFile,
+                                "r"
+                        );
+
+                long keepBytes = 256L * 1024L;
+                long startOffset = Math.max(
+                        0L,
+                        reader.length() - keepBytes
+                );
+
+                reader.seek(startOffset);
+
+                byte[] tail = new byte[
+                        (int) (reader.length() - startOffset)
+                ];
+
+                reader.readFully(tail);
+                reader.close();
+
+                java.io.FileOutputStream reset =
+                        new java.io.FileOutputStream(
+                                traceFile,
+                                false
+                        );
+
+                reset.write(tail);
+                reset.close();
+            }
+
+            java.io.FileWriter writer =
+                    new java.io.FileWriter(
+                            traceFile,
+                            true
+                    );
+
+            writer.write(line);
+            writer.write("\n");
+            writer.flush();
+            writer.close();
+
+        } catch (Throwable ignored) {
+            // Diagnostics must never interrupt Gerfex.
         }
     }
 
