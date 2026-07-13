@@ -145,3 +145,20 @@ input{
 input::placeholder{
   color:#777;
 }
+
+/*
+ * Gerfex text-selection boundaries:
+ * the interface is not selectable by default. Individual content windows
+ * explicitly enable text selection.
+ */
+body,
+#root {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}

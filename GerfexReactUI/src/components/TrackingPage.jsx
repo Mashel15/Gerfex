@@ -259,7 +259,9 @@ export default function TrackingPage() {
 const styles = {
   panel: {
     display: "grid",
-    gap: 4
+    gap: 4,
+    userSelect: "none",
+    WebkitUserSelect: "none"
   },
   note: {
     color: "#94a3b8",
@@ -286,6 +288,8 @@ const styles = {
     padding: 12,
     maxHeight: 420,
     overflow: "auto",
-    direction: "rtl"
+    direction: "rtl",
+    userSelect: "text",
+    WebkitUserSelect: "text"
   }
 };

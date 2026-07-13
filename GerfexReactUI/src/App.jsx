@@ -1002,7 +1002,13 @@ export default function App() {
         </aside>
       )}
 
-      <main style={st.messages}>
+      <main
+        style={{
+          ...st.messages,
+          userSelect: menu ? "none" : "text",
+          WebkitUserSelect: menu ? "none" : "text"
+        }}
+      >
         {(learningSession ? learningSession.messages : messages).map((m, i) => (
           <div style={st.msg} key={i}>
             <b>{m.speaker}</b>
@@ -1048,7 +1054,7 @@ export default function App() {
 }
 
 const st = {
-  app: { height: "100dvh", background: "#0b0f14", color: "#f8fafc", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", overflow: "hidden" },
+  app: { height: "100dvh", background: "#0b0f14", color: "#f8fafc", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", overflow: "hidden", userSelect: "none", WebkitUserSelect: "none" },
   header: { height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", borderBottom: "1px solid #1f2937", background: "#0b0f14", flexShrink: 0 },
   icon: { width: 42, height: 42, borderRadius: 12, border: "none", background: "#111827", color: "white", fontSize: 22 },
   title: { fontWeight: 800, fontSize: 18 },
@@ -1086,6 +1092,6 @@ const st = {
   footer: { flexShrink: 0, padding: "2px 2px calc(2px + env(safe-area-inset-bottom))", background: "#0b0f14" },
   composer: { width: "100%", maxWidth: "100%", margin: 0, display: "flex", alignItems: "center", gap: 8, background: "#202123", border: "1px solid #374151", borderRadius: 18, padding: "4px 8px" },
   round: { width: 38, height: 38, borderRadius: 19, border: "none", background: "#2b2c2f", color: "white", fontSize: 18, flexShrink: 0 },
-  textarea: { flex: 1, resize: "none", overflowY: "auto", maxHeight: 150, minHeight: 38, border: "none", outline: "none", background: "transparent", color: "white", fontSize: 16, lineHeight: "24px", padding: "7px 2px", fontFamily: "inherit" },
+  textarea: { flex: 1, resize: "none", overflowY: "auto", maxHeight: 150, minHeight: 38, border: "none", outline: "none", background: "transparent", color: "white", fontSize: 16, lineHeight: "24px", padding: "7px 2px", fontFamily: "inherit", userSelect: "text", WebkitUserSelect: "text" },
   send: { width: 38, height: 38, borderRadius: 19, border: "none", background: "#f8fafc", color: "#111827", fontSize: 20, fontWeight: 800, flexShrink: 0 }
 };
