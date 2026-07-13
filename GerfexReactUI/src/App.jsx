@@ -82,6 +82,7 @@ async function askGerfexNative(prompt, modelState = {}, routeHint = null) {
     reply: replies[0]?.content || parsed.reply || parsed.error || "لا يوجد رد.",
     speaker: replies[0]?.speaker || parsed.speaker || "Gerfex",
     replies,
+    trace_id: parsed.trace_id || null,
     raw: parsed.raw || parsed
   };
 }
