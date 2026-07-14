@@ -973,7 +973,18 @@ export default function App() {
         <div style={{ textAlign: "center" }}>
           <div style={st.title}>Gerfex</div>
 </div>
-        <button style={st.icon} onClick={() => setQuick(!quick)}>📦</button>
+        <button
+          style={{
+            ...st.icon,
+            width: 34,
+            height: 34,
+            borderRadius: 10,
+            fontSize: 17
+          }}
+          onClick={() => setQuick(!quick)}
+        >
+          📦
+        </button>
       </header>
 
       {menu && (
@@ -1070,7 +1081,7 @@ export default function App() {
 }
 
 const st = {
-  app: { height: "100dvh", background: "#0b0f14", color: "#f8fafc", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", overflow: "hidden", userSelect: "none", WebkitUserSelect: "none" },
+  app: { height: "100dvh", width: "100%", maxWidth: "100vw", background: "#0b0f14", color: "#f8fafc", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", overflow: "hidden", overflowX: "hidden", userSelect: "none", WebkitUserSelect: "none" },
   header: { height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", borderBottom: "1px solid #1f2937", background: "#0b0f14", flexShrink: 0 },
   icon: { width: 42, height: 42, borderRadius: 12, border: "none", background: "#111827", color: "white", fontSize: 22 },
   title: { fontWeight: 800, fontSize: 18 },

@@ -162,3 +162,21 @@ textarea {
   -webkit-user-select: text;
   user-select: text;
 }
+
+/* Gerfex keyboard viewport stability */
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #0b0f14;
+  overscroll-behavior-x: none;
+}
+
+html {
+  background-color: #0b0f14;
+}
