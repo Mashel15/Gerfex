@@ -103,9 +103,9 @@ async function getNativePerceptionStatus() {
 }
 
 const sections = [
-  ["models", "🤖", "النماذج"],
+  ["models", "📦", "النماذج"],
   ["sessions", "💬", "الجلسات"],
-  ["learning", "🧠", "التعليم"],
+  ["learning", "💡", "الأفكار"],
   ["dev", "⚙️", "التتبع"]
 ];
 
@@ -168,6 +168,9 @@ export default function App() {
   const [section, setSection] = useState("sessions");
   const [input, setInput] = useState("");
   const [typingFocus, setTypingFocus] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(() =>
+    Math.round(window.visualViewport?.height || window.innerHeight)
+  );
   const [listening, setListening] = useState(false);
   const [voiceInput, setVoiceInput] = useState(false);
 
@@ -184,8 +187,6 @@ export default function App() {
   const [learning, setLearning] = useState(() =>
     load("g_learning", { queue: [], done: [] })
   );
-  const [nativeLearning, setNativeLearning] = useState(null);
-  const [nativeLearningStatus, setNativeLearningStatus] = useState("");
   const [learningSession, setLearningSession] = useState(null);
 
   const [showAddModel, setShowAddModel] = useState(false);
@@ -205,6 +206,49 @@ export default function App() {
   const bottom = useRef(null);
   const textRef = useRef(null);
   const fileRef = useRef(null);
+
+  useEffect(() => {
+    const viewport = window.visualViewport;
+
+    const updateViewport = () => {
+      const nextHeight = Math.round(
+        viewport?.height || window.innerHeight
+      );
+
+      setViewportHeight(nextHeight);
+
+      window.requestAnimationFrame(() => {
+        bottom.current?.scrollIntoView({
+          block: "end"
+        });
+      });
+    };
+
+    updateViewport();
+
+    viewport?.addEventListener("resize", updateViewport);
+    viewport?.addEventListener("scroll", updateViewport);
+    window.addEventListener("resize", updateViewport);
+
+    return () => {
+      viewport?.removeEventListener("resize", updateViewport);
+      viewport?.removeEventListener("scroll", updateViewport);
+      window.removeEventListener("resize", updateViewport);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!typingFocus) return;
+
+    const timer = window.setTimeout(() => {
+      bottom.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
+    }, 120);
+
+    return () => window.clearTimeout(timer);
+  }, [typingFocus, learningSession]);
 
   useEffect(() => localStorage.setItem("g_messages", JSON.stringify(messages)), [messages]);
   useEffect(() => {
@@ -330,28 +374,28 @@ export default function App() {
         };
 
         if (!GerfexNative?.gmaNativeChat) {
-        throw new Error("gmaNativeChat غير متوفر لصفحة التعليم");
+        throw new Error("gmaNativeChat غير متوفر لصفحة الأفكار");
       }
 
       const nativeGma = await GerfexNative.gmaNativeChat({
-        message: "[LEARNING_SESSION]\\n" + text,
+        message: "[IDEAS_SESSION]\\n" + text,
         predictLength: 128
       });
 
       const data = {
         ok: !!nativeGma?.ok,
-        reply: nativeGma?.reply || nativeGma?.error || "لم أستطع توليد رد تعلّم الآن.",
+        reply: nativeGma?.reply || nativeGma?.error || "لم أستطع توليد رد الآن.",
         speaker: "GMA",
         raw: nativeGma
       };
-        const replyText = data.reply || data.raw?.reply || data.raw?.error || "لم أستطع توليد رد تعلّم الآن.";
+        const replyText = data.reply || data.raw?.reply || data.raw?.error || "لم أستطع توليد رد الآن.";
         const replyMsg = { speaker: "GMA", content: replyText };
 
         const finalMessages = [...baseMessages, replyMsg];
         setLearningSession((x) => ({ ...x, messages: finalMessages }));
         persistLearningSessionMessages(learningSession, finalMessages);
       } catch (err) {
-        const errorMsg = { speaker: "Gerfex", content: "فشل اتصال صفحة التعلم بـ GMA: " + (err?.message || err) };
+        const errorMsg = { speaker: "Gerfex", content: "فشل اتصال صفحة الأفكار بـ GMA: " + (err?.message || err) };
         const finalMessages = [...baseMessages, errorMsg];
         setLearningSession((x) => ({ ...x, messages: finalMessages }));
         persistLearningSessionMessages(learningSession, finalMessages);
@@ -537,34 +581,51 @@ export default function App() {
   }
 
 
-  function makeLearn(kind, amount) {
-    kind = "session";
-    const all = String(amount) === "all";
-    const unit = kind === "idea" ? "سطر" : "صفحة";
-    const count = all ? messages.length : (kind === "idea" ? Number(amount) : Number(amount) * 12);
+  function addMainSessionToIdeas(amount) {
+    const pages = Math.max(1, Number(amount) || 1);
+    const messageCount = pages * 12;
+    const copiedMessages = messages.slice(-messageCount);
 
     const item = {
       id: Date.now(),
-      title: kind === "idea" ? "فكرة من الجلسة الحالية" : "جلسة تعلم من الجلسة الحالية",
+      title: "فكرة من الجلسة الرئيسية",
       date: new Date().toLocaleString(),
-      pages: all ? "كل الجلسة" : amount + " " + unit,
-      messages: messages.slice(-count)
+      pages: pages + " صفحة",
+      messages: copiedMessages
     };
 
-    setLearning((l) => ({ ...l, queue: [item, ...(l.queue || [])] }));
-    addReply("تمت إضافة الجلسة إلى جلسات التعلم.");
+    setLearning((current) => ({
+      ...current,
+      queue: [item, ...(current.queue || [])]
+    }));
   }
 
-  function moveLearn(from, to, id) {
-    setLearning((l) => {
-      const item = l[from].find((x) => x.id === id);
-      if (!item) return l;
-      return {
-        ...l,
-        [from]: l[from].filter((x) => x.id !== id),
-        [to]: [item, ...l[to]]
-      };
+  function createIdeaSession() {
+    const item = {
+      id: Date.now(),
+      title: "جلسة أفكار جديدة",
+      date: new Date().toLocaleString(),
+      pages: "جلسة جديدة",
+      messages: [
+        {
+          speaker: "GMA",
+          content: "جلسة أفكار جديدة. اكتب الموضوع الذي تريد مناقشته."
+        }
+      ]
+    };
+
+    setLearning((current) => ({
+      ...current,
+      queue: [item, ...(current.queue || [])]
+    }));
+
+    setLearningSession({
+      ...item,
+      source: "queue",
+      messages: [...item.messages]
     });
+
+    setMenu(false);
   }
 
   function deleteLearn(from, id) {
@@ -800,26 +861,49 @@ export default function App() {
     }));
   }
 
-  function LearningList({ title, name }) {
-    const data = learning[name] || [];
+  function IdeasList() {
+    const data = learning.queue || [];
+
     return (
       <>
-        <h4 style={st.h}>{title}</h4>
-        {data.length === 0 && <p style={st.note}>فارغ.</p>}
-        {data.map((x) => (
-          <div style={st.card} key={x.id}>
-            <b>{x.title}</b>
-            <small style={{ color: "#94a3b8" }}>
-              {name === "queue" ? "النوع: جلسة تعلم" : "النوع: مكتملة"}
-            </small>
-            <small style={{ color: "#94a3b8" }}>{x.date} - {x.pages}</small>
+        <h4 style={st.h}>💡 جلسات الأفكار</h4>
 
-            <div style={{ ...st.cardBtns, gridTemplateColumns: "repeat(5, 1fr)" }}>
-              <button onClick={() => { setLearningSession({ ...x, source: name, messages: [...(x.messages || [])] }); setMenu(false); }}>فتح</button>
-              <button onClick={() => renameLearnItem(name, x.id)}>تسمية</button>
-              {name !== "queue" && <button onClick={() => moveLearn(name, "queue", x.id)}>للتعلم</button>}
-              {name !== "done" && <button onClick={() => moveLearn(name, "done", x.id)}>مكتملة</button>}
-              <button onClick={() => deleteLearn(name, x.id)}>حذف</button>
+        {data.length === 0 && (
+          <p style={st.note}>لا توجد جلسات أفكار بعد.</p>
+        )}
+
+        {data.map((item) => (
+          <div style={st.card} key={item.id}>
+            <b>{item.title}</b>
+
+            <small style={{ color: "#94a3b8" }}>
+              {item.date} - {item.pages}
+            </small>
+
+            <div style={{
+              ...st.cardBtns,
+              gridTemplateColumns: "repeat(3, 1fr)"
+            }}>
+              <button
+                onClick={() => {
+                  setLearningSession({
+                    ...item,
+                    source: "queue",
+                    messages: [...(item.messages || [])]
+                  });
+                  setMenu(false);
+                }}
+              >
+                فتح
+              </button>
+
+              <button onClick={() => renameLearnItem("queue", item.id)}>
+                تسمية
+              </button>
+
+              <button onClick={() => deleteLearn("queue", item.id)}>
+                حذف
+              </button>
             </div>
           </div>
         ))}
@@ -827,92 +911,11 @@ export default function App() {
     );
   }
 
-  async function refreshNativeLearning() {
-    try {
-      setNativeLearningStatus("جاري تحديث تعلم Gerfex الداخلي...");
-      if (!GerfexNative?.learningStatus) {
-        setNativeLearningStatus("دالة learningStatus غير موجودة في Native.");
-        return;
-      }
-
-      const res = await GerfexNative.learningStatus();
-      const data = JSON.parse(res.result || "{}");
-      setNativeLearning(data);
-      setNativeLearningStatus(data.ok ? "تم تحديث حالة التعلم الداخلي." : ("فشل التحديث: " + (data.error || "unknown")));
-    } catch (err) {
-      setNativeLearningStatus("خطأ في تحديث التعلم الداخلي: " + (err?.message || err));
-    }
-  }
-
-  async function approveNativeLesson() {
-    try {
-      setNativeLearningStatus("جاري اعتماد آخر درس...");
-      const res = await GerfexNative.approveLatestLesson();
-      const data = JSON.parse(res.result || "{}");
-      setNativeLearningStatus(data.ok ? "تم اعتماد آخر درس." : ("لم يتم الاعتماد: " + (data.reason || data.error || "unknown")));
-      await refreshNativeLearning();
-    } catch (err) {
-      setNativeLearningStatus("خطأ اعتماد الدرس: " + (err?.message || err));
-    }
-  }
-
-  async function approveNativeImprovement() {
-    try {
-      setNativeLearningStatus("جاري اعتماد آخر تطوير...");
-      const res = await GerfexNative.approveLatestImprovement();
-      const data = JSON.parse(res.result || "{}");
-      setNativeLearningStatus(data.ok ? "تم اعتماد آخر تطوير." : ("لم يتم الاعتماد: " + (data.reason || data.error || "unknown")));
-      await refreshNativeLearning();
-    } catch (err) {
-      setNativeLearningStatus("خطأ اعتماد التطوير: " + (err?.message || err));
-    }
-  }
-
-  function NativeLearningList({ title, items }) {
-    const data = Array.isArray(items) ? items : [];
-    return (
-      <>
-        <h4 style={st.h}>{title} ({data.length})</h4>
-        {data.length === 0 && <p style={st.note}>فارغ.</p>}
-        {data.map((x) => (
-          <div style={st.card} key={x.id || x.text}>
-            <b>{x.kind || "item"}</b>
-            <small style={{ color: "#cbd5e1" }}>{x.status || ""}</small>
-            <p style={{ margin: "6px 0 0", whiteSpace: "pre-wrap" }}>{x.text || JSON.stringify(x)}</p>
-          </div>
-        ))}
-      </>
-    );
-  }
-
   function renderLearning() {
-    const totalPages = Math.max(1, Math.ceil(messages.length / 12));
-
     return (
       <>
-        <h4 style={st.h}>🧠 تعلم Gerfex الداخلي</h4>
+        <h4 style={st.h}>💡 إضافة جلسة من الصفحة الرئيسية</h4>
 
-        <div style={st.two}>
-          <button style={st.save} onClick={refreshNativeLearning}>تحديث حالة التعلم</button>
-          <button style={st.save} onClick={approveNativeLesson}>اعتماد آخر درس</button>
-        </div>
-
-        <button style={{ ...st.item, background: "#0f172a", marginTop: 8 }} onClick={approveNativeImprovement}>
-          اعتماد آخر تطوير
-        </button>
-
-        {nativeLearningStatus && <p style={st.note}>{nativeLearningStatus}</p>}
-
-        {nativeLearning && (
-          <>
-            <NativeLearningList title="⏳ الدروس المعلقة" items={nativeLearning.pending_lessons} />
-            <NativeLearningList title="⏳ التطويرات المعلقة" items={nativeLearning.pending_improvements} />
-            <NativeLearningList title="✅ المعرفة المعتمدة" items={nativeLearning.approved_knowledge} />
-            <NativeLearningList title="✅ التطويرات المعتمدة" items={nativeLearning.approved_improvements} />
-          </>
-        )}
-
-        <h4 style={st.h}>📚 إضافة جلسة للتعلم</h4>
         <div style={st.two}>
           <div style={st.inputWrap}>
             <input
@@ -920,22 +923,31 @@ export default function App() {
               type="number"
               min="1"
               value={learnPages}
-              onChange={(e) => setLearnPages(e.target.value)}
+              onChange={(event) => setLearnPages(event.target.value)}
             />
             <span style={st.unitLabel}>صفحة</span>
           </div>
-          <button style={st.save} onClick={() => makeLearn("session", learnPages || 1)}>إضافة</button>
+
+          <button
+            style={st.save}
+            onClick={() => addMainSessionToIdeas(learnPages)}
+          >
+            إضافة
+          </button>
         </div>
+
         <button
-          style={{ ...st.item, background: "#0f172a", marginTop: 8 }}
-          onClick={() => setLearnPages(String(totalPages))}
+          style={{
+            ...st.item,
+            background: "#0f172a",
+            marginTop: 8
+          }}
+          onClick={createIdeaSession}
         >
-          اختيار كل الصفحات
+          ➕ إنشاء جلسة جديدة
         </button>
 
-        {/* قسم الأفكار ملغي نهائياً */}
-        <LearningList title="📚 محفوظة للتعلم" name="queue" />
-        <LearningList title="✅ جلسات مكتملة" name="done" />
+        <IdeasList />
       </>
     );
   }
@@ -950,14 +962,18 @@ export default function App() {
   const activeModels = models.filter((m) => m.connected);
 
   return (
-    <div style={st.app}>
+    <div
+      style={{
+        ...st.app,
+        height: viewportHeight + "px"
+      }}
+    >
       <header style={st.header}>
         <button style={st.icon} onClick={() => setMenu(!menu)}>☰</button>
         <div style={{ textAlign: "center" }}>
           <div style={st.title}>Gerfex</div>
-          <div style={st.ok}>● prototype v1</div>
-        </div>
-        <button style={st.icon} onClick={() => setQuick(!quick)}>🤖</button>
+</div>
+        <button style={st.icon} onClick={() => setQuick(!quick)}>📦</button>
       </header>
 
       {menu && (
@@ -975,7 +991,7 @@ export default function App() {
 
       {quick && (
         <aside style={st.quick}>
-          <b>🤖 النماذج النشطة</b>
+          <b>📦 النماذج النشطة</b>
           {activeModels.length === 0 && <p style={st.note}>لا يوجد نموذج متصل.</p>}
           {activeModels.map((m) => (
             <div style={{ ...st.quickRow, gridTemplateColumns: "1fr 42px 42px" }} key={m.id}>
