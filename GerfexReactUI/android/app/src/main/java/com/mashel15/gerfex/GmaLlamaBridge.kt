@@ -97,6 +97,38 @@ object GmaLlamaBridge {
     }
 
 
+    @Volatile
+    private var cachedBehaviorPrompt: String? = null
+
+    private fun loadBehaviorPrompt(context: Context): String {
+        cachedBehaviorPrompt?.let { return it }
+
+        return synchronized(this) {
+            cachedBehaviorPrompt?.let { return@synchronized it }
+
+            val fallback =
+                "أجب بالعربية مباشرة وباختصار، ولا تخمّن أو تكرر نفسك."
+
+            val loaded = try {
+                context.assets
+                    .open("GerfexGMA/behavior/response_behavior.txt")
+                    .bufferedReader(Charsets.UTF_8)
+                    .use { it.readText().trim() }
+                    .ifBlank { fallback }
+            } catch (error: Throwable) {
+                Log.w(
+                    "GMA_DEBUG",
+                    "GMA behavior asset unavailable; using fallback",
+                    error
+                )
+                fallback
+            }
+
+            cachedBehaviorPrompt = loaded
+            loaded
+        }
+    }
+
     @JvmStatic
     fun generateBlocking(
         context: Context,
@@ -190,10 +222,15 @@ object GmaLlamaBridge {
 
             setStage("llama_native_generate_started")
 
-            // Stable native prompt path.
-            // GmaPromptComposer remains disconnected from runtime.
-            val systemPrompt =
-                "أنت GMA، الذكاء الداخلي الرسمي داخل Gerfex. أجب بالعربية وبشكل مختصر ومفيد."
+            // GMA-specific behavior is isolated in its own asset.
+            val behaviorPrompt = loadBehaviorPrompt(context)
+
+            val systemPrompt = listOf(
+                "أنت GMA، الذكاء الداخلي الرسمي داخل Gerfex.",
+                behaviorPrompt
+            )
+                .filter { it.isNotBlank() }
+                .joinToString("\n\n")
 
             runtimeTrace(
                 "native_call_enter",

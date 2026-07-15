@@ -577,18 +577,79 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
         const auto generation_started_at =
                 std::chrono::steady_clock::now();
 
-        int max_pred = predictLength > 0 ? predictLength : 128;
-        if (max_pred > 256) max_pred = 256;
+        // Normal answer budget. Short answers still stop immediately at EOG.
+        const int normal_max_pred = 256;
 
-        // One limited continuation only when GMA does not reach EOG.
-        // Main: 64 -> 96. Learning: 128 -> 192.
-        const int extension_tokens =
-                max_pred <= 64 ? 32 : 64;
+        // Reserve a small context margin and never exceed the real context room.
+        const int context_room =
+                std::max(
+                        0,
+                        (int) cparams.n_ctx - n_tokens - 8
+                );
 
+        // Hidden completion reserve. GMA is not told that this reserve exists.
         const int hard_max_pred =
-                std::min(256, max_pred + extension_tokens);
+                std::min(384, context_room);
+
+        if (hard_max_pred <= 0) {
+            return env->NewStringUTF(
+                    "GMA_LLAMA_ERROR: prompt_budget_invalid"
+            );
+        }
+
+        const int max_pred =
+                std::min(normal_max_pred, hard_max_pred);
 
         bool extension_activated = false;
+        bool ended_complete_at_normal_limit = false;
+
+        auto ends_with = [](
+                const std::string &value,
+                const std::string &suffix
+        ) -> bool {
+            return value.size() >= suffix.size() &&
+                   value.compare(
+                           value.size() - suffix.size(),
+                           suffix.size(),
+                           suffix
+                   ) == 0;
+        };
+
+        auto answer_looks_complete = [&](const std::string &value) -> bool {
+            size_t end = value.find_last_not_of(" \\t\\r\\n");
+
+            if (end == std::string::npos) {
+                return false;
+            }
+
+            const std::string trimmed = value.substr(0, end + 1);
+
+            // Clear unfinished endings.
+            static const std::vector<std::string> unfinished = {
+                    ",", "،", ":", "؛", "-", "–", "—",
+                    "و", "أو", "ثم", "مثل", "مثلًا", "كالتالي"
+            };
+
+            for (const auto &suffix : unfinished) {
+                if (ends_with(trimmed, suffix)) {
+                    return false;
+                }
+            }
+
+            // Strong sentence or structure endings.
+            static const std::vector<std::string> complete = {
+                    ".", "!", "?", "؟",
+                    ")", "]", "}", "»", "\""
+            };
+
+            for (const auto &suffix : complete) {
+                if (ends_with(trimmed, suffix)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
 
         LOGI(
                 "GMA_TRACK generation_start id=%llu max_pred=%d "
@@ -604,11 +665,24 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
 
         for (int i = 0; i < hard_max_pred; ++i) {
             if (!extension_activated && i == max_pred) {
+                if (answer_looks_complete(out)) {
+                    ended_complete_at_normal_limit = true;
+
+                    LOGI(
+                            "GMA_TRACK generation_normal_limit_complete "
+                            "id=%llu generated_tokens=%d",
+                            (unsigned long long) request_id,
+                            generated_tokens
+                    );
+
+                    break;
+                }
+
                 extension_activated = true;
 
                 LOGI(
                         "GMA_TRACK generation_extension id=%llu "
-                        "from=%d to=%d",
+                        "from=%d to=%d reason=incomplete_answer",
                         (unsigned long long) request_id,
                         max_pred,
                         hard_max_pred
@@ -701,6 +775,8 @@ Java_com_mashel15_gerfex_GmaLlamaBridge_nativeGenerate(
                 ? "eog"
                 : ended_by_decode_error
                 ? "decode_error"
+                : ended_complete_at_normal_limit
+                ? "complete_at_normal_limit"
                 : generated_tokens >= hard_max_pred
                 ? "extended_max_pred"
                 : extension_activated
